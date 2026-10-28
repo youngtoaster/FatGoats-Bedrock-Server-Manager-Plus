@@ -7,7 +7,7 @@ A modern, full-stack self-hosted administration panel designed to operate, monit
 ## 💾 Quick Installation (Windows Standalone Setup)
 
 Download the one-click installer executable from GitHub Releases:
-**[⬇️ Download BedrockServerManager-Setup.exe (v1.1.0)](https://github.com/tywentghxst/FatGoats-Bedrock-Server-Manager-Plus/releases/latest/download/BedrockServerManager-Setup.exe)**
+**[⬇️ Download BedrockServerManager-Setup.exe (v1.1.0)](https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases/latest/download/BedrockServerManager-Setup.exe)**
 
 The setup wizard automatically:
 1. **Runtime Verification**: Checks for Node.js runtime (and automatically downloads/configures the official Node.js LTS runtime if missing).

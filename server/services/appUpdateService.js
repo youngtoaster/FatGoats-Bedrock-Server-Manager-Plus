@@ -7,7 +7,7 @@ const unzipper = require('unzipper');
 const db = require('../database');
 
 const ROOT_DIR = path.resolve(__dirname, '..', '..');
-const GITHUB_REPO = 'tywentghxst/FatGoats-Bedrock-Server-Manager-Plus';
+const GITHUB_REPO = 'youngtoaster/FatGoats-Bedrock-Server-Manager-Plus';
 const GITHUB_BRANCH = 'main';
 
 /**
@@ -19,6 +19,9 @@ function getGitPaths() {
     path.join(process.env.USERPROFILE || '', 'AppData', 'Local', 'Programs', 'Git', 'cmd'),
     'C:\\Program Files\\Git\\cmd',
     'C:\\Program Files (x86)\\Git\\cmd',
+    'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\Git\\cmd',
+    'C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\Git\\cmd',
+    'C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer\\Git\\cmd',
     path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Git', 'bin'),
     'C:\\Program Files\\Git\\bin',
   ];
@@ -129,6 +132,20 @@ function safeWriteFile(targetFilePath, buffer) {
       throw err;
     }
   }
+}
+
+function getGitHubAuthHeaders() {
+  const headers = {
+    'User-Agent': 'BedrockServerManager-AppUpdate',
+    Accept: 'application/vnd.github.v3+json',
+  };
+  try {
+    const token = process.env.GITHUB_TOKEN || getSetting('github_token', '');
+    if (token && token.trim()) {
+      headers['Authorization'] = `Bearer ${token.trim()}`;
+    }
+  } catch (_) {}
+  return headers;
 }
 
 function getSetting(key, defaultValue = null) {
@@ -263,10 +280,7 @@ class AppUpdateService {
   async fetchGitHubCommits() {
     const url = `https://api.github.com/repos/${GITHUB_REPO}/commits?per_page=30&sha=${GITHUB_BRANCH}`;
     const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'BedrockServerManager-AppUpdate',
-        Accept: 'application/vnd.github.v3+json',
-      },
+      headers: getGitHubAuthHeaders(),
       timeout: 12000,
     });
 

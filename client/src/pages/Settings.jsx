@@ -1104,7 +1104,7 @@ export const Settings = () => {
                       </span>
                     </div>
                     <a
-                      href="https://github.com/tywentghxst/FatGoats-Bedrock-Server-Manager-Plus"
+                      href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-secondary btn-xs font-mono"
