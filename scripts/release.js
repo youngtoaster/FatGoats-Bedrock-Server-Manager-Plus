@@ -104,6 +104,7 @@ async function main() {
 
 #### Key Features:
 - Real-time Minecraft Bedrock Dedicated Server process supervisor and ANSI console.
+- 1-Click Instant Addon Auto-Installer (.mcaddon, .mcpack, .zip) with automatic BP/RP separation and active world UUID injection.
 - 1-Click Instant Heal (20 HP), Food/Saturation restoration, and zero-delay kicks/bans.
 - World Manager & Importer (.mcworld zip) with custom seed world generator.
 - Integrated Playit & Cloudflare zero-port tunneling.

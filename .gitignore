@@ -21,6 +21,8 @@ data/uploads/*
 data/logs/
 *.log
 *.log.gz
+*.old
+*.old-*
 
 # Auth caches & credentials
 data/auth_cache/

@@ -105,7 +105,13 @@
           <div class="deck-card">
             <div class="deck-icon">🖥️</div>
             <h3>Real-Time BDS Process Engine</h3>
-            <p>Direct standard input/output IPC piping to <code>bedrock_server.exe</code> with sub-millisecond command execution, ANSI syntax parsing, and automated crash detection with instant restart.</p>
+            <p>Direct standard input/output IPC piping to <code>bedrock_server.exe</code> with sub-millisecond command execution, ANSI syntax parsing, and automated crash recovery.</p>
+          </div>
+
+          <div class="deck-card">
+            <div class="deck-icon">🧩</div>
+            <h3>1-Click Addon Auto-Installer</h3>
+            <p>Drag and drop any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code>. Automatically splits BP/RP, extracts UUIDs, and registers to your active world in &lt; 1 second.</p>
           </div>
 
           <div class="deck-card">
@@ -118,12 +124,6 @@
             <div class="deck-icon">🌍</div>
             <h3>World Importer & Generator</h3>
             <p>Full support for drag-and-drop <code>.mcworld</code> archives, automated level switching, and a built-in world generator with custom seed randomization and presets.</p>
-          </div>
-
-          <div class="deck-card">
-            <div class="deck-icon">🌐</div>
-            <h3>Global Tunnel & Friend Bridging</h3>
-            <p>Integrated Playit / Cloudflare tunneling and Xbox LAN broadcasting to invite friends across Xbox, PlayStation, Switch, iOS, and Android without opening router ports.</p>
           </div>
         </div>
       </div>
@@ -143,7 +143,7 @@
         </div>
 
         <div class="bento-grid">
-          <!-- Card 1: Process Engine -->
+          <!-- Row 1: Core Runtime (Wide 2-col) + Player Matrix (1-col) -->
           <div class="bento-card bento-wide">
             <div class="bento-badge">CORE RUNTIME</div>
             <h3 class="bento-title">Native BDS Process Controller & Watchdog</h3>
@@ -158,7 +158,6 @@
             </div>
           </div>
 
-          <!-- Card 2: Player Management -->
           <div class="bento-card">
             <div class="bento-badge">SECURITY & MODERATION</div>
             <h3 class="bento-title">1-Click Player Controls & Banlist</h3>
@@ -173,7 +172,52 @@
             </div>
           </div>
 
-          <!-- Card 3: World Management & Generator -->
+          <!-- Row 2: Addon Auto-Installer (Full 3-col Spotlight) -->
+          <div class="bento-card bento-full addon-spotlight-card">
+            <div class="bento-badge">🚀 GAME-CHANGING AUTOMATION • 1-CLICK INSTANT</div>
+            <h3 class="bento-title" style="font-size: 1.6rem; margin-top: 0.35rem;">Instant Addon & Mod Auto-Installer (.mcaddon, .mcpack, .zip)</h3>
+            <p class="bento-desc" style="max-width: 900px; font-size: 0.96rem; line-height: 1.65;">
+              Installing Bedrock addons used to be an exhausting chore—renaming files, hunting for nested folders, opening Notepad to copy cryptic UUID strings, and manually editing JSON. 
+              <strong>FatGoats BSM+ completely eliminates the headache:</strong> simply drag and drop any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code> file directly into the manager. In less than 1 second, our intelligent engine unpacks nested archives, auto-separates Behavior and Resource packs, extracts high-res icons and localized names, pairs sync groups, and injects valid UUID manifests directly into your active world. It's lightning-fast, 100% automated, and completely crash-proof!
+            </p>
+
+            <div class="addon-pipeline-steps">
+              <div class="pipeline-step">
+                <span class="step-num-badge">Step 01</span>
+                <div class="step-title">📥 Drag & Drop</div>
+                <div class="step-desc">Upload any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code> directly in your browser.</div>
+              </div>
+
+              <div class="pipeline-step">
+                <span class="step-num-badge">Step 02</span>
+                <div class="step-title">⚡ Deep Inspection</div>
+                <div class="step-desc">Reads <code>manifest.json</code>, extracts pack icons, and parses <code>en_US.lang</code> in &lt; 500ms.</div>
+              </div>
+
+              <div class="pipeline-step">
+                <span class="step-num-badge">Step 03</span>
+                <div class="step-title">🔄 Auto-Split BP & RP</div>
+                <div class="step-desc">Routes Behavior Packs to <code>behavior_packs/</code> and Resource Packs to <code>resource_packs/</code>.</div>
+              </div>
+
+              <div class="pipeline-step">
+                <span class="step-num-badge">Step 04</span>
+                <div class="step-title">✓ Atomic World Injection</div>
+                <div class="step-desc">Injects verified UUIDs into active world JSON configs without typing a single line of code.</div>
+              </div>
+            </div>
+
+            <div class="bento-tags">
+              <span>Drag & Drop .mcaddon</span>
+              <span>Sub-Second Extraction</span>
+              <span>Intelligent BP/RP Auto-Split</span>
+              <span>Paired Sync Groups</span>
+              <span>Zero-Crash JSON Guard</span>
+              <span>Under 1 Second</span>
+            </div>
+          </div>
+
+          <!-- Row 3: Worlds (1-col) + Backups (1-col) + Tunneling (1-col) -->
           <div class="bento-card">
             <div class="bento-badge">WORLDS & GENERATION</div>
             <h3 class="bento-title">World Importer & Custom Generator</h3>
@@ -187,21 +231,6 @@
             </div>
           </div>
 
-          <!-- Card 4: Addons & Behavior Packs -->
-          <div class="bento-card">
-            <div class="bento-badge">EXPANSION ENGINE</div>
-            <h3 class="bento-title">Automated Addon & Pack Deployment</h3>
-            <p class="bento-desc">
-              Upload <code>.mcaddon</code> or <code>.mcpack</code> files. The engine automatically inspects <code>manifest.json</code> UUIDs, splits resource and behavior packs, and updates <code>world_behavior_packs.json</code>.
-            </p>
-            <div class="bento-tags">
-              <span>UUID Linking</span>
-              <span>Manifest Validation</span>
-              <span>Auto-Splitting</span>
-            </div>
-          </div>
-
-          <!-- Card 5: Safe Backups -->
           <div class="bento-card">
             <div class="bento-badge">DISASTER RECOVERY</div>
             <h3 class="bento-title">Zero-Corruption Backup Snapshots</h3>
@@ -215,7 +244,6 @@
             </div>
           </div>
 
-          <!-- Card 6: Zero-Port Tunneling -->
           <div class="bento-card">
             <div class="bento-badge">NETWORKING</div>
             <h3 class="bento-title">Playit Tunneling & Zero Port Forwarding</h3>
@@ -229,7 +257,7 @@
             </div>
           </div>
 
-          <!-- Card 7: Xbox Friend Bridging -->
+          <!-- Row 4: Xbox Friend Bridging (1-col) + In-App Updates (1-col) + Windows Tray (1-col) -->
           <div class="bento-card">
             <div class="bento-badge">CROSSPLAY BRIDGE</div>
             <h3 class="bento-title">MCXboxBroadcast Friend Bridging</h3>
@@ -243,7 +271,6 @@
             </div>
           </div>
 
-          <!-- Card 8: In-App Updates -->
           <div class="bento-card">
             <div class="bento-badge">MAINTENANCE</div>
             <h3 class="bento-title">Safe Git Pull In-App Updater</h3>
@@ -257,7 +284,6 @@
             </div>
           </div>
 
-          <!-- Card 9: Windows Tray Watchdog -->
           <div class="bento-card">
             <div class="bento-badge">NATIVE SYSTEM</div>
             <h3 class="bento-title">Native Windows System Tray Minimization</h3>
@@ -270,7 +296,7 @@
               <span>Auto-Start on Boot</span>
             </div>
           </div>
-        </div>
+        </div></div>
       </div>
     </section>
 
@@ -341,10 +367,10 @@
                 <td class="col-highlight">✓ Official Mojang Save Hold/Query File Freezing</td>
               </tr>
               <tr>
-                <td class="compare-feature-cell">Automatic Addon UUID Extraction & Pairing</td>
-                <td>❌ Manual Zip Unpack</td>
-                <td>⚠️ Basic File Browser</td>
-                <td class="col-highlight">✓ Automatic UUID Manifest & Pair Linking</td>
+                <td class="compare-feature-cell">Addon & Mod Auto-Installer (.mcaddon, .mcpack, .zip)</td>
+                <td>❌ Manual Zip Unpack, UUID Extraction, Notepad JSON Editing</td>
+                <td>⚠️ Slow Manual File Uploads, No Auto-Registration</td>
+                <td class="col-highlight">✓ 1-Click Instant Auto-Installer: Splits BP/RP & Injects Active World UUIDs in &lt; 1s</td>
               </tr>
               <tr>
                 <td class="compare-feature-cell">Windows System Tray Minimization</td>
@@ -479,6 +505,19 @@
         </div>
 
         <div class="faq-grid">
+          <div class="faq-card">
+            <div class="faq-header">
+              <span class="faq-question">How does the 1-Click Addon Auto-Installer work, and why is it so fast?</span>
+              <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-body">
+              <p>
+                <strong>Zero technical setup.</strong> Normally, adding mods and addons to Minecraft Bedrock Dedicated Server is painful: you have to extract zip archives, dig through nested folders, open <code>manifest.json</code> in a text editor to hunt down 36-character UUID strings and version headers, manually copy files into <code>bds/behavior_packs/</code> and <code>bds/resource_packs/</code>, and format JSON in <code>world_behavior_packs.json</code> (where a single comma error crashes your server).<br><br>
+                With FatGoats BSM+, you simply drag and drop any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code> file into the panel. In less than 1 second, the engine decompresses the archive, automatically separates Behavior and Resource packs, extracts high-res icons and localized names from <code>en_US.lang</code>, pairs companion packs into sync groups, and injects verified UUID manifests directly into your active world. It is instantaneous, 100% automated, and completely crash-proof!
+              </p>
+            </div>
+          </div>
+
           <div class="faq-card open">
             <div class="faq-header">
               <span class="faq-question">Will updating the manager delete my Minecraft worlds or databases?</span>
