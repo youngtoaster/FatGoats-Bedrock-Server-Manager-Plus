@@ -90,6 +90,13 @@ async function main() {
   const backupService = require('./services/backupService');
   backupService.initAutoBackupScheduler(serverProcess);
 
+  // Serve showcase website at /showcase and /website
+  const websiteDir = path.join(__dirname, '..', 'website');
+  if (fs.existsSync(websiteDir)) {
+    app.use('/showcase', express.static(websiteDir));
+    app.use('/website', express.static(websiteDir));
+  }
+
   // Serve client in production
   const clientDist = path.join(__dirname, '..', 'client', 'dist');
   if (process.env.NODE_ENV === 'production' || fs.existsSync(clientDist)) {
