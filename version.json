@@ -1,6 +1,6 @@
 {
-  "commit": "2085d8c",
-  "commitFull": "2085d8ce5a1c18816df7146bce54758209d6c38c",
-  "date": "Just now",
-  "subject": "fix(worlds): add resilient multipart uploadMiddleware, auto-detect mcworld in addons, and API fallbacks"
+  "commit": "7519566",
+  "commitFull": "75195664252eaa74f5a299116f9c416b537de63c",
+  "date": "2026-10-28T04:02:17.000Z",
+  "subject": "chore(github): migrate remote repository and in-app updater to youngtoaster"
 }
