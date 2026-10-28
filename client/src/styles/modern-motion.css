@@ -1,0 +1,578 @@
+/* ==========================================================================
+   BEDROCK SERVER MANAGER+ — MODERN MOTION, FLUID PHYSICS & AESTHETICS ENGINE
+   Next-Generation Obsidian Theme, Smooth Spring Motions, Ambient Mesh Glows
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Ambient Atmospheric Mesh Glow Layers
+   -------------------------------------------------------------------------- */
+.ambient-app-glow {
+  position: fixed;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(140px);
+  z-index: 0;
+  opacity: 0.16;
+  will-change: transform, opacity;
+}
+
+.ambient-app-glow.glow-1 {
+  top: -12%;
+  left: 12%;
+  width: 580px;
+  height: 580px;
+  background: radial-gradient(circle, #10b981 0%, rgba(16, 185, 129, 0) 70%);
+  animation: ambientFloat1 18s ease-in-out infinite alternate;
+}
+
+.ambient-app-glow.glow-2 {
+  top: 28%;
+  right: -8%;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, #06b6d4 0%, rgba(6, 182, 212, 0) 70%);
+  animation: ambientFloat2 22s ease-in-out infinite alternate;
+}
+
+.ambient-app-glow.glow-3 {
+  bottom: -15%;
+  left: 30%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, #6366f1 0%, rgba(99, 102, 241, 0) 70%);
+  animation: ambientFloat3 26s ease-in-out infinite alternate;
+}
+
+.ambient-app-grid {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+@keyframes ambientFloat1 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.14; }
+  50% { transform: translate(40px, 30px) scale(1.12); opacity: 0.22; }
+  100% { transform: translate(-25px, 50px) scale(0.95); opacity: 0.16; }
+}
+
+@keyframes ambientFloat2 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+  50% { transform: translate(-50px, -35px) scale(1.1); opacity: 0.24; }
+  100% { transform: translate(30px, -45px) scale(0.92); opacity: 0.13; }
+}
+
+@keyframes ambientFloat3 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.12; }
+  50% { transform: translate(35px, -40px) scale(1.08); opacity: 0.2; }
+  100% { transform: translate(-45px, 25px) scale(0.96); opacity: 0.15; }
+}
+
+/* Ensure content sits above ambient lighting */
+.main-wrapper, .sidebar, .content-container, .top-header {
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   2. Fluid Page Transitions & Spring Physics
+   -------------------------------------------------------------------------- */
+@keyframes pageSpringIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dashboard-page,
+.console-page,
+.players-page,
+.worlds-page,
+.backups-page,
+.addons-page,
+.properties-page,
+.users-page,
+.settings-page,
+.versions-page,
+.audit-page,
+.xbox-page,
+.portal-page {
+  animation: pageSpringIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+/* Staggered entrance for sections within pages */
+.dashboard-page > *:nth-child(1) { animation: pageSpringIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.02s both; }
+.dashboard-page > *:nth-child(2) { animation: pageSpringIn 0.40s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+.dashboard-page > *:nth-child(3) { animation: pageSpringIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.09s both; }
+.dashboard-page > *:nth-child(4) { animation: pageSpringIn 0.50s cubic-bezier(0.16, 1, 0.3, 1) 0.13s both; }
+.dashboard-page > *:nth-child(5) { animation: pageSpringIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.17s both; }
+
+/* --------------------------------------------------------------------------
+   3. Modern Glassmorphism & Animated Border Glows
+   -------------------------------------------------------------------------- */
+.modern-card,
+.telemetry-card,
+.hero-status-panel,
+.remote-access-summary-card,
+.panel-card,
+.properties-section-card,
+.backup-card,
+.world-card,
+.addon-card {
+  background: rgba(15, 20, 32, 0.72) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative;
+}
+
+.modern-card:hover,
+.telemetry-card:hover,
+.panel-card:hover,
+.backup-card:hover,
+.world-card:hover,
+.addon-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(16, 185, 129, 0.32) !important;
+  box-shadow: 0 20px 42px -10px rgba(0, 0, 0, 0.65), 0 0 25px rgba(16, 185, 129, 0.12) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Hero Power & Status Panel Master Upgrades
+   -------------------------------------------------------------------------- */
+.hero-status-panel {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Status-Running Living Energy Pulse */
+.hero-status-panel.state-running {
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  box-shadow: 0 16px 45px -12px rgba(0, 0, 0, 0.7), 0 0 35px rgba(16, 185, 129, 0.18), inset 0 1px 0 rgba(16, 185, 129, 0.35) !important;
+}
+
+.hero-status-panel.state-running::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #10b981, #06b6d4, #10b981, transparent);
+  background-size: 200% 100%;
+  animation: heroBeamSweep 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes heroBeamSweep {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.hero-status-panel.state-starting {
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  box-shadow: 0 16px 45px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.15) !important;
+}
+
+.hero-status-panel.state-stopped {
+  border-color: rgba(244, 63, 94, 0.25) !important;
+}
+
+/* Radar Ping Ripples */
+.radar-status-dot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-wave {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+  animation: radarPingSweep 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes radarPingSweep {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Tactile Micro-Physics for Power Buttons & Actions
+   -------------------------------------------------------------------------- */
+.btn-power,
+.btn-header-power,
+.btn-primary,
+.btn-secondary {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform, box-shadow;
+}
+
+.btn-power:hover:not(:disabled),
+.btn-header-power:hover:not(:disabled),
+.btn-primary:hover:not(:disabled),
+.btn-secondary:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.btn-power:active:not(:disabled),
+.btn-header-power:active:not(:disabled),
+.btn-primary:active:not(:disabled),
+.btn-secondary:active:not(:disabled) {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* Individual Power Button Glowing Aura */
+.btn-power-start:hover:not(:disabled),
+.btn-start-all:hover:not(:disabled) {
+  box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.45), 0 0 12px rgba(16, 185, 129, 0.3) !important;
+  border-color: #34d399 !important;
+}
+
+.btn-power-restart:hover:not(:disabled),
+.btn-restart-all:hover:not(:disabled) {
+  box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.45), 0 0 12px rgba(245, 158, 11, 0.3) !important;
+  border-color: #fbbf24 !important;
+}
+
+.btn-power-stop:hover:not(:disabled),
+.btn-stop-all:hover:not(:disabled) {
+  box-shadow: 0 8px 24px -4px rgba(244, 63, 94, 0.45), 0 0 12px rgba(244, 63, 94, 0.3) !important;
+  border-color: #f87171 !important;
+}
+
+.btn-power-update:hover:not(:disabled) {
+  box-shadow: 0 8px 24px -4px rgba(6, 182, 212, 0.45), 0 0 12px rgba(6, 182, 212, 0.3) !important;
+  border-color: #38bdf8 !important;
+}
+
+/* Light Sheen Reflection Sweep on Primary Buttons */
+.btn-primary::after,
+.btn-power-start::after,
+.btn-start-all::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent,
+    rgba(255, 255, 255, 0.14),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.65s ease;
+  pointer-events: none;
+}
+
+.btn-primary:hover::after,
+.btn-power-start:hover::after,
+.btn-start-all:hover::after {
+  transform: translateX(100%);
+}
+
+/* --------------------------------------------------------------------------
+   6. Telemetry Metric Bars & Sparkline Visuals
+   -------------------------------------------------------------------------- */
+.telemetry-meter-bar {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: var(--radius-full) !important;
+  height: 8px !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.telemetry-meter-bar .meter-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  position: relative;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+/* Moving Shimmer on Active Progress Bars */
+.telemetry-meter-bar .meter-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  animation: meterShimmerSweep 2.2s infinite;
+}
+
+@keyframes meterShimmerSweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.metric-number {
+  font-family: var(--font-mono);
+  letter-spacing: -0.03em;
+  transition: color 0.3s ease;
+}
+
+/* --------------------------------------------------------------------------
+   7. Player Controls (💖 Heal, 🍖 Feed, 👢 Kick, 🚫 Ban)
+   -------------------------------------------------------------------------- */
+.btn-chip-heal,
+.btn-heal,
+.btn-chip-feed,
+.btn-feed,
+.btn-chip-kick,
+.btn-kick,
+.btn-chip-ban,
+.btn-ban,
+.btn-op,
+.btn-deop {
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-chip-heal:hover,
+.btn-heal:hover {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 4px 14px rgba(244, 114, 182, 0.55) !important;
+  border-color: #f472b6 !important;
+  animation: heartPulseHover 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes heartPulseHover {
+  0% { transform: translateY(-2px) scale(1.06); }
+  100% { transform: translateY(-2px) scale(1.13); }
+}
+
+.btn-chip-feed:hover,
+.btn-feed:hover {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 4px 14px rgba(251, 146, 60, 0.55) !important;
+  border-color: #fb923c !important;
+}
+
+.btn-chip-kick:hover,
+.btn-kick:hover {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.55) !important;
+  border-color: #f87171 !important;
+}
+
+.btn-chip-ban:hover,
+.btn-ban:hover {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 4px 18px rgba(220, 38, 38, 0.7) !important;
+  border-color: #dc2626 !important;
+}
+
+.btn-op:hover {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.55) !important;
+  border-color: #fbbf24 !important;
+}
+
+.btn-deop:hover {
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 4px 14px rgba(148, 163, 184, 0.45) !important;
+}
+
+/* Table Row Hover Fluidity */
+table tbody tr {
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+table tbody tr:hover {
+  background-color: rgba(16, 185, 129, 0.045) !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. High-Tech Terminal & Console Polish
+   -------------------------------------------------------------------------- */
+.console-terminal-wrapper,
+.console-terminal-box {
+  background: #06090e !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8), 0 10px 30px -10px rgba(0, 0, 0, 0.6) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle CRT Scanline Overlay */
+.console-terminal-wrapper::before,
+.console-terminal-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.22) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  opacity: 0.35;
+  z-index: 2;
+}
+
+.terminal-input-bar input {
+  transition: all 0.22s ease !important;
+}
+
+.terminal-input-bar input:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.35), inset 0 0 8px rgba(16, 185, 129, 0.15) !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. World Importer & Custom Generator Effects
+   -------------------------------------------------------------------------- */
+.world-dropzone {
+  border: 2px dashed rgba(16, 185, 129, 0.35) !important;
+  border-radius: var(--radius-lg) !important;
+  background: rgba(16, 185, 129, 0.03) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.world-dropzone:hover,
+.world-dropzone.drag-active {
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.25) !important;
+  transform: scale(1.01);
+}
+
+/* Dice Tumble Animation on Random Seed Button */
+.btn-random-seed:active .dice-icon,
+.btn-random-seed:focus .dice-icon {
+  animation: diceTumble 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes diceTumble {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.25); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Active World Beacon Badge */
+.world-card.active-world {
+  border-color: #10b981 !important;
+  box-shadow: 0 16px 40px -10px rgba(16, 185, 129, 0.28), inset 0 1px 0 rgba(16, 185, 129, 0.4) !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. Sidebar & Navigation Micro-Interactions
+   -------------------------------------------------------------------------- */
+.sidebar {
+  background: rgba(11, 13, 20, 0.88) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+.nav-link {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.nav-link:hover {
+  transform: translateX(4px);
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: #fff !important;
+}
+
+.nav-link.active {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.16) 0%, rgba(16, 185, 129, 0.03) 100%) !important;
+  border-left: 3px solid #10b981 !important;
+  color: #fff !important;
+}
+
+.nav-link:hover .nav-icon {
+  animation: iconWiggle 0.4s ease-in-out;
+}
+
+@keyframes iconWiggle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25) rotate(-6deg); }
+}
+
+.sidebar-user-card:hover .user-settings-gear {
+  animation: gearSpin 1.2s linear infinite;
+}
+
+@keyframes gearSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   11. Floating Alert Toasts & Notifications
+   -------------------------------------------------------------------------- */
+.alert-toast,
+.header-action-toast {
+  animation: toastSlideBounce 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+  backdrop-filter: blur(16px) !important;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 20px rgba(16, 185, 129, 0.2) !important;
+}
+
+@keyframes toastSlideBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12. Custom Sleek Scrollbars
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(9, 10, 16, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  transition: background 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.45);
+}

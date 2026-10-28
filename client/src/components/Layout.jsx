@@ -326,6 +326,11 @@ export const Layout = () => {
 
       {/* Main Content Area */}
       <div className="main-wrapper">
+        {/* Ambient Atmospheric Mesh Glow Layers */}
+        <div className="ambient-app-glow glow-1" aria-hidden="true" />
+        <div className="ambient-app-glow glow-2" aria-hidden="true" />
+        <div className="ambient-app-glow glow-3" aria-hidden="true" />
+        <div className="ambient-app-grid" aria-hidden="true" />
         {/* Top Floating Glass Header */}
         <header className="top-header">
           <div className="header-left">

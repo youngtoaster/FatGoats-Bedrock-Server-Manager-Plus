@@ -882,12 +882,12 @@ export const Worlds = () => {
                     />
                     <button
                       type="button"
-                      className="btn btn-secondary btn-sm d-flex items-center gap-1"
+                      className="btn btn-secondary btn-sm d-flex items-center gap-1 btn-random-seed"
                       onClick={generateRandomSeed}
                       disabled={isGenerating}
                       title="Generate a random numerical seed"
                     >
-                      <span>🎲</span>
+                      <span className="dice-icon">🎲</span>
                       <span>Random</span>
                     </button>
                   </div>
