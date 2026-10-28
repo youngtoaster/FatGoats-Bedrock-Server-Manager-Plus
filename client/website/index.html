@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FatGoats Bedrock Server Manager+ | Next-Gen Minecraft BDS Administration</title>
+  <meta name="description" content="A modern, full-stack administration panel and real-time command center for Minecraft Bedrock Dedicated Server. Features instant healing, zero-delay banning, world generation, addon management, and crossplay friend bridging.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Interactive 3D Voxel Canvas -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+  <div class="grid-overlay"></div>
+
+  <div class="site-content">
+    <!-- Navigation Bar -->
+    <header class="navbar">
+      <div class="container nav-container">
+        <a href="#" class="brand-link">
+          <div class="brand-logo-icon">🟩</div>
+          <div class="brand-text-wrap">
+            <span class="brand-name">FatGoats BSM+</span>
+            <span class="brand-sub">Bedrock Dedicated Server</span>
+          </div>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#demo">Live Demo</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#comparison">Comparison</a></li>
+          <li><a href="#install">Installation</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+            <span>⭐ Star on GitHub</span>
+          </a>
+          <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases/latest" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+            <span>⬇️ Download .exe</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-pill-wrap">
+          <span class="badge badge-emerald">
+            <span class="pulse-dot"></span>
+            Minecraft Bedrock v1.21+ Ready • Windows Standalone
+          </span>
+        </div>
+
+        <h1 class="hero-title">
+          The Ultimate Command Center for <br>
+          <span class="text-gradient">Minecraft Bedrock Dedicated Server</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Say goodbye to fragile command prompts and manual config edits. Operate, supervise, backup, and customize your Bedrock world with fluid real-time telemetry, instant player controls, and zero-headache automation.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#install" class="btn btn-primary btn-lg">
+            <span>⬇️ Download Windows Setup</span>
+          </a>
+          <a href="#demo" class="btn btn-secondary btn-lg">
+            <span>🎮 Try Live Interactive Demo</span>
+          </a>
+          <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+            <span>📂 View Source Code ↗</span>
+          </a>
+        </div>
+
+        <!-- Metric Counters -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-number">20.0</span>
+            <span class="metric-label">Stable Server TPS</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-number">1-Click</span>
+            <span class="metric-label">Heal, Feed, Kick & Ban</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-number">0 Ports</span>
+            <span class="metric-label">Cloudflare / Playit Tunnel</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-number">100%</span>
+            <span class="metric-label">Addon & World Safe</span>
+          </div>
+        </div>
+
+        <!-- ==========================================================================
+             INTERACTIVE DASHBOARD SIMULATOR
+             ========================================================================== -->
+        <div class="simulator-wrap" id="demo">
+          <div class="simulator-window">
+            <div class="window-header">
+              <div class="window-dots">
+                <span class="window-dot dot-red"></span>
+                <span class="window-dot dot-yellow"></span>
+                <span class="window-dot dot-green"></span>
+              </div>
+              <div class="window-title">
+                <span>FatGoats-BSM-Plus.local:3001</span>
+                <span class="window-badge">INTERACTIVE SIMULATOR</span>
+              </div>
+              <div style="font-size: 0.75rem; color: #64748b; font-family: var(--font-mono);">
+                BDS Engine v1.21.30
+              </div>
+            </div>
+
+            <!-- Simulator Sub-Navigation -->
+            <div class="sim-tabs-bar">
+              <button class="sim-tab-btn active" data-view="overview">
+                <span>📊</span> Overview & Telemetry
+              </button>
+              <button class="sim-tab-btn" data-view="console">
+                <span>💻</span> Live Console
+              </button>
+              <button class="sim-tab-btn" data-view="players">
+                <span>👥</span> Player Matrix (Heal/Ban)
+              </button>
+              <button class="sim-tab-btn" data-view="worldgen">
+                <span>✨</span> World Generator
+              </button>
+            </div>
+
+            <!-- Simulator Body Container -->
+            <div class="sim-body">
+              <!-- Power Control Strip -->
+              <div class="sim-power-strip">
+                <div class="sim-power-left">
+                  <div class="sim-status-indicator">
+                    <span id="sim-status-circle" class="sim-status-circle running"></span>
+                    <span id="sim-status-text" class="sim-status-text">RUNNING</span>
+                  </div>
+                  <div class="sim-telemetry-pill">
+                    Port: <strong>19132 (UDP)</strong> • Active World: <strong>"Bedrock level"</strong>
+                  </div>
+                </div>
+
+                <div class="sim-power-actions">
+                  <button id="sim-power-btn" class="btn btn-sm btn-secondary">
+                    🛑 Stop Server
+                  </button>
+                </div>
+              </div>
+
+              <!-- VIEW 1: OVERVIEW & TELEMETRY -->
+              <div id="view-overview">
+                <!-- Mini Waveforms Grid -->
+                <div class="telemetry-row">
+                  <div class="telemetry-mini-card">
+                    <div class="tele-header">
+                      <span>Server Ticks (TPS)</span>
+                      <span style="color: #10b981;">● OPTIMAL</span>
+                    </div>
+                    <div class="tele-value" id="tele-tps">20.0</div>
+                    <canvas id="tps-canvas" class="tele-canvas"></canvas>
+                  </div>
+
+                  <div class="telemetry-mini-card">
+                    <div class="tele-header">
+                      <span>CPU Utilization</span>
+                      <span style="color: #06b6d4;">● BDS THREAD</span>
+                    </div>
+                    <div class="tele-value" id="tele-cpu">3.8%</div>
+                    <canvas id="cpu-canvas" class="tele-canvas"></canvas>
+                  </div>
+
+                  <div class="telemetry-mini-card">
+                    <div class="tele-header">
+                      <span>Memory Working Set</span>
+                      <span style="color: #8b5cf6;">● RESIDENT</span>
+                    </div>
+                    <div class="tele-value" id="tele-ram">890 MB</div>
+                    <canvas id="ram-canvas" class="tele-canvas"></canvas>
+                  </div>
+                </div>
+
+                <!-- Live Connected Players Strip -->
+                <div style="background: rgba(15,23,42,0.5); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.25rem;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                      <span>🟢 Live Connected Players</span>
+                      <span class="badge badge-emerald" style="font-size: 0.65rem;">Interact Below!</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: #64748b;">Click 💖 Heal, 🍖 Feed, 👢 Kick or 🚫 Ban</span>
+                  </div>
+
+                  <table class="sim-player-table">
+                    <thead>
+                      <tr>
+                        <th>Gamertag</th>
+                        <th>Permission</th>
+                        <th>Whitelist</th>
+                        <th style="text-align: right;">Instant Controls</th>
+                      </tr>
+                    </thead>
+                    <tbody id="sim-player-tbody">
+                      <!-- Rendered by app.js -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- VIEW 2: LIVE CONSOLE -->
+              <div id="view-console" style="display: none;">
+                <div class="sim-terminal-screen" id="sim-terminal">
+                  <!-- Streaming lines rendered dynamically -->
+                </div>
+                <div class="sim-cmd-input-bar">
+                  <input type="text" id="sim-cmd-input" class="sim-input" placeholder="Type Bedrock command (e.g. effect AlexGamer heal 1 255 true, op Steve, help)...">
+                  <button id="sim-cmd-submit" class="btn btn-sm btn-primary">Dispatch</button>
+                </div>
+                <div style="display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                  <span style="font-size: 0.72rem; color: #64748b;">Try Quick Commands:</span>
+                  <button class="btn-chip" onclick="document.getElementById('sim-cmd-input').value='list'; document.getElementById('sim-cmd-submit').click();">/list</button>
+                  <button class="btn-chip" onclick="document.getElementById('sim-cmd-input').value='op SteveCraft'; document.getElementById('sim-cmd-submit').click();">/op SteveCraft</button>
+                  <button class="btn-chip" onclick="document.getElementById('sim-cmd-input').value='time set day'; document.getElementById('sim-cmd-submit').click();">/time set day</button>
+                  <button class="btn-chip" onclick="document.getElementById('sim-cmd-input').value='weather clear'; document.getElementById('sim-cmd-submit').click();">/weather clear</button>
+                </div>
+              </div>
+
+              <!-- VIEW 3: WORLD GENERATOR -->
+              <div id="view-worldgen" style="display: none;">
+                <div style="background: rgba(15,23,42,0.5); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem;">
+                  <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">✨ Bedrock Terrain Generator</h3>
+                  <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.25rem;">
+                    Create fresh worlds with custom seeds, gamemodes, difficulty levels, and generator templates before booting the server.
+                  </p>
+
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                    <div>
+                      <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">World Display Name</label>
+                      <input type="text" class="sim-input" style="width: 100%; margin-top: 0.35rem;" value="New Adventure Realm">
+                    </div>
+                    <div>
+                      <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">World Seed</label>
+                      <div style="display: flex; gap: 0.4rem; margin-top: 0.35rem;">
+                        <input type="text" id="sim-seed-input" class="sim-input" style="width: 100%;" value="420691337">
+                        <button id="sim-random-seed-btn" class="btn btn-sm btn-secondary" title="Roll Random Seed">🎲 Roll</button>
+                      </div>
+                    </div>
+                    <div>
+                      <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Default Gamemode</label>
+                      <select class="sim-input" style="width: 100%; margin-top: 0.35rem;">
+                        <option>Survival Mode</option>
+                        <option>Creative Mode</option>
+                        <option>Adventure Mode</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Generator Type</label>
+                      <select class="sim-input" style="width: 100%; margin-top: 0.35rem;">
+                        <option>Default (Infinite Biomes)</option>
+                        <option>Flat (Superflat Canvas)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; gap: 0.75rem; align-items: center; justify-content: flex-end;">
+                    <button class="btn btn-primary btn-sm" onclick="showToast('World Generated Successfully!', 'success');">
+                      ✨ Generate & Activate World
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- VIEW 4: DEDICATED PLAYER MATRIX -->
+              <div id="view-players" style="display: none;">
+                <div style="background: rgba(15,23,42,0.5); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem;">
+                  <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.35rem;">👑 Player & Permission Center</h3>
+                  <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">
+                    Real-time player monitoring with zero-delay kicking, persistent SQLite banlists, and instantaneous health/saturation restoration.
+                  </p>
+
+                  <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                    <span class="badge badge-emerald">Online: 4 Players</span>
+                    <span class="badge badge-purple">Operators: 1 (AlexGamer)</span>
+                    <span class="badge badge-cyan">Allowlist: Synced</span>
+                  </div>
+
+                  <p style="font-size: 0.85rem; color: #64748b;">
+                    Try clicking any button in the table above to test the interactive sound synthesis and live command injection!
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         BENTO FEATURES GRID
+         ========================================================================== -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Enterprise Bedrock Architecture</span>
+          <h2 class="section-title">Engineered for Seamless Server Management</h2>
+          <p class="section-desc">
+            Everything you need to host, protect, and scale your Minecraft Bedrock realm with zero technical friction.
+          </p>
+        </div>
+
+        <div class="bento-grid">
+          <!-- Card 1: Instant Player Heals & Food -->
+          <div class="bento-card bento-col-8">
+            <div class="card-glare"></div>
+            <div class="card-icon-wrap" style="color: #f472b6; border-color: rgba(236, 72, 153, 0.3); background: rgba(236, 72, 153, 0.1);">
+              💖
+            </div>
+            <h3 class="bento-title">Instant Healing & Food Saturation</h3>
+            <p class="bento-p">
+              Restore player health and hunger meters instantaneously with a single click. FatGoats BSM+ injects native Bedrock <code>effect &lt;player&gt; heal 1 255 true</code> and <code>effect &lt;player&gt; saturation 1 255 true</code> directly to the process stdin with particle suppression for instantaneous full recovery.
+            </p>
+            <div class="feature-tag-list">
+              <span class="f-tag">Instant 20 HP Health</span>
+              <span class="f-tag">100% Saturation</span>
+              <span class="f-tag">Particle Suppression</span>
+              <span class="f-tag">No Plugin Required</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Zero-Delay Ban & Ejection Guard -->
+          <div class="bento-card bento-col-4">
+            <div class="card-glare"></div>
+            <div class="card-icon-wrap" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.1);">
+              🚫
+            </div>
+            <h3 class="bento-title">Connection Guard & Bans</h3>
+            <p class="bento-p">
+              Auto-kick connecting banned players before terrain packets load. Synchronizes persistent SQLite bans with <code>banned-players.json</code> and purges them from the whitelist.
+            </p>
+            <div class="feature-tag-list">
+              <span class="f-tag">Auto-Kick on Connect</span>
+              <span class="f-tag">Preset Reason Chips</span>
+              <span class="f-tag">1-Click Unban</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Dynamic World Generator -->
+          <div class="bento-card bento-col-4">
+            <div class="card-glare"></div>
+            <div class="card-icon-wrap" style="color: #10b981; border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.1);">
+              ✨
+            </div>
+            <h3 class="bento-title">Terrain Generator Engine</h3>
+            <p class="bento-p">
+              Generate new Bedrock worlds on the fly. Select random or custom seeds, gamemodes, difficulty, and infinite/flat generators with automatic <code>server.properties</code> sync.
+            </p>
+            <div class="feature-tag-list">
+              <span class="f-tag">Random Seed Roller</span>
+              <span class="f-tag">Flat & Infinite</span>
+              <span class="f-tag">levelname.txt Engine</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Drag & Drop Addon Ecosystem -->
+          <div class="bento-card bento-col-4">
+            <div class="card-glare"></div>
+            <div class="card-icon-wrap" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.1);">
+              🧩
+            </div>
+            <h3 class="bento-title">Addon & Mod Manager</h3>
+            <p class="bento-p">
+              Drag-and-drop <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code> archives. The engine automatically parses UUID manifests, pairs behavior and resource packs, and orders load priorities.
+            </p>
+            <div class="feature-tag-list">
+              <span class="f-tag">Manifest Auto-Parser</span>
+              <span class="f-tag">Dual-Pack Sync</span>
+              <span class="f-tag">In-Place Updates</span>
+            </div>
+          </div>
+
+          <!-- Card 5: Xbox Live Bot & Crossplay Bridge -->
+          <div class="bento-card bento-col-4">
+            <div class="card-glare"></div>
+            <div class="card-icon-wrap" style="color: #107c10; border-color: rgba(16, 124, 16, 0.3); background: rgba(16, 124, 16, 0.1);">
+              🎮
+            </div>
+            <h3 class="bento-title">Xbox Console Crossplay</h3>
+            <p class="bento-p">
+              Integrated Xbox Live bot advertises the server directly on Xbox friends lists. Players on Xbox Series X|S, PS5, Switch, and mobile can join straight from their Friends tab without DNS hacks.
+            </p>
+            <div class="feature-tag-list">
+              <span class="f-tag">Console Crossplay</span>
+              <span class="f-tag">Auto-Friend Accepts</span>
+              <span class="f-tag">No DNS Tricks</span>
+            </div>
+          </div>
+
+          <!-- Card 6: Zero-Config Cloudflare & Playit Tunnels -->
+          <div class="bento-card bento-col-6">
+            <div class="card-glare"></div>
+            <div class="card-icon-wrap" style="color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.1);">
+              🌐
+            </div>
+            <h3 class="bento-title">Zero-Port-Forward WAN Tunnels</h3>
+            <p class="bento-p">
+              Play with friends anywhere across the globe without touching your home router firewall. Embedded Cloudflare and Playit tunneling daemons grant you a public domain with end-to-end DDoS mitigation.
+            </p>
+            <div class="feature-tag-list">
+              <span class="f-tag">No Port 19132 Opening</span>
+              <span class="f-tag">DDoS Protected</span>
+              <span class="f-tag">Custom Domain Aliasing</span>
+            </div>
+          </div>
+
+          <!-- Card 7: Zero-Downtime Auto-Backups -->
+          <div class="bento-card bento-col-6">
+            <div class="card-glare"></div>
+            <div class="card-icon-wrap" style="color: #8b5cf6; border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.1);">
+              💾
+            </div>
+            <h3 class="bento-title">Live Hot-Backups & One-Click Restore</h3>
+            <p class="bento-p">
+              Leverages BDS <code>save hold</code> / <code>save resume</code> commands to flush world memory into LevelDB chunks and create compressed <code>.mcworld</code> archives while players are actively building.
+            </p>
+            <div class="feature-tag-list">
+              <span class="f-tag">Zero Server Halts</span>
+              <span class="f-tag">Scheduled Cron Backups</span>
+              <span class="f-tag">Direct .mcworld Export</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         COMPARISON TABLE
+         ========================================================================== -->
+    <section class="section" id="comparison" style="background: rgba(15, 23, 42, 0.25);">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Direct Feature Comparison</span>
+          <h2 class="section-title">Why Server Owners Choose FatGoats BSM+</h2>
+          <p class="section-desc">
+            See how the platform compares against vanilla command-line execution and generic server wrappers.
+          </p>
+        </div>
+
+        <div class="table-wrap">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Capability / Feature</th>
+                <th>Vanilla BDS CLI</th>
+                <th>Generic Web GUIs</th>
+                <th class="col-highlight">FatGoats BSM+</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="compare-feature-cell">Instant Health & Food Restoration</td>
+                <td>❌ Manual Console Codes</td>
+                <td>❌ Unsupported</td>
+                <td class="col-highlight">✓ 1-Click Instant Healing & Saturation</td>
+              </tr>
+              <tr>
+                <td class="compare-feature-cell">Banning & Connection Interception</td>
+                <td>❌ No Native Ban Command</td>
+                <td>⚠️ Clunky Whitelist Hack</td>
+                <td class="col-highlight">✓ Zero-Delay Auto-Kick & SQLite Registry</td>
+              </tr>
+              <tr>
+                <td class="compare-feature-cell">Interactive World Generator</td>
+                <td>❌ Requires Manual Files</td>
+                <td>⚠️ Basic Rename</td>
+                <td class="col-highlight">✓ Full Terrain, Seed & Preset Generator</td>
+              </tr>
+              <tr>
+                <td class="compare-feature-cell">Crossplay Friends Bot (Xbox/PS/Switch)</td>
+                <td>❌ Impossible</td>
+                <td>❌ Unsupported</td>
+                <td class="col-highlight">✓ Built-in Xbox Live Friend Bridge</td>
+              </tr>
+              <tr>
+                <td class="compare-feature-cell">Zero-Port-Forward Tunneling</td>
+                <td>❌ Requires Router Access</td>
+                <td>❌ Manual External Tools</td>
+                <td class="col-highlight">✓ Integrated Cloudflare & Playit Daemons</td>
+              </tr>
+              <tr>
+                <td class="compare-feature-cell">Addon Dependency Resolution</td>
+                <td>❌ Manual Zip Unpack</td>
+                <td>⚠️ Basic File Browser</td>
+                <td class="col-highlight">✓ Automatic UUID Manifest & Pair Linking</td>
+              </tr>
+              <tr>
+                <td class="compare-feature-cell">Windows System Tray Minimization</td>
+                <td>❌ Clutter Desktop Window</td>
+                <td>❌ Browser Only</td>
+                <td class="col-highlight">✓ Native Windows Tray Watchdog</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         INSTALLATION & QUICK START
+         ========================================================================== -->
+    <section class="section" id="install">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Quick Deployment</span>
+          <h2 class="section-title">Up and Running in 60 Seconds</h2>
+          <p class="section-desc">
+            Choose between our standalone one-click Windows installer or clone directly with Git.
+          </p>
+        </div>
+
+        <div class="install-box">
+          <div>
+            <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1.25rem;">
+              Option 1: Windows One-Click Installer
+            </h3>
+
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <h4>Download the Installer</h4>
+                <p>Grab <code>BedrockServerManager-Setup.exe</code> directly from GitHub Releases.</p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <h4>Run the Setup Wizard</h4>
+                <p>The wizard verifies Node.js, registers the tray application, and creates desktop shortcuts.</p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <h4>Open in Browser</h4>
+                <p>Access your dashboard immediately at <code>http://localhost:3001</code>.</p>
+              </div>
+            </div>
+
+            <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases/latest" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top: 1rem;">
+              <span>⬇️ Download BedrockServerManager-Setup.exe</span>
+            </a>
+          </div>
+
+          <div>
+            <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1.25rem;">
+              Option 2: Developer Git Clone
+            </h3>
+            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 1rem;">
+              Deploy from terminal on any modern Windows 10/11 or Windows Server environment:
+            </p>
+
+            <div class="code-block" style="margin-bottom: 0.75rem;">
+              <span>git clone https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus.git</span>
+              <button class="copy-btn" data-copy="git clone https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus.git">Copy</button>
+            </div>
+
+            <div class="code-block" style="margin-bottom: 0.75rem;">
+              <span>npm run setup</span>
+              <button class="copy-btn" data-copy="npm run setup">Copy</button>
+            </div>
+
+            <div class="code-block" style="margin-bottom: 1.25rem;">
+              <span>npm start</span>
+              <button class="copy-btn" data-copy="npm start">Copy</button>
+            </div>
+
+            <span class="badge badge-cyan">✓ Node.js 18+ Supported</span>
+            <span class="badge badge-emerald" style="margin-left: 0.5rem;">✓ SQLite & WASM Built-in</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FAQ SECTION
+         ========================================================================== -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-tag">Frequently Asked Questions</span>
+          <h2 class="section-title">Everything You Need to Know</h2>
+        </div>
+
+        <div class="faq-grid">
+          <div class="faq-card open">
+            <div class="faq-header">
+              <span class="faq-question">How does console crossplay work without port forwarding?</span>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-body">
+              <p class="faq-answer">
+                FatGoats BSM+ integrates an automated Xbox Live bot that connects to the Xbox network and friends your players. Console Minecraft clients (Xbox, PlayStation, Nintendo Switch) automatically discover the server through the native Friends tab without requiring DNS redirects or port alterations.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-header">
+              <span class="faq-question">How do Instant Healing and Instant Food heal work?</span>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-body">
+              <p class="faq-answer">
+                In Minecraft Bedrock Edition, the server uses native <code>/effect &lt;player&gt; heal 1 255 true</code> and <code>/effect &lt;player&gt; saturation 1 255 true</code> commands. Amplifier 255 instantly replenishes health points and saturation without displaying floating potion bubbles.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-header">
+              <span class="faq-question">Can I import my existing Minecraft Bedrock worlds?</span>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-body">
+              <p class="faq-answer">
+                Yes! Simply drag and drop any <code>.mcworld</code> or <code>.zip</code> file into the World Management view. The manager inspects the internal NBT headers, extracts the LevelDB chunks, and safely registers the world for instant play.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-card">
+            <div class="faq-header">
+              <span class="faq-question">How are banned players kept from reconnecting?</span>
+              <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-body">
+              <p class="faq-answer">
+                While vanilla BDS lacks a persistent ban system, FatGoats BSM+ acts as a high-speed process wrapper. The moment a client attempts connection, the manager validates their Gamertag and XUID against SQLite and <code>banned-players.json</code>, issuing an immediate kick before any world chunks load.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top">
+          <div class="brand-link">
+            <div class="brand-logo-icon">🟩</div>
+            <div class="brand-text-wrap">
+              <span class="brand-name">FatGoats Bedrock Server Manager+</span>
+              <span class="brand-sub">Crafted with passion for the Minecraft Bedrock community</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+              <span>GitHub Repository</span>
+            </a>
+            <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+              <span>Releases & Updates</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>&copy; 2026 youngtoaster / FatGoats. Released under the MIT License.</span>
+          <span>Minecraft is a trademark of Mojang Synergies AB. Not an official Minecraft product.</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Audio Toggle Floating Control -->
+  <button id="audio-toggle" class="audio-toggle-btn" title="Toggle Sound Effects">🔊</button>
+
+  <!-- Interactive Floating Toast -->
+  <div id="showcase-toast" class="showcase-toast">
+    <span>✓</span> <span>Action executed</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
