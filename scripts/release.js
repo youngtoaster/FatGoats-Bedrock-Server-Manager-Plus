@@ -37,6 +37,13 @@ async function main() {
   console.log(` Publishing Release: ${tagName} (v${version})`);
   console.log('========================================================');
 
+  // Ensure git directory is in PATH for gh CLI
+  const gitCmd = getGitCmd();
+  const gitDir = path.dirname(gitCmd);
+  if (!process.env.PATH.includes(gitDir)) {
+    process.env.PATH = `${gitDir}${path.delimiter}${process.env.PATH}`;
+  }
+
   // 1. Build Client
   console.log('\n[1/6] Building Production React Frontend...');
   run('npm run build', path.join(ROOT_DIR, 'client'));
