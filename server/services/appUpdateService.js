@@ -648,26 +648,47 @@ class AppUpdateService {
       }
 
       // ------------------------------------------------------------------------
-      // STEP 5: Recompile Windows Native Tray Launcher Binary
+      // STEP 5: Recompile Windows Native Executables
       // ------------------------------------------------------------------------
       this.updatePercent = 95;
       this.updateStage = 5;
-      this.updateProgress = 'Recompiling BedrockServerManager.exe Windows tray launcher...';
+      this.updateProgress = 'Recompiling native Windows executables (Tray Launcher & Installer)...';
       const cscPath = 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe';
-      if (fs.existsSync(cscPath) && fs.existsSync(path.join(ROOT_DIR, 'tray', 'Program.cs'))) {
-        try {
-          prepareLockedFileForReplacement(path.join(ROOT_DIR, 'BedrockServerManager.exe'));
-          execSync(
-            `"${cscPath}" /target:winexe /out:BedrockServerManager.exe /win32icon:tray\\app.ico /r:System.dll,System.Drawing.dll,System.Windows.Forms.dll,System.Core.dll tray\\Program.cs`,
-            {
-              cwd: ROOT_DIR,
-              windowsHide: true,
-              timeout: 30000,
-            }
-          );
-          console.log('[AppUpdateService] Recompiled BedrockServerManager.exe.');
-        } catch (err) {
-          console.warn('[AppUpdateService] Tray recompile note:', err.message);
+      if (fs.existsSync(cscPath)) {
+        // 5a. Recompile Tray Launcher
+        if (fs.existsSync(path.join(ROOT_DIR, 'tray', 'Program.cs'))) {
+          try {
+            prepareLockedFileForReplacement(path.join(ROOT_DIR, 'BedrockServerManager.exe'));
+            execSync(
+              `"${cscPath}" /target:winexe /out:BedrockServerManager.exe /win32icon:tray\\app.ico /r:System.dll,System.Drawing.dll,System.Windows.Forms.dll,System.Core.dll tray\\Program.cs`,
+              {
+                cwd: ROOT_DIR,
+                windowsHide: true,
+                timeout: 30000,
+              }
+            );
+            console.log('[AppUpdateService] Recompiled BedrockServerManager.exe.');
+          } catch (err) {
+            console.warn('[AppUpdateService] Tray recompile note:', err.message);
+          }
+        }
+
+        // 5b. Recompile Setup Installer
+        if (fs.existsSync(path.join(ROOT_DIR, 'installer', 'Installer.cs'))) {
+          try {
+            prepareLockedFileForReplacement(path.join(ROOT_DIR, 'BedrockServerManager-Setup.exe'));
+            execSync(
+              `"${cscPath}" /target:winexe /out:BedrockServerManager-Setup.exe /win32icon:tray\\app.ico /r:System.dll,System.Drawing.dll,System.Windows.Forms.dll,System.Core.dll,System.IO.Compression.dll,System.IO.Compression.FileSystem.dll installer\\Installer.cs`,
+              {
+                cwd: ROOT_DIR,
+                windowsHide: true,
+                timeout: 30000,
+              }
+            );
+            console.log('[AppUpdateService] Recompiled BedrockServerManager-Setup.exe.');
+          } catch (err) {
+            console.warn('[AppUpdateService] Installer recompile note:', err.message);
+          }
         }
       }
 

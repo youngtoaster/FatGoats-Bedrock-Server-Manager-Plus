@@ -12,6 +12,9 @@
     "sync:website": "node -e \"require('fs').cpSync('website', 'client/website', {recursive:true})\"",
     "website": "npx serve website",
     "build:tray": "cd tray && build.bat",
+    "build:installer": "cd installer && build.bat",
+    "build:exes": "npm run build:tray && npm run build:installer",
+    "release": "node scripts/release.js",
     "start": "set NODE_ENV=production && node server/index.js",
     "setup": "npm install && cd client && npm install && node server/setup.js",
     "lint:ui": "lintapple http://localhost:3001"

@@ -8,7 +8,6 @@ set CSC=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe
 
 if not exist "%CSC%" (
     echo Error: C# compiler not found at %CSC%
-    pause
     exit /b 1
 )
 
@@ -20,8 +19,9 @@ if %ERRORLEVEL% EQU 0 (
     echo ===================================================
     echo  SUCCESS: BedrockServerManager.exe built!
     echo ===================================================
+    exit /b 0
 ) else (
     echo.
     echo Error during compilation.
+    exit /b 1
 )
-pause

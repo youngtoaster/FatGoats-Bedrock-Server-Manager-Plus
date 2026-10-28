@@ -1,0 +1,71 @@
+name: Release Executables
+
+on:
+  push:
+    tags:
+      - 'v*'
+  release:
+    types: [published, created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release Tag name (e.g. v1.2.3)'
+        required: true
+        default: 'v1.2.3'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build & Release Executables
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          cd client && npm ci --no-audit --no-fund
+
+      - name: Build React Client
+        run: |
+          cd client && npm run build
+
+      - name: Compile Native Windows Executables
+        shell: cmd
+        run: |
+          cd tray && call build.bat
+          cd ..
+          cd installer && call build.bat
+          cd ..
+
+      - name: Verify Executables
+        shell: pwsh
+        run: |
+          if (!(Test-Path BedrockServerManager.exe)) { throw "BedrockServerManager.exe was not created!" }
+          if (!(Test-Path BedrockServerManager-Setup.exe)) { throw "BedrockServerManager-Setup.exe was not created!" }
+          Get-Item BedrockServerManager.exe, BedrockServerManager-Setup.exe | Select-Object Name, Length
+
+      - name: Upload Artifacts to GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+        with:
+          tag_name: ${{ github.event.release.tag_name || github.ref_name || inputs.tag }}
+          name: ${{ github.event.release.name || github.ref_name || inputs.tag }}
+          files: |
+            BedrockServerManager-Setup.exe
+            BedrockServerManager.exe
+          generate_release_notes: true
+          draft: false
+          prerelease: false

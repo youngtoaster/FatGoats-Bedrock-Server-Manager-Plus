@@ -45,7 +45,7 @@ namespace BedrockServerManager.Installer
         private Panel footerPanel;
         private BackgroundWorker worker;
 
-        private const string REPO_ZIP_URL = "https://github.com/tywentghxst/FatGoats-Bedrock-Server-Manager-Plus/archive/refs/heads/main.zip";
+        private const string REPO_ZIP_URL = "https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/archive/refs/heads/main.zip";
         private const string NODE_ZIP_URL = "https://nodejs.org/dist/v20.18.0/node-v20.18.0-win-x64.zip";
         private const string JAVA_ZIP_URL = "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_x64_windows_hotspot_21.0.12.1_1.zip";
         private const string JAVA_API_URL = "https://api.adoptium.net/v3/binary/latest/21/ga/windows/x64/jre/hotspot/normal/eclipse?project=jdk";
