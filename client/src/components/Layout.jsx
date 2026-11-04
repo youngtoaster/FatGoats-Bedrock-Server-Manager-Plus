@@ -3,6 +3,30 @@ import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api';
 import AppUpdateModal from './AppUpdateModal';
+import {
+  LayoutDashboard,
+  Users,
+  Terminal,
+  Globe,
+  Sliders,
+  FolderArchive,
+  Archive,
+  Package,
+  ShieldCheck,
+  Settings,
+  GitBranch,
+  ClipboardList,
+  Menu,
+  X,
+  Play,
+  RotateCcw,
+  Square,
+  LogOut,
+  Radio,
+  Loader2,
+  ArrowUpCircle,
+  Server
+} from 'lucide-react';
 
 export const Layout = () => {
   const { user, logout, isAdmin } = useAuth();
@@ -83,12 +107,12 @@ export const Layout = () => {
     setActionLoading('start-all');
     try {
       const res = await api.Server.startAll();
-      setActionToast({ type: 'success', text: res?.message || 'Started all services (Server, Playit, and Xbox Bot)!' });
-      setTimeout(() => setActionToast(null), 4500);
+      setActionToast({ type: 'success', text: res?.message || 'Started all services (server, tunnel, and relay).' });
+      setTimeout(() => setActionToast(null), 4000);
       await fetchStatus();
     } catch (err) {
       setActionToast({ type: 'error', text: err?.message || 'Failed to start all services.' });
-      setTimeout(() => setActionToast(null), 4500);
+      setTimeout(() => setActionToast(null), 4000);
     } finally {
       setActionLoading(null);
     }
@@ -99,12 +123,12 @@ export const Layout = () => {
     setActionLoading('restart-all');
     try {
       const res = await api.Server.restartAll();
-      setActionToast({ type: 'success', text: res?.message || 'Restarted all services (Server, Playit, and Xbox Bot)!' });
-      setTimeout(() => setActionToast(null), 4500);
+      setActionToast({ type: 'success', text: res?.message || 'Restarted all services.' });
+      setTimeout(() => setActionToast(null), 4000);
       await fetchStatus();
     } catch (err) {
       setActionToast({ type: 'error', text: err?.message || 'Failed to restart all services.' });
-      setTimeout(() => setActionToast(null), 4500);
+      setTimeout(() => setActionToast(null), 4000);
     } finally {
       setActionLoading(null);
     }
@@ -115,12 +139,12 @@ export const Layout = () => {
     setActionLoading('stop-all');
     try {
       const res = await api.Server.stopAll();
-      setActionToast({ type: 'success', text: res?.message || 'Stopped all services (Server, Playit, and Xbox Bot).' });
-      setTimeout(() => setActionToast(null), 4500);
+      setActionToast({ type: 'success', text: res?.message || 'Stopped all services.' });
+      setTimeout(() => setActionToast(null), 4000);
       await fetchStatus();
     } catch (err) {
       setActionToast({ type: 'error', text: err?.message || 'Failed to stop all services.' });
-      setTimeout(() => setActionToast(null), 4500);
+      setTimeout(() => setActionToast(null), 4000);
     } finally {
       setActionLoading(null);
     }
@@ -144,18 +168,18 @@ export const Layout = () => {
   const getPageTitle = () => {
     const path = location.pathname;
     if (path === '/') return 'Dashboard';
-    if (path.startsWith('/players')) return 'Players & Permissions';
-    if (path.startsWith('/console')) return 'Live Console';
-    if (path.startsWith('/properties')) return 'Server Properties';
-    if (path.startsWith('/worlds')) return 'Worlds & Saves';
-    if (path.startsWith('/backups')) return 'Backup Archives';
-    if (path.startsWith('/addons')) return 'Add-ons & Mods';
-    if (path.startsWith('/users')) return 'Access Vault & Users';
-    if (path.startsWith('/settings')) return 'Settings & Login Credentials';
-    if (path.startsWith('/versions')) return 'Version Management';
-    if (path.startsWith('/audit')) return 'Security Audit Log';
-    if (path.startsWith('/xbox')) return 'Console & Public Access';
-    return 'Server Manager';
+    if (path.startsWith('/players')) return 'Players and permissions';
+    if (path.startsWith('/console')) return 'Console';
+    if (path.startsWith('/properties')) return 'Server properties';
+    if (path.startsWith('/worlds')) return 'Worlds and saves';
+    if (path.startsWith('/backups')) return 'Backup archives';
+    if (path.startsWith('/addons')) return 'Add-ons and mods';
+    if (path.startsWith('/users')) return 'Access vault and users';
+    if (path.startsWith('/settings')) return 'Settings and credentials';
+    if (path.startsWith('/versions')) return 'Version management';
+    if (path.startsWith('/audit')) return 'Security audit trail';
+    if (path.startsWith('/xbox')) return 'Console and public access';
+    return 'Server manager';
   };
 
   return (
@@ -167,26 +191,26 @@ export const Layout = () => {
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
           <div className="brand-logo-cube">
-            <span className="cube-face">⛏️</span>
+            <Server size={18} className="text-emerald" />
           </div>
           <div className="brand-text">
             <span className="brand-title">Bedrock Panel</span>
             <span className="brand-badge">BDS Manager</span>
           </div>
           <button className="sidebar-close-btn" onClick={toggleSidebar} aria-label="Close menu">
-            ✕
+            <X size={16} />
           </button>
         </div>
 
         <nav className="sidebar-nav">
-          <div className="nav-group-label">OVERVIEW & MONITORING</div>
+          <div className="nav-group-label">Overview and monitoring</div>
           <NavLink
             to="/"
             end
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
             onClick={closeSidebarOnNav}
           >
-            <span className="nav-icon">⚡</span>
+            <span className="nav-icon"><LayoutDashboard size={16} /></span>
             <span className="nav-text">Dashboard</span>
           </NavLink>
 
@@ -195,8 +219,8 @@ export const Layout = () => {
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
             onClick={closeSidebarOnNav}
           >
-            <span className="nav-icon">🎮</span>
-            <span className="nav-text">Players & OPs</span>
+            <span className="nav-icon"><Users size={16} /></span>
+            <span className="nav-text">Players and operators</span>
           </NavLink>
 
           <NavLink
@@ -204,8 +228,8 @@ export const Layout = () => {
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
             onClick={closeSidebarOnNav}
           >
-            <span className="nav-icon">🖥️</span>
-            <span className="nav-text">Interactive Console</span>
+            <span className="nav-icon"><Terminal size={16} /></span>
+            <span className="nav-text">Console</span>
           </NavLink>
 
           <NavLink
@@ -213,21 +237,20 @@ export const Layout = () => {
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
             onClick={closeSidebarOnNav}
           >
-            <span className="nav-icon">🌐</span>
-            <span className="nav-text">Console & Public Access</span>
-            <span className="nav-badge-pill" style={{ background: '#107c10', color: '#fff' }}>Crossplay</span>
+            <span className="nav-icon"><Radio size={16} /></span>
+            <span className="nav-text">Crossplay and public access</span>
           </NavLink>
 
           {isAdmin && (
             <>
-              <div className="nav-group-label">CONFIGURATION & WORLDS</div>
+              <div className="nav-group-label">Configuration and worlds</div>
               <NavLink
                 to="/properties"
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 onClick={closeSidebarOnNav}
               >
-                <span className="nav-icon">⚙️</span>
-                <span className="nav-text">Server Properties</span>
+                <span className="nav-icon"><Sliders size={16} /></span>
+                <span className="nav-text">Server properties</span>
               </NavLink>
 
               <NavLink
@@ -235,8 +258,8 @@ export const Layout = () => {
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 onClick={closeSidebarOnNav}
               >
-                <span className="nav-icon">🌍</span>
-                <span className="nav-text">Worlds & Levels</span>
+                <span className="nav-icon"><FolderArchive size={16} /></span>
+                <span className="nav-text">Worlds and saves</span>
               </NavLink>
 
               <NavLink
@@ -244,8 +267,8 @@ export const Layout = () => {
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 onClick={closeSidebarOnNav}
               >
-                <span className="nav-icon">💾</span>
-                <span className="nav-text">Backup Archives</span>
+                <span className="nav-icon"><Archive size={16} /></span>
+                <span className="nav-text">Backup archives</span>
               </NavLink>
 
               <NavLink
@@ -253,8 +276,8 @@ export const Layout = () => {
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 onClick={closeSidebarOnNav}
               >
-                <span className="nav-icon">🧩</span>
-                <span className="nav-text">Addons & Packs</span>
+                <span className="nav-icon"><Package size={16} /></span>
+                <span className="nav-text">Addons and mods</span>
                 <span className="nav-badge-pill">BP/RP</span>
               </NavLink>
             </>
@@ -262,14 +285,14 @@ export const Layout = () => {
 
           {isAdmin && (
             <>
-              <div className="nav-group-label">SECURITY & ENGINE</div>
+              <div className="nav-group-label">Security and system</div>
               <NavLink
                 to="/users"
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 onClick={closeSidebarOnNav}
               >
-                <span className="nav-icon">👥</span>
-                <span className="nav-text">Users & Invites</span>
+                <span className="nav-icon"><ShieldCheck size={16} /></span>
+                <span className="nav-text">Users and access</span>
               </NavLink>
 
               <NavLink
@@ -277,7 +300,7 @@ export const Layout = () => {
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 onClick={closeSidebarOnNav}
               >
-                <span className="nav-icon">⚙️</span>
+                <span className="nav-icon"><Settings size={16} /></span>
                 <span className="nav-text">Settings</span>
               </NavLink>
 
@@ -286,8 +309,8 @@ export const Layout = () => {
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 onClick={closeSidebarOnNav}
               >
-                <span className="nav-icon">📦</span>
-                <span className="nav-text">BDS Versions</span>
+                <span className="nav-icon"><GitBranch size={16} /></span>
+                <span className="nav-text">BDS versions</span>
               </NavLink>
 
               <NavLink
@@ -295,21 +318,21 @@ export const Layout = () => {
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 onClick={closeSidebarOnNav}
               >
-                <span className="nav-icon">📋</span>
-                <span className="nav-text">Audit Trail</span>
+                <span className="nav-icon"><ClipboardList size={16} /></span>
+                <span className="nav-text">Audit trail</span>
               </NavLink>
             </>
           )}
         </nav>
 
-        {/* Sidebar Footer User Info (Clickable shortcut to Settings) */}
+        {/* Sidebar Footer User Info */}
         <div
           className="sidebar-user-card clickable-user-card"
           onClick={() => {
             closeSidebarOnNav();
             navigate('/settings');
           }}
-          title="Click to manage admin login & settings"
+          title="Account settings"
         >
           <div className="user-avatar-badge">
             {user?.username?.[0]?.toUpperCase() || 'A'}
@@ -317,25 +340,19 @@ export const Layout = () => {
           <div className="user-details-group">
             <span className="user-display-name">{user?.username || 'admin'}</span>
             <span className={`user-role-tag ${user?.role === 'admin' ? 'role-admin' : 'role-viewer'}`}>
-              {user?.role === 'admin' ? '🛡️ Administrator' : '👁️ Viewer'}
+              {user?.role === 'admin' ? 'Administrator' : 'Viewer'}
             </span>
           </div>
-          <span className="user-settings-gear" title="Admin Settings">⚙️</span>
+          <Settings size={14} className="user-settings-gear text-muted" />
         </div>
       </aside>
 
       {/* Main Content Area */}
       <div className="main-wrapper">
-        {/* Ambient Atmospheric Mesh Glow Layers */}
-        <div className="ambient-app-glow glow-1" aria-hidden="true" />
-        <div className="ambient-app-glow glow-2" aria-hidden="true" />
-        <div className="ambient-app-glow glow-3" aria-hidden="true" />
-        <div className="ambient-app-grid" aria-hidden="true" />
-        {/* Top Floating Glass Header */}
         <header className="top-header">
           <div className="header-left">
             <button className="mobile-toggle-btn" onClick={toggleSidebar} aria-label="Toggle navigation">
-              ☰
+              <Menu size={18} />
             </button>
             <div className="header-breadcrumbs">
               <span className="crumb-app">Minecraft BDS</span>
@@ -350,8 +367,8 @@ export const Layout = () => {
               <span className="pulse-indicator-dot" />
               <span className="status-pill-text">
                 {serverStatus.state === 'running' && 'Server Online'}
-                {serverStatus.state === 'starting' && 'Starting Up...'}
-                {serverStatus.state === 'stopping' && 'Halting...'}
+                {serverStatus.state === 'starting' && 'Starting'}
+                {serverStatus.state === 'stopping' && 'Stopping'}
                 {serverStatus.state === 'stopped' && 'Server Offline'}
               </span>
             </div>
@@ -368,9 +385,9 @@ export const Layout = () => {
                   : 'status-offline'
               }`}
               onClick={() => navigate('/xbox')}
-              title="Xbox Live Bot Connection Status (Click to open tab)"
+              title="Xbox Live bot status"
             >
-              <span className="xbox-pill-logo">🎮</span>
+              <Radio size={13} className="text-muted" />
               <span className="xbox-pill-dot" />
               <span className="xbox-pill-text">
                 {xboxStatus?.state === 'running'
@@ -378,12 +395,12 @@ export const Layout = () => {
                   : xboxStatus?.pendingLogin
                   ? 'Xbox: Login Code Ready'
                   : xboxStatus?.account?.authenticated
-                  ? `Xbox: ${xboxStatus?.account?.gamertag} (Ready)`
+                  ? `Xbox: ${xboxStatus?.account?.gamertag}`
                   : 'Xbox: Disconnected'}
               </span>
             </div>
 
-            {/* Global Master Power Controls (Start All / Restart All / Stop All) */}
+            {/* Global Master Power Controls */}
             {canControl && (
               <div className="header-master-controls">
                 <button
@@ -391,10 +408,12 @@ export const Layout = () => {
                   className="btn-header-power btn-start-all"
                   onClick={handleStartAll}
                   disabled={actionLoading !== null || (serverStatus.state === 'running' && tunnelStatus?.isRunning && xboxStatus?.state === 'running')}
-                  title="Start Bedrock Server, Playit Tunnel, and Xbox Bot Relay all at once"
+                  title="Start server, tunnel, and Xbox relay"
                 >
-                  <span className="header-btn-icon">{actionLoading === 'start-all' ? '⏳' : '▶'}</span>
-                  <span>{actionLoading === 'start-all' ? 'Starting...' : 'Start All'}</span>
+                  <span className="header-btn-icon">
+                    {actionLoading === 'start-all' ? <Loader2 size={13} className="spinning" /> : <Play size={13} fill="currentColor" />}
+                  </span>
+                  <span>{actionLoading === 'start-all' ? 'Starting...' : 'Start all'}</span>
                 </button>
 
                 <button
@@ -402,10 +421,12 @@ export const Layout = () => {
                   className="btn-header-power btn-restart-all"
                   onClick={handleRestartAll}
                   disabled={actionLoading !== null}
-                  title="Restart Bedrock Server, Playit Tunnel, and Xbox Bot Relay all at once"
+                  title="Restart server, tunnel, and Xbox relay"
                 >
-                  <span className="header-btn-icon">{actionLoading === 'restart-all' ? '⏳' : '🔄'}</span>
-                  <span>{actionLoading === 'restart-all' ? 'Restarting...' : 'Restart All'}</span>
+                  <span className="header-btn-icon">
+                    {actionLoading === 'restart-all' ? <Loader2 size={13} className="spinning" /> : <RotateCcw size={13} />}
+                  </span>
+                  <span>{actionLoading === 'restart-all' ? 'Restarting...' : 'Restart all'}</span>
                 </button>
 
                 {(serverStatus.state === 'running' || tunnelStatus?.isRunning || xboxStatus?.state === 'running') && (
@@ -414,10 +435,12 @@ export const Layout = () => {
                     className="btn-header-power btn-stop-all"
                     onClick={handleStopAll}
                     disabled={actionLoading !== null}
-                    title="Stop Bedrock Server, Playit Tunnel, and Xbox Bot Relay"
+                    title="Stop server, tunnel, and Xbox relay"
                   >
-                    <span className="header-btn-icon">{actionLoading === 'stop-all' ? '⏳' : '⏹'}</span>
-                    <span>{actionLoading === 'stop-all' ? 'Stopping...' : 'Stop All'}</span>
+                    <span className="header-btn-icon">
+                      {actionLoading === 'stop-all' ? <Loader2 size={13} className="spinning" /> : <Square size={13} fill="currentColor" />}
+                    </span>
+                    <span>{actionLoading === 'stop-all' ? 'Stopping...' : 'Stop all'}</span>
                   </button>
                 )}
               </div>
@@ -429,22 +452,21 @@ export const Layout = () => {
               {updateInfo?.updateAvailable && (
                 <button
                   type="button"
-                  className="btn btn-warning btn-xs font-bold d-flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+                  className="btn btn-warning btn-xs font-medium d-flex items-center gap-1.5 px-3 py-1.5"
                   onClick={() => setShowUpdateModal(true)}
                   title={`Update available: ${updateInfo.commitsBehind} new commit(s)`}
-                  style={{ boxShadow: '0 0 10px rgba(245, 158, 11, 0.4)' }}
                 >
-                  <span>🚀</span>
-                  <span>Update Available ({updateInfo.commitsBehind})</span>
+                  <ArrowUpCircle size={13} />
+                  <span>Update available ({updateInfo.commitsBehind})</span>
                 </button>
               )}
               <span className="user-pill-chip">
                 <span className="chip-avatar">{user?.username?.[0]?.toUpperCase() || 'A'}</span>
                 <span className="chip-name">{user?.username}</span>
               </span>
-              <button onClick={handleLogout} className="btn-logout" title="Sign Out of Panel">
-                <span className="logout-icon">🚪</span>
-                <span>Sign Out</span>
+              <button onClick={handleLogout} className="btn-logout" title="Sign out">
+                <LogOut size={14} className="logout-icon" />
+                <span>Sign out</span>
               </button>
             </div>
           </div>
@@ -462,13 +484,12 @@ export const Layout = () => {
 
         {actionToast && (
           <div className={`header-action-toast toast-${actionToast.type}`}>
-            <span>{actionToast.type === 'success' ? '✓' : '⚠️'}</span>
             <span>{actionToast.text}</span>
             <button
               onClick={() => setActionToast(null)}
               style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', marginLeft: '0.4rem' }}
             >
-              ✕
+              <X size={14} />
             </button>
           </div>
         )}
@@ -478,7 +499,7 @@ export const Layout = () => {
           <Outlet />
         </main>
 
-        {/* Modern Mobile App Bottom Navigation Bar */}
+        {/* Mobile App Bottom Navigation Bar */}
         <nav className="mobile-bottom-nav">
           <NavLink
             to="/"
@@ -486,7 +507,7 @@ export const Layout = () => {
             className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
             onClick={closeSidebarOnNav}
           >
-            <span className="mobile-nav-icon">⚡</span>
+            <span className="mobile-nav-icon"><LayoutDashboard size={18} /></span>
             <span className="mobile-nav-label">Dashboard</span>
           </NavLink>
 
@@ -495,7 +516,7 @@ export const Layout = () => {
             className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
             onClick={closeSidebarOnNav}
           >
-            <span className="mobile-nav-icon">🖥️</span>
+            <span className="mobile-nav-icon"><Terminal size={18} /></span>
             <span className="mobile-nav-label">Console</span>
           </NavLink>
 
@@ -506,7 +527,7 @@ export const Layout = () => {
               onClick={closeSidebarOnNav}
             >
               <div className="mobile-nav-icon-wrap">
-                <span className="mobile-nav-icon">🧩</span>
+                <span className="mobile-nav-icon"><Package size={18} /></span>
               </div>
               <span className="mobile-nav-label">Addons</span>
             </NavLink>
@@ -517,12 +538,12 @@ export const Layout = () => {
               onClick={closeSidebarOnNav}
             >
               <div className="mobile-nav-icon-wrap">
-                <span className="mobile-nav-icon">🎮</span>
+                <span className="mobile-nav-icon"><Radio size={18} /></span>
                 {xboxStatus?.account?.authenticated && (
                   <span className={`mobile-nav-badge-dot ${xboxStatus?.state === 'running' ? 'live' : 'ready'}`} />
                 )}
               </div>
-              <span className="mobile-nav-label">Xbox Bot</span>
+              <span className="mobile-nav-label">Xbox</span>
             </NavLink>
           )}
 
@@ -531,7 +552,7 @@ export const Layout = () => {
             className={({ isActive }) => `mobile-nav-item ${isActive ? 'active' : ''}`}
             onClick={closeSidebarOnNav}
           >
-            <span className="mobile-nav-icon">👥</span>
+            <span className="mobile-nav-icon"><Users size={18} /></span>
             <span className="mobile-nav-label">Players</span>
           </NavLink>
 
@@ -539,12 +560,12 @@ export const Layout = () => {
             type="button"
             className={`mobile-nav-item mobile-nav-menu-btn ${sidebarOpen ? 'active' : ''}`}
             onClick={toggleSidebar}
-            aria-label="Open full menu drawer"
+            aria-label="Open navigation menu"
           >
             <div className="mobile-nav-icon-wrap">
-              <span className="mobile-nav-icon">☰</span>
+              <span className="mobile-nav-icon"><Menu size={18} /></span>
               {xboxStatus?.state === 'running' && (
-                <span className="mobile-nav-badge-dot live" title="Xbox Relay active" />
+                <span className="mobile-nav-badge-dot live" title="Xbox relay active" />
               )}
             </div>
             <span className="mobile-nav-label">Menu</span>

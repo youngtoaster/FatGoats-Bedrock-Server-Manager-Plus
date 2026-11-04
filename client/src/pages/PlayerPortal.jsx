@@ -163,7 +163,7 @@ export const PlayerPortal = () => {
     return (
       <div className="portal-viewport-center">
         <div className="portal-card text-center p-8">
-          <div className="portal-icon-big mb-3">🔒</div>
+          <div className="portal-icon-big mb-3"><Lock size={32} className="text-muted" /></div>
           <h2 className="portal-title text-xl font-bold mb-2">Portal Unavailable</h2>
           <p className="portal-subtitle text-muted mb-6">
             The player server control portal has been disabled by the server administrator.
@@ -233,7 +233,7 @@ export const PlayerPortal = () => {
                 className="btn btn-secondary btn-xs ml-auto"
                 onClick={fetchStatus}
               >
-                🔄 Retry
+                Retry
               </button>
             </div>
           )}
@@ -242,7 +242,7 @@ export const PlayerPortal = () => {
           {requiresAuth ? (
             <div className="portal-auth-prompt mt-6">
               <div className="auth-prompt-badge mb-4">
-                <span>🔒 Member Authentication Required</span>
+                <span>Authentication required</span>
               </div>
               <p className="text-sub text-sm mb-4 text-center">
                 The administrator has configured this portal to require sign-in to control server power.
@@ -351,14 +351,14 @@ export const PlayerPortal = () => {
                                     <div key={player.name} className="portal-player-online-chip" title={`${player.name} is in-game`}>
                                       <PlayerSkinAvatar name={player.name} size={28} />
                                       <span className="portal-chip-name">{player.name}</span>
-                                      {player.isOp && <span className="portal-chip-op-crown" title="Operator">👑</span>}
+                                      {player.isOp && <span className="portal-chip-op-crown">OP</span>}
                                     </div>
                                   ))}
                                 </div>
                               </div>
                             ) : (
                               <div className="portal-online-players-empty-strip">
-                                <span>👥 0 players currently in world</span>
+                                <span>0 players currently in world</span>
                               </div>
                             )}
                           </div>
@@ -400,7 +400,7 @@ export const PlayerPortal = () => {
                             disabled={actionLoading || isStopped || isStarting || isRestarting || cooldown > 0}
                             title={isStopped ? 'Server must be running to restart' : 'Reboot Bedrock server'}
                           >
-                            <span className="btn-portal-icon">🔄</span>
+                            
                             <span className="btn-portal-label">Restart Server</span>
                             <span className="btn-portal-sub">
                               {isStopped ? 'Server Offline' : isRestarting ? 'Restarting...' : 'Reboot World'}
@@ -428,7 +428,7 @@ export const PlayerPortal = () => {
                             disabled={actionLoading || cooldown > 0}
                             title="Restart Server, Playit Tunnel, and Xbox Bot together"
                           >
-                            <span className="btn-portal-icon">🔄⚡</span>
+                            
                             <span className="btn-portal-label">Restart All</span>
                             <span className="btn-portal-sub">Reboot All Services</span>
                           </button>
@@ -443,7 +443,7 @@ export const PlayerPortal = () => {
                         <div className="portal-tunnel-card portal-online-players-card">
                           <div className="portal-tunnel-header d-flex items-center justify-between">
                             <div className="d-flex items-center gap-2">
-                              <span className="portal-tunnel-logo">👥</span>
+                              
                               <div>
                                 <div className="d-flex items-center gap-2">
                                   <h3 className="portal-tunnel-title m-0">Players Online</h3>
@@ -472,7 +472,7 @@ export const PlayerPortal = () => {
                             </div>
                           ) : onlinePlayers.length === 0 ? (
                             <div className="portal-no-players-box text-center p-4">
-                              <span className="portal-empty-icon">🎮</span>
+                              
                               <p className="text-sub text-xs m-0 mt-1">No players currently in world. Jump in and be the first to join!</p>
                             </div>
                           ) : (
@@ -487,7 +487,7 @@ export const PlayerPortal = () => {
                                       </h4>
                                       {player.isOp && (
                                         <span className="portal-op-badge" title="Server Operator">
-                                          👑 OP
+                                          OP
                                         </span>
                                       )}
                                     </div>
@@ -511,7 +511,7 @@ export const PlayerPortal = () => {
                         <div className="portal-tunnel-card">
                           <div className="portal-tunnel-header">
                             <div className="d-flex items-center gap-2">
-                              <span className="portal-tunnel-logo">🌐</span>
+                              
                               <div>
                                 <h3 className="portal-tunnel-title m-0">Direct Server IP Connection</h3>
                                 <span className="portal-tunnel-subtitle">Direct join with Server IP &amp; Port (PC, Mobile, Consoles via DNS)</span>
@@ -532,10 +532,10 @@ export const PlayerPortal = () => {
                                     className="btn-portal-copy-tag"
                                     onClick={async () => {
                                       await safeCopyToClipboard(status.tunnel.publicAddress);
-                                      setActionMessage({ type: 'success', text: `📋 Copied server address "${status.tunnel.publicAddress}" to clipboard!` });
+                                      setActionMessage({ type: 'success', text: `Copied server address "${status.tunnel.publicAddress}" to clipboard!` });
                                     }}
                                   >
-                                    📋 Copy Full Address
+                                    Copy address
                                   </button>
                                 </div>
 
@@ -553,7 +553,7 @@ export const PlayerPortal = () => {
                               </div>
 
                               <div className="portal-xbox-guide mt-3">
-                                <div className="guide-title">📖 How To Join With Server Address:</div>
+                                <div className="guide-title">How to join with server address:</div>
                                 <ol className="portal-guide-steps">
                                   <li>Launch <strong>Minecraft Bedrock</strong> on PC, iPhone, iPad, or Android.</li>
                                   <li>Go to the <strong>Play &gt; Servers</strong> tab and click <strong>Add Server</strong>.</li>
@@ -580,7 +580,7 @@ export const PlayerPortal = () => {
                         <div className="portal-xbox-card">
                           <div className="portal-xbox-header">
                             <div className="d-flex items-center gap-2">
-                              <span className="portal-xbox-logo">🎮</span>
+                              
                               <div>
                                 <h3 className="portal-xbox-title m-0">Console &amp; Mobile Quick-Join</h3>
                                 <span className="portal-xbox-subtitle">Xbox Live Friend Relay Bot</span>
@@ -636,12 +636,12 @@ export const PlayerPortal = () => {
                                       await safeCopyToClipboard(status.xboxBot.gamertag);
                                       setActionMessage({
                                         type: 'success',
-                                        text: `📋 Copied Gamertag "${status.xboxBot.gamertag}" to clipboard!`,
+                                        text: `Copied gamertag "${status.xboxBot.gamertag}" to clipboard!`,
                                       });
                                     }}
                                     title="Copy Gamertag to clipboard"
                                   >
-                                    📋 Copy Tag
+                                    Copy tag
                                   </button>
                                 </div>
                               </div>
@@ -666,7 +666,7 @@ export const PlayerPortal = () => {
                           {/* Quick Step-by-Step Instructions */}
                           <div className="portal-xbox-guide">
                             <div className="guide-title">
-                              <span>🚀 How to join from Xbox, PlayStation, Switch &amp; Mobile:</span>
+                              <span>How to join from console and mobile:</span>
                             </div>
                             <ol className="portal-guide-steps">
                               <li>
@@ -714,7 +714,7 @@ export const PlayerPortal = () => {
                                   disabled={actionLoading || cooldown > 0}
                                   title="Restart Xbox Live Relay Bot"
                                 >
-                                  🔄 Restart Relay Bot
+                                  Restart relay bot
                                 </button>
                               </div>
                             </div>
@@ -736,7 +736,7 @@ export const PlayerPortal = () => {
                             style={{ cursor: 'pointer' }}
                           >
                             <div className="d-flex items-center gap-2">
-                              <span className="portal-tunnel-logo">🧩</span>
+                              
                               <div>
                                 <div className="d-flex items-center gap-2">
                                   <h3 className="portal-tunnel-title m-0">Active Server Addons</h3>
@@ -786,7 +786,7 @@ export const PlayerPortal = () => {
                             <>
                               {addons.length === 0 ? (
                                 <div className="portal-addons-empty">
-                                  <span className="portal-empty-icon">📦</span>
+                                  
                                   <p className="text-sub text-sm m-0">No custom addons currently active on this world.</p>
                                 </div>
                               ) : (
@@ -810,7 +810,7 @@ export const PlayerPortal = () => {
                                           className="portal-addon-icon-fallback"
                                           style={{ display: addon.hasIcon && addon.iconUuid ? 'none' : 'flex' }}
                                         >
-                                          🧩
+                                          
                                         </div>
                                       </div>
                                       <div className="portal-addon-info">

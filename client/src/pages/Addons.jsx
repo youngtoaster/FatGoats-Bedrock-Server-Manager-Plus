@@ -2,6 +2,33 @@ import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 import { safeCopyToClipboard } from '../utils/clipboard';
+import {
+  Package,
+  FolderArchive,
+  Upload,
+  Download,
+  Trash2,
+  CheckCircle2,
+  AlertTriangle,
+  RefreshCw,
+  Search,
+  Sliders,
+  Palette,
+  Layers,
+  Activity,
+  Sparkles,
+  Copy,
+  ArrowLeftRight,
+  Link2,
+  FolderOpen,
+  FileCheck,
+  X,
+  Check,
+  ExternalLink,
+  Lock,
+  Key,
+  Globe
+} from 'lucide-react';
 
 export function getCleanPackName(addon) {
   if (!addon) return 'Bedrock Add-On';
@@ -950,7 +977,7 @@ export const Addons = () => {
           <div className="d-flex items-center gap-3">
             <h1 className="page-title m-0">Addons &amp; Pack Engine</h1>
             <span className={`badge ${isAdmin ? 'badge-success' : 'badge-primary'}`}>
-              {isAdmin ? '🛡️ Admin Privilege' : '👁️ View-Only'}
+              {isAdmin ? 'Administrator' : 'Viewer'}
             </span>
           </div>
           <p className="page-subtitle mt-1">
@@ -965,7 +992,7 @@ export const Addons = () => {
             disabled={scanningDisk || loading}
             title="Scan behavior_packs/ and resource_packs/ for packs copied via SFTP/manual copy"
           >
-            {scanningDisk ? '🔄 Scanning...' : '📁 Scan Folders'}
+            {scanningDisk ? 'Scanning...' : 'Scan folders'}
           </button>
           <button
             type="button"
@@ -973,7 +1000,7 @@ export const Addons = () => {
             onClick={loadData}
             disabled={loading}
           >
-            🔄 Refresh
+            Refresh
           </button>
         </div>
       </div>
@@ -981,7 +1008,7 @@ export const Addons = () => {
       {/* METRICS DASHBOARD */}
       <div className="addons-metrics-row mb-5">
         <div className="metric-glass-card">
-          <div className="metric-icon">📦</div>
+          <div className="metric-icon"><Package size={18} className="text-muted" /></div>
           <div className="metric-info">
             <span className="metric-label">{showSystemPacks ? 'ALL INSTALLED PACKS' : 'CUSTOM ADDONS'}</span>
             <div className="d-flex items-baseline gap-2">
@@ -1026,7 +1053,7 @@ export const Addons = () => {
         </div>
 
         <div className="metric-glass-card">
-          <div className="metric-icon">🗺️</div>
+          <div className="metric-icon"><FolderArchive size={18} className="text-muted" /></div>
           <div className="metric-info">
             <span className="metric-label">ACTIVE WORLD TARGET</span>
             <span className="metric-val font-mono text-base font-bold text-white truncate" title={activeWorldName}>
@@ -1043,7 +1070,7 @@ export const Addons = () => {
           className={`settings-tab-btn ${engineMode === 'manage' ? 'active' : ''}`}
           onClick={() => setEngineMode('manage')}
         >
-          <span className="tab-icon">🗂️</span>
+          <Layers size={14} className="inline mr-1" />
           <span>Mode 1: Manage Packs ({totalInstalled})</span>
         </button>
         <button
@@ -1062,7 +1089,7 @@ export const Addons = () => {
             loadSuggestions();
           }}
         >
-          <span className="tab-icon">💡</span>
+          <Sparkles size={14} className="inline mr-1" />
           <span className="d-flex items-center gap-1.5">
             <span>Mode 3: Suggestions &amp; Swaps</span>
             {suggestions.length > 0 && (
@@ -1077,7 +1104,7 @@ export const Addons = () => {
           className={`settings-tab-btn ${engineMode === 'diagnostics' ? 'active' : ''}`}
           onClick={() => setEngineMode('diagnostics')}
         >
-          <span className="tab-icon">🩺</span>
+          <Activity size={14} className="inline mr-1" />
           <span>Mode 4: AI Diagnostics Engine</span>
         </button>
       </div>
@@ -1108,7 +1135,7 @@ export const Addons = () => {
               />
 
               <div className="upload-zone-inner p-6 text-center">
-                <div className="upload-animated-icon mb-3">📥</div>
+                <div className="upload-animated-icon mb-3"><Upload size={28} className="text-muted" /></div>
                 <h3 className="upload-main-title mb-1">
                   {isDraggingFile ? 'Drop Addon Packages Here' : 'Importer Gateway: Drag & Drop Bedrock Addons'}
                 </h3>
@@ -1126,7 +1153,7 @@ export const Addons = () => {
                       fileInputRef.current?.click();
                     }}
                   >
-                    📁 Select Addon Files
+                    Browse files
                   </button>
                 </div>
 
@@ -1162,7 +1189,7 @@ export const Addons = () => {
             <div className="d-flex justify-between items-center flex-wrap gap-3">
               {/* Search input */}
               <div className="search-input-wrap flex-1 min-w-260">
-                <span className="search-icon">🔍</span>
+                <Search size={14} className="search-icon text-muted" />
                 <input
                   type="text"
                   className="input-modern w-full"
@@ -1262,7 +1289,7 @@ export const Addons = () => {
                           className="bulk-menu-item text-danger"
                           onClick={() => setBulkConfirmAction('delete_all')}
                         >
-                          🗑️ Delete All Packs
+                          Delete all packs
                         </button>
                       </div>
                     )}
@@ -1322,7 +1349,7 @@ export const Addons = () => {
                     disabled={bulkProcessing}
                     title="Uninstall and remove all selected packs from server"
                   >
-                    🗑️ Delete Selected ({selectedUuids.size})
+                    Delete selected ({selectedUuids.size})
                   </button>
                 </div>
               )}
@@ -1332,7 +1359,7 @@ export const Addons = () => {
           {/* ADDON CARDS GRID */}
           {displayedAddons.length === 0 ? (
             <div className="empty-state-card text-center p-8 modern-card">
-              <div className="empty-glyph mb-3">📦</div>
+              <div className="empty-glyph mb-3"><Package size={32} className="text-muted" /></div>
               <h3 className="empty-title mb-1">No Addon Packs Found</h3>
               <p className="text-sub text-sm mb-4">
                 {searchQuery || typeFilter !== 'all' || statusFilter !== 'all'
@@ -1397,7 +1424,7 @@ export const Addons = () => {
                             />
                           ) : (
                             <span className="addon-icon-fallback">
-                              {isBP ? '⚙️' : '🎨'}
+                              {isBP ? 'BP' : 'RP'}
                             </span>
                           )}
                           <span
@@ -1418,7 +1445,7 @@ export const Addons = () => {
                         )}
                         {hasCompanion && (
                           <span className="badge badge-dual-pack" title="Paired dual-pack imported together">
-                            🔗 Dual-Pack
+                            Paired pack
                           </span>
                         )}
                       </div>
@@ -1461,7 +1488,7 @@ export const Addons = () => {
                             setSuccessMsg(`Copied UUID "${addon.uuid}" to clipboard!`);
                           }}
                         >
-                          {addon.uuid.substring(0, 8)}...{addon.uuid.substring(addon.uuid.length - 4)} 📋
+                          {addon.uuid.substring(0, 8)}...{addon.uuid.substring(addon.uuid.length - 4)}
                         </span>
                       </div>
                       {addon.download_url && (
@@ -1530,7 +1557,7 @@ export const Addons = () => {
                               : `Swap to ${addon.type === 'behavior' ? 'Resource Pack' : 'Behavior Pack'} (BP ⇄ RP)`
                           }
                         >
-                          {swappingUuid === addon.uuid ? '⏳' : '🔄'}
+                          {swappingUuid === addon.uuid ? '...' : <ArrowLeftRight size={13} />}
                         </button>
                       )}
 
@@ -1562,7 +1589,7 @@ export const Addons = () => {
                           disabled={addon.is_system}
                           title={addon.is_system ? 'Internal server system addons cannot be uninstalled' : 'Uninstall pack (Trash)'}
                         >
-                          🗑️
+                          <Trash2 size={13} />
                         </button>
                       )}
                     </div>
@@ -1612,7 +1639,7 @@ export const Addons = () => {
                 onClick={handleSaveOrder}
                 disabled={savingOrder || !isAdmin}
               >
-                {savingOrder ? '💾 Committing...' : '💾 Save Priorities'}
+                {savingOrder ? 'Saving...' : 'Save load order'}
               </button>
             </div>
           </div>
@@ -1848,7 +1875,7 @@ export const Addons = () => {
                             className="pack-item-icon-fallback"
                             style={{ display: hasIcon ? 'none' : 'flex' }}
                           >
-                            🎨
+                            
                           </span>
                         </div>
 
@@ -1943,7 +1970,7 @@ export const Addons = () => {
                                 }}
                               />
                             ) : null}
-                            <span className="available-chip-icon-fallback" style={{ display: hasChipIcon ? 'none' : 'inline' }}>🎨</span>
+                            <span className="available-chip-icon-fallback" style={{ display: hasChipIcon ? 'none' : 'inline' }}></span>
                           </div>
                           <span>{getCleanPackName(pack)}</span>
                           <span className="chip-plus">+</span>
@@ -1968,7 +1995,7 @@ export const Addons = () => {
             <div className="d-flex justify-between items-center flex-wrap gap-3">
               <div>
                 <h2 className="text-lg font-bold text-white d-flex items-center gap-2 m-0">
-                  <span>💡</span>
+                  <Sparkles size={13} className="inline mr-1" />
                   <span>Smart Pack Suggestions &amp; Location Swapper</span>
                 </h2>
                 <p className="text-xs text-sub mt-1 mb-0">
@@ -1981,7 +2008,7 @@ export const Addons = () => {
                 onClick={loadSuggestions}
                 disabled={loadingSuggestions}
               >
-                <span>{loadingSuggestions ? '⏳' : '🔄'}</span>
+                <RefreshCw size={13} className={loadingSuggestions ? "spinning" : ""} />
                 <span>{loadingSuggestions ? 'Scanning...' : 'Re-Scan Packs & Server Logs'}</span>
               </button>
             </div>
@@ -2047,7 +2074,7 @@ export const Addons = () => {
                           onClick={() => handleSwapPack({ uuid: sug.uuid, name: sug.packName, group_id: true }, true)}
                           disabled={swappingUuid === sug.uuid}
                         >
-                          <span>🔀</span>
+                          <ArrowLeftRight size={13} />
                           <span>Swap Both Packs (Invert BP ⇄ RP)</span>
                         </button>
                       )}
@@ -2057,7 +2084,7 @@ export const Addons = () => {
                         onClick={() => handleSwapPack({ uuid: sug.uuid, name: sug.packName }, false)}
                         disabled={swappingUuid === sug.uuid}
                       >
-                        <span>🔄</span>
+                        <RefreshCw size={13} />
                         <span>Swap Only This Pack Location</span>
                       </button>
                     </div>
@@ -2078,7 +2105,7 @@ export const Addons = () => {
           {/* Manual Pack Location Switcher Quick-Table */}
           <div className="modern-card p-4">
             <h3 className="text-base font-bold text-white mb-2 d-flex items-center gap-2">
-              <span>🔧</span>
+              <Sliders size={13} />
               <span>Manual Pack Location Switcher</span>
             </h3>
             <p className="text-xs text-sub mb-3">
@@ -2103,7 +2130,7 @@ export const Addons = () => {
                       <tr key={addon.uuid}>
                         <td>
                           <div className="d-flex items-center gap-2">
-                            <span className="text-base">{isBP ? '⚙️' : '🎨'}</span>
+                            <span>{isBP ? "BP" : "RP"}</span>
                             <div>
                               <div className="text-white font-bold text-xs">{addon.display_name || addon.name}</div>
                               <div className="text-muted font-mono text-xs">{addon.uuid.substring(0, 8)}...</div>
@@ -2117,7 +2144,7 @@ export const Addons = () => {
                         </td>
                         <td>
                           {hasComp ? (
-                            <span className="badge badge-dual-pack">🔗 Dual-Pack</span>
+                            <span className="badge badge-dual-pack">Paired pack</span>
                           ) : (
                             <span className="text-sub text-xs">Standalone</span>
                           )}
@@ -2131,7 +2158,7 @@ export const Addons = () => {
                               disabled={swappingUuid === addon.uuid}
                               title={`Move to ${isBP ? 'resource_packs/' : 'behavior_packs/'}`}
                             >
-                              <span>🔄</span>
+                              <RefreshCw size={13} />
                               <span>Move to {isBP ? 'Resource' : 'Behavior'}</span>
                             </button>
                             {hasComp && (
@@ -2142,7 +2169,7 @@ export const Addons = () => {
                                 disabled={swappingUuid === addon.uuid}
                                 title="Invert both packs in this dual-pack pair"
                               >
-                                <span>🔀</span>
+                                <ArrowLeftRight size={13} />
                                 <span>Invert Pair</span>
                               </button>
                             )}
@@ -2167,7 +2194,7 @@ export const Addons = () => {
           <div className="modern-card p-4 mb-5 d-flex justify-between items-center flex-wrap gap-3">
             <div>
               <h3 className="section-title text-base m-0 d-flex items-center gap-2">
-                <span>🩺</span>
+                <Activity size={13} />
                 <span>Automated Diagnostics &amp; AI Health Scanner</span>
               </h3>
               <p className="text-sub text-xs m-0 mt-1">
@@ -2180,7 +2207,7 @@ export const Addons = () => {
                 className="btn btn-secondary btn-sm"
                 onClick={() => setShowKeyInput(!showKeyInput)}
               >
-                🔑 {geminiApiKey ? 'Gemini Key Configured' : 'Configure Gemini API Key'}
+                {geminiApiKey ? 'Gemini API key configured' : 'Configure Gemini API key'}
               </button>
               <button
                 type="button"
@@ -2188,7 +2215,7 @@ export const Addons = () => {
                 onClick={runDiagnostics}
                 disabled={loadingDiagnostics}
               >
-                {loadingDiagnostics ? '🔄 Scanning...' : '🚀 Re-Run Diagnostics'}
+                {loadingDiagnostics ? 'Scanning...' : 'Rerun diagnostics'}
               </button>
             </div>
           </div>
@@ -2277,7 +2304,7 @@ export const Addons = () => {
                 {/* Contributing Indicators */}
                 <div className="contributing-indicators-card p-3 rounded bg-darker">
                   <span className="text-xs text-sub font-bold d-block mb-1.5">
-                    📊 Contributing Indicators:
+                    Contributing indicators:
                   </span>
                   <ul className="m-0 pl-4 text-xs text-sub">
                     {diagnosticsReport.lagMeter.contributingIndicators.map((ind, i) => (
@@ -2306,7 +2333,7 @@ export const Addons = () => {
               <div className="modern-card p-5">
                 <div className="d-flex justify-between items-center mb-4">
                   <h4 className="section-title text-base m-0 d-flex items-center gap-2">
-                    <span>🔍</span>
+                    <Search size={13} />
                     <span>Detected Issues &amp; Inconsistencies ({diagnosticsReport.issues.length})</span>
                   </h4>
                   {diagnosticsReport.issues.length === 0 && (
@@ -2316,7 +2343,7 @@ export const Addons = () => {
 
                 {diagnosticsReport.issues.length === 0 ? (
                   <div className="text-center py-6 text-muted">
-                    <span className="text-3xl d-block mb-2">🎉</span>
+                    <div className="mb-2"><CheckCircle2 size={32} className="text-emerald" /></div>
                     <p className="text-white font-bold mb-1">No Pack Conflicts Detected</p>
                     <p className="text-xs text-sub m-0">
                       All dual-packs are symmetrically paired, manifests follow modern schemas, and zero critical file collisions exist.
@@ -2410,7 +2437,7 @@ export const Addons = () => {
                   <div className="form-group-modern mb-4 p-3 bg-darker rounded border border-warning">
                     <div className="d-flex justify-between items-center mb-1 flex-wrap gap-1">
                       <span className="field-label-bold m-0 text-warning font-bold text-xs d-flex items-center gap-1">
-                        <span>🔄</span>
+                        <RefreshCw size={13} />
                         <span>Swap Pack Location (BP ⇄ RP)</span>
                       </span>
                       <span className={`badge ${editModalAddon.type === 'behavior' ? 'badge-behavior' : 'badge-resource'} text-xs`}>
@@ -2428,7 +2455,7 @@ export const Addons = () => {
                         disabled={swappingUuid === editModalAddon.uuid}
                         title={`Move from ${editModalAddon.type === 'behavior' ? 'behavior_packs' : 'resource_packs'} to ${editModalAddon.type === 'behavior' ? 'resource_packs' : 'behavior_packs'}`}
                       >
-                        <span>{swappingUuid === editModalAddon.uuid ? '⏳' : '🔄'}</span>
+                        <span>{swappingUuid === editModalAddon.uuid ? '...' : 'Swap'}</span>
                         <span>
                           {swappingUuid === editModalAddon.uuid
                             ? 'Swapping...'
@@ -2444,7 +2471,7 @@ export const Addons = () => {
                           disabled={swappingUuid === editModalAddon.uuid}
                           title="Invert both packs in this dual-pack companion pair"
                         >
-                          <span>🔀</span>
+                          <ArrowLeftRight size={13} />
                           <span>Invert Dual-Pack Pair Roles (BP ⇄ RP)</span>
                         </button>
                       )}
@@ -2473,7 +2500,7 @@ export const Addons = () => {
                       }}
                       title="Search web for official addon download or info page"
                     >
-                      <span>🔍 Auto Search Online</span>
+                      <span>Auto search online</span>
                     </button>
                   </div>
                   <input
@@ -2497,7 +2524,7 @@ export const Addons = () => {
                         onChange={(e) => setEditForm({ ...editForm, syncGroup: e.target.checked })}
                       />
                       <span className="text-xs text-white font-bold">
-                        🔗 Synchronize changes to companion dual-pack
+                        Synchronize changes to companion pack
                       </span>
                     </label>
                     <small className="text-sub text-xs d-block mt-1 pl-5">
@@ -2521,7 +2548,7 @@ export const Addons = () => {
                   className="btn btn-primary"
                   disabled={savingEdit}
                 >
-                  {savingEdit ? '💾 Saving...' : '💾 Save Settings'}
+                  {savingEdit ? 'Saving...' : 'Save settings'}
                 </button>
               </div>
             </form>
@@ -2564,7 +2591,7 @@ export const Addons = () => {
                     accept=".mcpack,.mcaddon,.zip"
                     onChange={(e) => setInPlaceFile(e.target.files?.[0] || null)}
                   />
-                  <div className="text-2xl mb-1">📦</div>
+                  <div className="text-2xl mb-1"><Package size={24} className="text-muted" /></div>
                   <span className="text-sm font-bold text-white d-block">
                     {inPlaceFile ? inPlaceFile.name : 'Click to select replacement .mcpack or .mcaddon'}
                   </span>
@@ -2590,7 +2617,7 @@ export const Addons = () => {
                   className="btn btn-primary"
                   disabled={!inPlaceFile || inPlaceUpdating}
                 >
-                  {inPlaceUpdating ? 'Installing Update...' : '🚀 Replace & Update Pack'}
+                  {inPlaceUpdating ? 'Installing update...' : 'Replace and update pack'}
                 </button>
               </div>
             </form>
@@ -2632,7 +2659,7 @@ export const Addons = () => {
                 {companion && (
                   <div className="p-3 rounded mb-3" style={{ background: 'rgba(168, 85, 247, 0.1)', border: '1px solid rgba(168, 85, 247, 0.3)' }}>
                     <div className="d-flex items-center gap-2 mb-2 text-purple font-semibold text-sm">
-                      <span>🔗</span>
+                      <Link2 size={13} />
                       <span>Paired Companion Dual-Pack Detected</span>
                     </div>
                     <p className="text-xs text-sub mb-3">
@@ -2702,8 +2729,8 @@ export const Addons = () => {
                   {isDeleting
                     ? 'Deleting...'
                     : companion && deleteCompanionChoice === 'both'
-                    ? '🗑️ Delete Both Companion Packs'
-                    : '🗑️ Confirm Delete'}
+                    ? 'Delete both companion packs'
+                    : 'Confirm delete'}
                 </button>
               </div>
             </div>
@@ -2718,7 +2745,7 @@ export const Addons = () => {
         <div className="modal-overlay" onClick={() => !bulkProcessing && setBatchDeleteModalOpen(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog">
             <div className="modal-header">
-              <h3 className="modal-title">🗑️ Delete Selected Addon Packs</h3>
+              <h3 className="modal-title">Delete selected packs</h3>
               <button
                 type="button"
                 className="modal-close-btn"
@@ -2742,7 +2769,7 @@ export const Addons = () => {
                       <li key={a.uuid}>
                         <strong className="text-white">{getCleanPackName(a)}</strong>{' '}
                         <span className="text-sub font-mono">({a.type === 'resource' ? 'RP' : 'BP'}, {a.version || 'v1.0.0'})</span>
-                        {a.group_id && <span className="text-purple ml-2 font-semibold">🔗 Paired Dual-Pack</span>}
+                        {a.group_id && <span className="text-purple ml-2 font-semibold">Paired pack</span>}
                       </li>
                     ))}
                 </ul>
@@ -2763,7 +2790,7 @@ export const Addons = () => {
               </div>
 
               <div className="alert-toast alert-error">
-                🚨 WARNING: This action cannot be undone. Files will be deleted from disk and unlinked from active worlds.
+                Warning: This action cannot be undone. Files will be deleted from disk and unlinked from active worlds.
               </div>
             </div>
 
@@ -2782,7 +2809,7 @@ export const Addons = () => {
                 onClick={() => handleExecuteBatch('delete_selected', batchIncludeCompanions)}
                 disabled={bulkProcessing}
               >
-                {bulkProcessing ? 'Deleting Packs...' : `🗑️ Delete ${selectedUuids.size} Selected Packs`}
+                {bulkProcessing ? 'Deleting Packs...' : `Delete ${selectedUuids.size} selected packs`}
               </button>
             </div>
           </div>
@@ -2819,7 +2846,7 @@ export const Addons = () => {
               )}
               {bulkConfirmAction === 'delete_all' && (
                 <div className="alert-toast alert-error">
-                  🚨 WARNING: This will permanently DELETE all {totalInstalled} packs from disk and database!
+                  Warning: This will permanently delete all {totalInstalled} packs from disk and database!
                 </div>
               )}
             </div>
@@ -2854,7 +2881,7 @@ export const Addons = () => {
           <div className="modal url-wizard-modal" onClick={(e) => e.stopPropagation()} role="dialog" style={{ maxWidth: '680px', width: '92%' }}>
             <div className="modal-header d-flex justify-between items-center">
               <div className="d-flex items-center gap-2">
-                <span className="text-xl">🌐</span>
+                <Globe size={18} className="text-muted" />
                 <div>
                   <h3 className="modal-title m-0">Addon Source URL &amp; Metadata Finder</h3>
                   <span className="text-xs text-sub">
@@ -2907,7 +2934,7 @@ export const Addons = () => {
                           className="wizard-pack-icon-fallback"
                           style={{ display: hasIco ? 'none' : 'flex' }}
                         >
-                          🧩
+                          
                         </div>
                       </div>
                       <div className="min-w-0">
@@ -2973,7 +3000,7 @@ export const Addons = () => {
                   disabled={urlWizardSearching || urlWizardSaving || urlWizardAutoSearchingAll}
                   title="Search Minecraft Marketplace PDPs"
                 >
-                  🏪 Marketplace
+                  Marketplace
                 </button>
                 <button
                   type="button"
@@ -2990,7 +3017,7 @@ export const Addons = () => {
                   disabled={urlWizardSearching || urlWizardSaving || urlWizardAutoSearchingAll}
                   title="Search CurseForge Bedrock"
                 >
-                  🔥 CurseForge
+                  CurseForge
                 </button>
                 <button
                   type="button"
@@ -3007,7 +3034,7 @@ export const Addons = () => {
                   disabled={urlWizardSearching || urlWizardSaving || urlWizardAutoSearchingAll}
                   title="Search MCPEDL"
                 >
-                  📦 MCPEDL
+                  MCPEDL
                 </button>
                 <button
                   type="button"
@@ -3049,7 +3076,7 @@ export const Addons = () => {
                   onClick={() => fetchUrlSearchResults(urlWizardQuery, urlWizardQueue[urlWizardIndex]?.uuid)}
                   disabled={urlWizardSearching || urlWizardSaving || urlWizardAutoSearchingAll || !urlWizardQuery.trim()}
                 >
-                  {urlWizardSearching ? 'Searching...' : '🔍 Search Web'}
+                  {urlWizardSearching ? 'Searching...' : 'Search web'}
                 </button>
               </div>
 
@@ -3115,7 +3142,7 @@ export const Addons = () => {
                               className="wizard-result-thumb-fallback"
                               style={{ display: item.image ? 'none' : 'flex' }}
                             >
-                              {isOfficial ? '🏪' : '🌐'}
+                              {isOfficial ? 'Official' : 'Web'}
                             </div>
                           </div>
 
@@ -3127,7 +3154,7 @@ export const Addons = () => {
                                 </span>
                               ) : isMarket ? (
                                 <span className="badge badge-marketplace text-xs py-0 px-1 font-mono">
-                                  🛒 {item.siteName || 'Marketplace'}
+                                  {item.siteName || 'Marketplace'}
                                 </span>
                               ) : item.siteName ? (
                                 <span className="badge badge-system text-xs py-0 px-1 font-mono">
@@ -3230,7 +3257,7 @@ export const Addons = () => {
         <div className="modal-overlay" onClick={() => !swappingUuid && setSwapConfirmModal(null)}>
           <div className="modal modal-md" onClick={(e) => e.stopPropagation()} role="dialog">
             <div className="modal-header">
-              <h3 className="modal-title">🔄 Swap Pack Location (BP ⇄ RP)</h3>
+              <h3 className="modal-title">Swap pack location (BP ⇄ RP)</h3>
               <button
                 type="button"
                 className="modal-close-btn"
@@ -3253,7 +3280,7 @@ export const Addons = () => {
               </div>
               {swapConfirmModal.addon.group_id && (
                 <div className="alert alert-info text-xs mb-3">
-                  🔗 <strong>Dual-Pack Companion Detected:</strong> This addon has a paired companion pack. You can invert both packs simultaneously so their roles swap cleanly.
+                  <strong>Paired companion detected:</strong> This addon has a paired companion pack. You can invert both packs simultaneously so their roles swap cleanly.
                 </div>
               )}
               <p className="text-xs text-sub mb-0">
@@ -3277,7 +3304,7 @@ export const Addons = () => {
                     onClick={() => handleSwapPack(swapConfirmModal.addon, true)}
                     disabled={Boolean(swappingUuid)}
                   >
-                    {swappingUuid ? '⏳ Swapping...' : '🔀 Invert Dual-Pack Roles'}
+                    {swappingUuid ? 'Swapping...' : 'Invert paired pack roles'}
                   </button>
                 )}
                 <button
@@ -3286,7 +3313,7 @@ export const Addons = () => {
                   onClick={() => handleSwapPack(swapConfirmModal.addon, false)}
                   disabled={Boolean(swappingUuid)}
                 >
-                  {swappingUuid ? '⏳ Swapping...' : '🔄 Swap Pack Location'}
+                  {swappingUuid ? 'Swapping...' : 'Swap pack location'}
                 </button>
               </div>
             </div>

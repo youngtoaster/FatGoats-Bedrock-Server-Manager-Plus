@@ -752,7 +752,7 @@ namespace BedrockServerManager.Installer
                         string iconPath = Path.Combine(targetDir, "tray", "app.ico");
 
                         key.SetValue("DisplayName", "Bedrock Server Manager Plus");
-                        key.SetValue("DisplayVersion", "1.2.3");
+                        key.SetValue("DisplayVersion", "1.2.4");
                         key.SetValue("Publisher", "FatGoats");
                         key.SetValue("InstallLocation", targetDir);
                         key.SetValue("DisplayIcon", File.Exists(iconPath) ? iconPath : exePath);

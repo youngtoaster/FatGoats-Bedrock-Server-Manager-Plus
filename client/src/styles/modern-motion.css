@@ -1,94 +1,29 @@
 /* ==========================================================================
-   BEDROCK SERVER MANAGER+ — MODERN MOTION, FLUID PHYSICS & AESTHETICS ENGINE
-   Next-Generation Obsidian Theme, Smooth Spring Motions, Ambient Mesh Glows
+   BEDROCK SERVER MANAGER+ — UNSLOPPED CRAFT & TACTILE INTERFACE ENGINE
+   Direction: Precise, Utilitarian, Industrial.
+   Graphite neutral ramp, quiet chrome, single bedrock emerald accent,
+   4px/8px rhythm, 140ms cubic-bezier(0.22, 1, 0.36, 1) transitions.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. Ambient Atmospheric Mesh Glow Layers
+   1. Strip AI-Slop Ambient Glows & Background Noise
    -------------------------------------------------------------------------- */
-.ambient-app-glow {
-  position: fixed;
-  pointer-events: none;
-  border-radius: 50%;
-  filter: blur(140px);
-  z-index: 0;
-  opacity: 0.16;
-  will-change: transform, opacity;
-}
-
-.ambient-app-glow.glow-1 {
-  top: -12%;
-  left: 12%;
-  width: 580px;
-  height: 580px;
-  background: radial-gradient(circle, #10b981 0%, rgba(16, 185, 129, 0) 70%);
-  animation: ambientFloat1 18s ease-in-out infinite alternate;
-}
-
-.ambient-app-glow.glow-2 {
-  top: 28%;
-  right: -8%;
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, #06b6d4 0%, rgba(6, 182, 212, 0) 70%);
-  animation: ambientFloat2 22s ease-in-out infinite alternate;
-}
-
-.ambient-app-glow.glow-3 {
-  bottom: -15%;
-  left: 30%;
-  width: 650px;
-  height: 650px;
-  background: radial-gradient(circle, #6366f1 0%, rgba(99, 102, 241, 0) 70%);
-  animation: ambientFloat3 26s ease-in-out infinite alternate;
-}
-
+.ambient-app-glow,
 .ambient-app-grid {
-  position: fixed;
-  inset: 0;
-  background-image: 
-    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
-}
-
-@keyframes ambientFloat1 {
-  0% { transform: translate(0, 0) scale(1); opacity: 0.14; }
-  50% { transform: translate(40px, 30px) scale(1.12); opacity: 0.22; }
-  100% { transform: translate(-25px, 50px) scale(0.95); opacity: 0.16; }
-}
-
-@keyframes ambientFloat2 {
-  0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
-  50% { transform: translate(-50px, -35px) scale(1.1); opacity: 0.24; }
-  100% { transform: translate(30px, -45px) scale(0.92); opacity: 0.13; }
-}
-
-@keyframes ambientFloat3 {
-  0% { transform: translate(0, 0) scale(1); opacity: 0.12; }
-  50% { transform: translate(35px, -40px) scale(1.08); opacity: 0.2; }
-  100% { transform: translate(-45px, 25px) scale(0.96); opacity: 0.15; }
-}
-
-/* Ensure content sits above ambient lighting */
-.main-wrapper, .sidebar, .content-container, .top-header {
-  position: relative;
-  z-index: 1;
+  display: none !important;
 }
 
 /* --------------------------------------------------------------------------
-   2. Fluid Page Transitions & Spring Physics
+   2. Purposeful Page Entrance (Single quiet fade & rise, no staggered bounce)
    -------------------------------------------------------------------------- */
-@keyframes pageSpringIn {
-  0% {
+@keyframes quietEntrance {
+  from {
     opacity: 0;
-    transform: translateY(16px) scale(0.99);
+    transform: translateY(8px);
   }
-  100% {
+  to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -105,19 +40,11 @@
 .audit-page,
 .xbox-page,
 .portal-page {
-  animation: pageSpringIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: transform, opacity;
+  animation: quietEntrance 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Staggered entrance for sections within pages */
-.dashboard-page > *:nth-child(1) { animation: pageSpringIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.02s both; }
-.dashboard-page > *:nth-child(2) { animation: pageSpringIn 0.40s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
-.dashboard-page > *:nth-child(3) { animation: pageSpringIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.09s both; }
-.dashboard-page > *:nth-child(4) { animation: pageSpringIn 0.50s cubic-bezier(0.16, 1, 0.3, 1) 0.13s both; }
-.dashboard-page > *:nth-child(5) { animation: pageSpringIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.17s both; }
-
 /* --------------------------------------------------------------------------
-   3. Modern Glassmorphism & Animated Border Glows
+   3. Quiet Graphite Surfaces (Replace glassmorphism and colored glowing borders)
    -------------------------------------------------------------------------- */
 .modern-card,
 .telemetry-card,
@@ -127,16 +54,17 @@
 .properties-section-card,
 .backup-card,
 .world-card,
-.addon-card {
-  background: rgba(15, 20, 32, 0.72) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: var(--radius-lg) !important;
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1), 
-              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+.addon-card,
+.gameplay-controls-card {
+  background: var(--bg-card, #19191b) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
+  border-radius: var(--radius-lg, 12px) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  transition: border-color 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 0.16s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  transform: none !important;
   position: relative;
 }
 
@@ -146,208 +74,198 @@
 .backup-card:hover,
 .world-card:hover,
 .addon-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(16, 185, 129, 0.32) !important;
-  box-shadow: 0 20px 42px -10px rgba(0, 0, 0, 0.65), 0 0 25px rgba(16, 185, 129, 0.12) !important;
+  transform: none !important;
+  border-color: rgba(237, 237, 237, 0.18) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
 }
 
 /* --------------------------------------------------------------------------
-   4. Hero Power & Status Panel Master Upgrades
+   4. Status Hero Panel & Quiet Process State Indicators
    -------------------------------------------------------------------------- */
 .hero-status-panel {
-  overflow: hidden;
-  position: relative;
+  padding: 1.5rem !important;
+  border-radius: var(--radius-xl, 16px) !important;
 }
 
-/* Status-Running Living Energy Pulse */
 .hero-status-panel.state-running {
-  border-color: rgba(16, 185, 129, 0.35) !important;
-  box-shadow: 0 16px 45px -12px rgba(0, 0, 0, 0.7), 0 0 35px rgba(16, 185, 129, 0.18), inset 0 1px 0 rgba(16, 185, 129, 0.35) !important;
+  border-color: rgba(16, 185, 129, 0.28) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(16, 185, 129, 0.2) !important;
 }
 
-.hero-status-panel.state-running::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #10b981, #06b6d4, #10b981, transparent);
-  background-size: 200% 100%;
-  animation: heroBeamSweep 4s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes heroBeamSweep {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+.hero-status-panel.state-running::after,
+.hero-status-panel::after {
+  display: none !important;
 }
 
 .hero-status-panel.state-starting {
-  border-color: rgba(245, 158, 11, 0.35) !important;
-  box-shadow: 0 16px 45px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.28) !important;
 }
 
 .hero-status-panel.state-stopped {
-  border-color: rgba(244, 63, 94, 0.25) !important;
+  border-color: rgba(229, 72, 77, 0.2) !important;
 }
 
-/* Radar Ping Ripples */
+/* Quiet Status Dot (No expanding radar ping loops) */
 .radar-status-dot {
+  width: 12px;
+  height: 12px;
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.radar-wave {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+.radar-core {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: inherit;
-  animation: radarPingSweep 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  background: var(--text-muted);
 }
 
-@keyframes radarPingSweep {
-  0% {
-    transform: scale(0.9);
-    opacity: 0.85;
-  }
-  70% {
-    transform: scale(2.8);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(3.2);
-    opacity: 0;
-  }
+.state-running .radar-core,
+.status-running .pulse-indicator-dot,
+.status-online .xbox-pill-dot {
+  background: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.state-starting .radar-core,
+.status-starting .pulse-indicator-dot,
+.status-pending .xbox-pill-dot {
+  background: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+}
+
+.state-stopped .radar-core,
+.status-stopped .pulse-indicator-dot,
+.status-offline .xbox-pill-dot {
+  background: #e5484d;
+}
+
+.radar-wave,
+.pulse-indicator-dot::after {
+  display: none !important;
 }
 
 /* --------------------------------------------------------------------------
-   5. Tactile Micro-Physics for Power Buttons & Actions
+   5. Tactile Controls & Buttons (No neon auras, no sheen sweep, 0.98 scale on press)
    -------------------------------------------------------------------------- */
+.btn,
 .btn-power,
 .btn-header-power,
 .btn-primary,
 .btn-secondary {
   position: relative;
   overflow: hidden;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  will-change: transform, box-shadow;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  border-radius: var(--radius-md, 8px) !important;
+  transition: background-color 0.14s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.14s cubic-bezier(0.22, 1, 0.36, 1),
+              color 0.14s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.1s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
+.btn::after,
+.btn-power::after,
+.btn-header-power::after,
+.btn-primary::after {
+  display: none !important;
+}
+
+.btn:hover:not(:disabled),
 .btn-power:hover:not(:disabled),
-.btn-header-power:hover:not(:disabled),
-.btn-primary:hover:not(:disabled),
-.btn-secondary:hover:not(:disabled) {
-  transform: translateY(-2px) scale(1.02);
+.btn-header-power:hover:not(:disabled) {
+  transform: none !important;
 }
 
+.btn:active:not(:disabled),
 .btn-power:active:not(:disabled),
-.btn-header-power:active:not(:disabled),
-.btn-primary:active:not(:disabled),
-.btn-secondary:active:not(:disabled) {
-  transform: translateY(1px) scale(0.97);
+.btn-header-power:active:not(:disabled) {
+  transform: scale(0.98) !important;
 }
 
-/* Individual Power Button Glowing Aura */
+/* High-contrast primary action */
+.btn-primary,
+.btn-power-start,
+.btn-start-all {
+  background: #10b981 !important;
+  color: #08090e !important;
+  border: 1px solid #10b981 !important;
+  font-weight: 600 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-primary:hover:not(:disabled),
 .btn-power-start:hover:not(:disabled),
 .btn-start-all:hover:not(:disabled) {
-  box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.45), 0 0 12px rgba(16, 185, 129, 0.3) !important;
-  border-color: #34d399 !important;
+  background: #059669 !important;
+  border-color: #059669 !important;
 }
 
+/* Secondary Actions */
+.btn-secondary,
+.btn-power-restart,
+.btn-restart-all {
+  background: var(--bg-raised, #232325) !important;
+  color: var(--text-main, #ededed) !important;
+  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
+}
+
+.btn-secondary:hover:not(:disabled),
 .btn-power-restart:hover:not(:disabled),
 .btn-restart-all:hover:not(:disabled) {
-  box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.45), 0 0 12px rgba(245, 158, 11, 0.3) !important;
-  border-color: #fbbf24 !important;
+  background: #2b2b2e !important;
+  border-color: rgba(237, 237, 237, 0.18) !important;
+}
+
+/* Stop Actions */
+.btn-power-stop,
+.btn-stop-all {
+  background: rgba(229, 72, 77, 0.12) !important;
+  color: #e5484d !important;
+  border: 1px solid rgba(229, 72, 77, 0.25) !important;
 }
 
 .btn-power-stop:hover:not(:disabled),
 .btn-stop-all:hover:not(:disabled) {
-  box-shadow: 0 8px 24px -4px rgba(244, 63, 94, 0.45), 0 0 12px rgba(244, 63, 94, 0.3) !important;
-  border-color: #f87171 !important;
-}
-
-.btn-power-update:hover:not(:disabled) {
-  box-shadow: 0 8px 24px -4px rgba(6, 182, 212, 0.45), 0 0 12px rgba(6, 182, 212, 0.3) !important;
-  border-color: #38bdf8 !important;
-}
-
-/* Light Sheen Reflection Sweep on Primary Buttons */
-.btn-primary::after,
-.btn-power-start::after,
-.btn-start-all::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    60deg,
-    transparent,
-    rgba(255, 255, 255, 0.14),
-    transparent
-  );
-  transform: translateX(-100%);
-  transition: transform 0.65s ease;
-  pointer-events: none;
-}
-
-.btn-primary:hover::after,
-.btn-power-start:hover::after,
-.btn-start-all:hover::after {
-  transform: translateX(100%);
+  background: rgba(229, 72, 77, 0.22) !important;
+  border-color: rgba(229, 72, 77, 0.45) !important;
 }
 
 /* --------------------------------------------------------------------------
-   6. Telemetry Metric Bars & Sparkline Visuals
+   6. Clean Telemetry Bars (No moving shimmers)
    -------------------------------------------------------------------------- */
 .telemetry-meter-bar {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border-radius: var(--radius-full) !important;
-  height: 8px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-radius: var(--radius-full, 9999px) !important;
+  height: 6px !important;
   overflow: hidden;
   position: relative;
 }
 
 .telemetry-meter-bar .meter-fill {
   height: 100%;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-full, 9999px);
   position: relative;
-  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Moving Shimmer on Active Progress Bars */
 .telemetry-meter-bar .meter-fill::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.35),
-    transparent
-  );
-  animation: meterShimmerSweep 2.2s infinite;
-}
-
-@keyframes meterShimmerSweep {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  display: none !important;
 }
 
 .metric-number {
   font-family: var(--font-mono);
-  letter-spacing: -0.03em;
-  transition: color 0.3s ease;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 /* --------------------------------------------------------------------------
-   7. Player Controls (💖 Heal, 🍖 Feed, 👢 Kick, 🚫 Ban)
+   7. Quiet Tactile Player Action Buttons
    -------------------------------------------------------------------------- */
 .btn-chip-heal,
 .btn-heal,
@@ -359,220 +277,217 @@
 .btn-ban,
 .btn-op,
 .btn-deop {
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
+  border-radius: var(--radius-sm, 6px) !important;
+  padding: 4px 10px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.1s ease !important;
+  transform: none !important;
+  box-shadow: none !important;
+  animation: none !important;
 }
 
 .btn-chip-heal:hover,
-.btn-heal:hover {
-  transform: translateY(-2px) scale(1.06);
-  box-shadow: 0 4px 14px rgba(244, 114, 182, 0.55) !important;
-  border-color: #f472b6 !important;
-  animation: heartPulseHover 0.8s infinite alternate ease-in-out;
-}
-
-@keyframes heartPulseHover {
-  0% { transform: translateY(-2px) scale(1.06); }
-  100% { transform: translateY(-2px) scale(1.13); }
-}
-
+.btn-heal:hover,
 .btn-chip-feed:hover,
-.btn-feed:hover {
-  transform: translateY(-2px) scale(1.06);
-  box-shadow: 0 4px 14px rgba(251, 146, 60, 0.55) !important;
-  border-color: #fb923c !important;
-}
-
+.btn-feed:hover,
 .btn-chip-kick:hover,
-.btn-kick:hover {
-  transform: translateY(-2px) scale(1.06);
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.55) !important;
-  border-color: #f87171 !important;
-}
-
+.btn-kick:hover,
 .btn-chip-ban:hover,
-.btn-ban:hover {
-  transform: translateY(-2px) scale(1.06);
-  box-shadow: 0 4px 18px rgba(220, 38, 38, 0.7) !important;
-  border-color: #dc2626 !important;
-}
-
-.btn-op:hover {
-  transform: translateY(-2px) scale(1.06);
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.55) !important;
-  border-color: #fbbf24 !important;
-}
-
+.btn-ban:hover,
+.btn-op:hover,
 .btn-deop:hover {
-  transform: translateY(-2px) scale(1.06);
-  box-shadow: 0 4px 14px rgba(148, 163, 184, 0.45) !important;
+  transform: none !important;
+  box-shadow: none !important;
+  animation: none !important;
 }
 
-/* Table Row Hover Fluidity */
+.btn-chip-heal:active,
+.btn-heal:active,
+.btn-chip-feed:active,
+.btn-feed:active,
+.btn-chip-kick:active,
+.btn-kick:active,
+.btn-chip-ban:active,
+.btn-ban:active,
+.btn-op:active,
+.btn-deop:active {
+  transform: scale(0.97) !important;
+}
+
+/* Table Rows */
 table tbody tr {
-  transition: background-color 0.18s ease, transform 0.18s ease;
+  transition: background-color 0.12s ease;
 }
 
 table tbody tr:hover {
-  background-color: rgba(16, 185, 129, 0.045) !important;
+  background-color: var(--bg-raised, #232325) !important;
 }
 
 /* --------------------------------------------------------------------------
-   8. High-Tech Terminal & Console Polish
+   8. Authentic Command Terminal (Clean dark contrast, no fake CRT scanlines)
    -------------------------------------------------------------------------- */
 .console-terminal-wrapper,
-.console-terminal-box {
-  background: #06090e !important;
-  border: 1px solid rgba(16, 185, 129, 0.25) !important;
-  border-radius: var(--radius-lg) !important;
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8), 0 10px 30px -10px rgba(0, 0, 0, 0.6) !important;
+.console-terminal-box,
+.terminal-window {
+  background: #0f0f10 !important;
+  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
+  border-radius: var(--radius-lg, 12px) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
   position: relative;
   overflow: hidden;
 }
 
-/* Subtle CRT Scanline Overlay */
 .console-terminal-wrapper::before,
-.console-terminal-box::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%,
-    rgba(0, 0, 0, 0.22) 50%
-  );
-  background-size: 100% 4px;
-  pointer-events: none;
-  opacity: 0.35;
-  z-index: 2;
+.console-terminal-box::before,
+.terminal-window::before {
+  display: none !important;
 }
 
-.terminal-input-bar input {
-  transition: all 0.22s ease !important;
+.terminal-input-bar input,
+.command-input {
+  background: #19191b !important;
+  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
+  color: var(--text-main, #ededed) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+  border-radius: var(--radius-md, 8px) !important;
+  padding: 8px 12px !important;
+  transition: border-color 0.14s ease !important;
 }
 
-.terminal-input-bar input:focus {
+.terminal-input-bar input:focus,
+.command-input:focus {
   border-color: #10b981 !important;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.35), inset 0 0 8px rgba(16, 185, 129, 0.15) !important;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
+  outline: none !important;
 }
 
 /* --------------------------------------------------------------------------
-   9. World Importer & Custom Generator Effects
-   -------------------------------------------------------------------------- */
-.world-dropzone {
-  border: 2px dashed rgba(16, 185, 129, 0.35) !important;
-  border-radius: var(--radius-lg) !important;
-  background: rgba(16, 185, 129, 0.03) !important;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.world-dropzone:hover,
-.world-dropzone.drag-active {
-  border-color: #10b981 !important;
-  background: rgba(16, 185, 129, 0.08) !important;
-  box-shadow: 0 0 30px rgba(16, 185, 129, 0.25) !important;
-  transform: scale(1.01);
-}
-
-/* Dice Tumble Animation on Random Seed Button */
-.btn-random-seed:active .dice-icon,
-.btn-random-seed:focus .dice-icon {
-  animation: diceTumble 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes diceTumble {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.25); }
-  100% { transform: rotate(360deg) scale(1); }
-}
-
-/* Active World Beacon Badge */
-.world-card.active-world {
-  border-color: #10b981 !important;
-  box-shadow: 0 16px 40px -10px rgba(16, 185, 129, 0.28), inset 0 1px 0 rgba(16, 185, 129, 0.4) !important;
-}
-
-/* --------------------------------------------------------------------------
-   10. Sidebar & Navigation Micro-Interactions
+   9. Sidebar & Navigation (36px rows, quiet active indicator, no wiggles)
    -------------------------------------------------------------------------- */
 .sidebar {
-  background: rgba(11, 13, 20, 0.88) !important;
-  backdrop-filter: blur(24px) !important;
-  -webkit-backdrop-filter: blur(24px) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
+  background: var(--bg-sidebar, #0f0f10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-right: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
+  width: var(--sidebar-width, 256px) !important;
+}
+
+.nav-group-label {
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: 0.02em !important;
+  color: var(--text-muted, #85858b) !important;
+  padding: 16px 12px 6px !important;
+  margin: 0 !important;
 }
 
 .nav-link {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  height: 36px !important;
+  margin: 2px 8px !important;
+  padding: 0 10px !important;
+  border-radius: var(--radius-md, 8px) !important;
+  color: var(--text-sub, #a1a1a6) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  transition: background-color 0.14s ease, color 0.14s ease !important;
+  transform: none !important;
+  border-left: none !important;
 }
 
 .nav-link:hover {
-  transform: translateX(4px);
-  background-color: rgba(255, 255, 255, 0.06) !important;
-  color: #fff !important;
+  transform: none !important;
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  color: var(--text-main, #ededed) !important;
 }
 
 .nav-link.active {
-  background: linear-gradient(90deg, rgba(16, 185, 129, 0.16) 0%, rgba(16, 185, 129, 0.03) 100%) !important;
-  border-left: 3px solid #10b981 !important;
-  color: #fff !important;
+  background: var(--bg-raised, #232325) !important;
+  color: var(--text-main, #ededed) !important;
+  font-weight: 500 !important;
+  border-left: 2px solid #10b981 !important;
+  border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0 !important;
 }
 
-.nav-link:hover .nav-icon {
-  animation: iconWiggle 0.4s ease-in-out;
-}
-
-@keyframes iconWiggle {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.25) rotate(-6deg); }
-}
-
+.nav-link:hover .nav-icon,
 .sidebar-user-card:hover .user-settings-gear {
-  animation: gearSpin 1.2s linear infinite;
+  animation: none !important;
 }
 
-@keyframes gearSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.nav-badge-pill {
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  padding: 2px 6px !important;
+  border-radius: var(--radius-xs, 4px) !important;
+  background: var(--bg-card, #19191b) !important;
+  color: var(--text-muted, #85858b) !important;
+  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
+  margin-left: auto !important;
 }
 
 /* --------------------------------------------------------------------------
-   11. Floating Alert Toasts & Notifications
+   10. Header & Clean Indicators
+   -------------------------------------------------------------------------- */
+.top-header {
+  height: 56px !important;
+  background: var(--bg-main, #141415) !important;
+  border-bottom: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 1.5rem !important;
+}
+
+.server-status-pill,
+.xbox-status-pill {
+  background: var(--bg-card, #19191b) !important;
+  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
+  border-radius: var(--radius-sm, 6px) !important;
+  padding: 4px 10px !important;
+  font-size: 12px !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. Quiet Toasts & Feedback
    -------------------------------------------------------------------------- */
 .alert-toast,
 .header-action-toast {
-  animation: toastSlideBounce 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
-  backdrop-filter: blur(16px) !important;
-  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7), 0 0 20px rgba(16, 185, 129, 0.2) !important;
-}
-
-@keyframes toastSlideBounce {
-  0% {
-    opacity: 0;
-    transform: translateY(-16px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  animation: quietEntrance 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  backdrop-filter: none !important;
+  background: var(--bg-raised, #232325) !important;
+  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.12)) !important;
+  border-radius: var(--radius-md, 8px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  font-size: 13px !important;
+  color: var(--text-main, #ededed) !important;
 }
 
 /* --------------------------------------------------------------------------
-   12. Custom Sleek Scrollbars
+   12. Minimalist Monospace Numbers & Code
+   -------------------------------------------------------------------------- */
+code, pre, .font-mono {
+  font-family: var(--font-mono) !important;
+  font-variant-numeric: tabular-nums !important;
+}
+
+/* --------------------------------------------------------------------------
+   13. Discrete Scrollbars
    -------------------------------------------------------------------------- */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(9, 10, 16, 0.6);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-full);
-  transition: background 0.2s ease;
+  background: rgba(237, 237, 237, 0.14);
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.45);
+  background: rgba(237, 237, 237, 0.24);
 }

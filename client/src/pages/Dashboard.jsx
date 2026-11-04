@@ -3,6 +3,39 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api';
 import { safeCopyToClipboard } from '../utils/clipboard';
+import {
+  Play,
+  RotateCcw,
+  Square,
+  RefreshCw,
+  CheckCircle2,
+  AlertTriangle,
+  Info,
+  X,
+  Package,
+  Download,
+  Clock,
+  Radio,
+  FolderArchive,
+  Copy,
+  Users,
+  Activity,
+  Cpu,
+  HardDrive,
+  Terminal,
+  Sliders,
+  Archive,
+  ArrowRight,
+  Sun,
+  Moon,
+  Sunrise,
+  Sunset,
+  CloudSun,
+  CloudRain,
+  CloudLightning,
+  Lock,
+  ArrowUpCircle
+} from 'lucide-react';
 
 export const Dashboard = () => {
   const { isAdmin, canControlServer } = useAuth();
@@ -99,26 +132,26 @@ export const Dashboard = () => {
   const handleCopyAddress = async (text) => {
     if (!text) return;
     await safeCopyToClipboard(text);
-    setCopyToast(`Copied "${text}" to clipboard!`);
+    setCopyToast(`Copied ${text}`);
     setTimeout(() => setCopyToast(null), 3000);
   };
 
   const handleInstallLatest = async () => {
-    if (!window.confirm('Download and install the latest official Minecraft Bedrock Dedicated Server build from Mojang? All your worlds, server.properties, and packs will be preserved.')) {
+    if (!window.confirm('Download and install the latest official Minecraft Bedrock Dedicated Server build from Mojang? All worlds, server.properties, and packs will be preserved.')) {
       return;
     }
 
     setIsInstallingBds(true);
     setActionMessage({
       type: 'info',
-      text: 'Connecting to Mojang CDN, downloading official Bedrock Dedicated Server package, and preserving your configurations...',
+      text: 'Downloading official Bedrock Dedicated Server package from Mojang CDN...',
     });
 
     try {
       const res = await api.Versions.installLatest();
       setActionMessage({
         type: 'success',
-        text: `✓ ${res.message || 'Bedrock server binaries installed and verified successfully!'}`,
+        text: res.message || 'Bedrock server binaries verified and ready.',
       });
       await fetchStatus();
     } catch (err) {
@@ -139,67 +172,56 @@ export const Dashboard = () => {
       await api.Versions.updateSettings(newVal);
       setActionMessage({
         type: 'success',
-        text: `Auto-Update ${newVal ? 'Enabled' : 'Disabled'}. The server will check and install the latest BDS build without overwriting your data.`,
+        text: `Automatic BDS binary updates ${newVal ? 'enabled' : 'disabled'}.`,
       });
-      await fetchStatus();
+      setTimeout(() => setActionMessage(null), 4000);
     } catch (err) {
       setAutoUpdate(!newVal);
       setActionMessage({
         type: 'error',
-        text: 'Failed to update auto-update setting.',
+        text: err.message || 'Failed to update auto-update setting.',
       });
     } finally {
       setUpdatingSettings(false);
     }
   };
 
-  const handleAction = async (actionType, actionFn) => {
-    // If user clicked start but the binary is missing, offer instant install
-    if (actionType === 'start' && status?.installed === false) {
-      if (window.confirm('Bedrock Server binary is not installed yet. Would you like to automatically download and install the official build now (preserves all maps and configs)?')) {
-        await handleInstallLatest();
-      }
-      return;
-    }
-
-    if (!window.confirm(`Are you sure you want to ${actionType.toUpperCase()} the Bedrock Dedicated Server?`)) {
-      return;
-    }
-
+  const handleAction = async (actionName, apiFn) => {
     setActionLoading(true);
     setActionMessage(null);
-
     try {
-      await actionFn();
+      const res = await apiFn();
       setActionMessage({
         type: 'success',
-        text: `Server command [${actionType.toUpperCase()}] executed successfully.`,
+        text: res?.message || `Command completed: ${actionName}`,
       });
+      setTimeout(() => setActionMessage(null), 4000);
       await fetchStatus();
     } catch (err) {
       setActionMessage({
         type: 'error',
-        text: err.message || `Failed to ${actionType} server.`,
+        text: err.message || `Failed to execute: ${actionName}`,
       });
     } finally {
       setActionLoading(false);
     }
   };
 
-  const serverState = status?.state || (status?.running ? 'running' : 'stopped');
   const isInstalled = status?.installed !== false;
-  const playersCount = status?.players?.length ?? status?.playerCount ?? status?.onlinePlayers ?? 0;
-  const maxPlayers = status?.maxPlayers ?? status?.properties?.['max-players'] ?? 10;
-  const playerPercent = Math.min(100, Math.round((playersCount / (maxPlayers || 10)) * 100));
+  const serverState = status?.state || (status?.running ? 'running' : 'stopped');
+  const playersCount = status?.players?.length ?? status?.playerCount ?? 0;
+  const maxPlayers = status?.maxPlayers || 10;
+  const playerPercent = Math.min(100, Math.round((playersCount / maxPlayers) * 100));
 
-  const cpuUsageNum = status?.cpu != null ? Number(status.cpu) : (status?.stats?.cpu != null ? Number(status.stats.cpu) : 0);
-  const memoryMb = status?.memory != null ? Number(status.memory) : (status?.stats?.memory != null ? Number(status.stats.memory) : (status?.memoryUsage?.rss ? Math.round(status.memoryUsage.rss / 1024 / 1024) : 0));
-  const allocatedRamMb = Number(status?.allocatedRam || 4096);
+  const cpuUsageNum = status?.cpu != null ? Math.round(status.cpu) : (status?.stats?.cpu != null ? Math.round(status.stats.cpu) : 0);
+  const memoryMb = status?.memory != null ? Math.round(status.memory) : (status?.stats?.memory != null ? Math.round(status.stats.memory) : 0);
+  const allocatedRamMb = status?.systemMemory?.totalMb ? Math.round(status.systemMemory.totalMb) : 2048;
   const ramPercent = Math.min(100, Math.round((memoryMb / allocatedRamMb) * 100));
+
   const hostTotalGb = status?.systemMemory?.totalMb ? (status.systemMemory.totalMb / 1024).toFixed(1) : null;
   const hostFreeGb = status?.systemMemory?.freeMb ? (status.systemMemory.freeMb / 1024).toFixed(1) : null;
   const tpsVal = status?.tps != null ? Number(status.tps).toFixed(1) : (status?.stats?.tps != null ? Number(status.stats.tps).toFixed(1) : '20.0');
-  const version = status?.version && status.version !== 'Unknown' ? status.version : (isInstalled ? 'BDS Detected' : 'Not Installed');
+  const version = status?.version && status.version !== 'Unknown' ? status.version : (isInstalled ? 'BDS Detected' : 'Not installed');
   const uptimeSeconds = status?.uptimeSeconds ?? status?.uptime ?? 0;
   const activeWorldName = status?.activeWorld || status?.levelName || 'Bedrock level';
 
@@ -208,15 +230,15 @@ export const Dashboard = () => {
       {/* Page Title & Subtitle */}
       <div className="page-header-row">
         <div>
-          <h1 className="page-main-title">Server Overview</h1>
-          <p className="page-sub-title">Live system status, performance telemetry, and instant power controls</p>
+          <h1 className="page-main-title">Server overview</h1>
+          <p className="page-sub-title">Process supervision, live telemetry, and server controls</p>
         </div>
         <div className="header-meta-actions">
           {/* Auto-update Toggle Switch */}
           {isAdmin && (
-            <label className="auto-update-toggle-card" title="Automatically keep Bedrock server updated with Mojang's official build without modifying your worlds or settings">
-              <span className="toggle-badge-icon">🔄</span>
-              <span className="toggle-label-text">Auto-Update Server:</span>
+            <label className="auto-update-toggle-card" title="Automatically keep Bedrock server updated with Mojang's official build">
+              <RefreshCw size={13} className="text-muted" />
+              <span className="toggle-label-text">Auto-update:</span>
               <input
                 type="checkbox"
                 className="toggle-real-input"
@@ -230,18 +252,19 @@ export const Dashboard = () => {
             </label>
           )}
 
-          <div className="live-pulse-badge" title="Real-time process telemetry actively updating (1.5s refresh)">
-            <span className="pulse-dot"></span>
-            <span>LIVE TELEMETRY</span>
+          <div className="live-pulse-badge" title="Live telemetry polling active (1.5s interval)">
+            <span className="pulse-dot" />
+            <span>Live telemetry</span>
           </div>
 
           <button
-            className="btn btn-secondary btn-sm"
+            className="btn btn-secondary btn-sm d-flex items-center gap-1.5"
             onClick={fetchStatus}
             disabled={loading}
-            title="Refresh Server Telemetry"
+            title="Refresh telemetry"
           >
-            <span className={`refresh-glyph ${loading ? 'spinning' : ''}`}>↻</span> Sync Stats
+            <RefreshCw size={13} className={loading ? 'spinning' : ''} />
+            <span>Refresh</span>
           </button>
         </div>
       </div>
@@ -250,12 +273,14 @@ export const Dashboard = () => {
       {actionMessage && (
         <div className={`alert-toast alert-${actionMessage.type}`}>
           <span className="toast-icon">
-            {actionMessage.type === 'success' && '✓'}
-            {actionMessage.type === 'error' && '⚠️'}
-            {actionMessage.type === 'info' && 'ℹ️'}
+            {actionMessage.type === 'success' && <CheckCircle2 size={15} />}
+            {actionMessage.type === 'error' && <AlertTriangle size={15} />}
+            {actionMessage.type === 'info' && <Info size={15} />}
           </span>
           <span className="toast-text">{actionMessage.text}</span>
-          <button className="toast-dismiss" onClick={() => setActionMessage(null)}>✕</button>
+          <button className="toast-dismiss" onClick={() => setActionMessage(null)}>
+            <X size={14} />
+          </button>
         </div>
       )}
 
@@ -263,27 +288,29 @@ export const Dashboard = () => {
       {!isInstalled && (
         <div className="install-prompt-banner">
           <div className="prompt-content-flex">
-            <span className="prompt-big-icon">📦</span>
+            <Package size={22} className="text-muted" />
             <div className="prompt-text-group">
-              <h3 className="prompt-heading">Official Bedrock Dedicated Server Binary Not Found</h3>
+              <h3 className="prompt-heading">Bedrock Dedicated Server binary missing</h3>
               <p className="prompt-subtext">
-                The BDS executable (<code>bedrock_server.exe</code>) has not been downloaded yet. You can automatically pull and extract Mojang's official Bedrock server package with 1 click. All existing worlds, properties, and packs are 100% preserved.
+                The BDS executable (<code>bedrock_server.exe</code>) has not been downloaded yet. Pull and extract Mojang's official server build with one click.
               </p>
             </div>
           </div>
           {isAdmin && (
             <button
-              className="btn btn-primary btn-install-now"
+              className="btn btn-primary btn-install-now d-flex items-center gap-1.5"
               onClick={handleInstallLatest}
               disabled={isInstallingBds}
             >
               {isInstallingBds ? (
                 <>
-                  <span className="refresh-glyph spinning mr-2">↻</span> Installing BDS...
+                  <RefreshCw size={14} className="spinning" />
+                  <span>Installing BDS...</span>
                 </>
               ) : (
                 <>
-                  <span className="btn-icon">⬇️</span> Download & Install Latest BDS
+                  <Download size={14} />
+                  <span>Download official BDS</span>
                 </>
               )}
             </button>
@@ -297,21 +324,20 @@ export const Dashboard = () => {
           <div className="hero-status-identity">
             <div className="radar-status-dot">
               <span className="radar-core" />
-              <span className="radar-wave" />
             </div>
             <div>
               <div className="hero-state-title">
-                Server Status:{' '}
+                Status:{' '}
                 <span className="state-badge-text">
-                  {!isInstalled ? 'NOT INSTALLED' : serverState.toUpperCase()}
+                  {!isInstalled ? 'Not installed' : serverState.charAt(0).toUpperCase() + serverState.slice(1)}
                 </span>
               </div>
               <div className="hero-engine-desc">
                 <span>{version}</span>
                 <span className="bullet-sep">•</span>
-                <span>Port {status?.port || 19132} (UDP)</span>
+                <span>Port {status?.port || 19132} UDP</span>
                 <span className="bullet-sep">•</span>
-                <span>Active World: <strong>{activeWorldName}</strong></span>
+                <span>Active world: <strong>{activeWorldName}</strong></span>
               </div>
             </div>
           </div>
@@ -320,66 +346,65 @@ export const Dashboard = () => {
           {canControlServer && (
             <div className="hero-control-buttons">
               <button
-                className="btn-power btn-power-start"
+                className="btn-power btn-power-start d-flex items-center gap-1.5"
                 onClick={() => handleAction('start', api.start)}
                 disabled={actionLoading || isInstallingBds || serverState === 'running' || serverState === 'starting'}
-                title={!isInstalled ? 'Download and start Bedrock server' : 'Spin up Bedrock server process'}
+                title="Start Bedrock server process"
               >
-                <span className="btn-icon">▶</span>
+                <Play size={13} fill="currentColor" />
                 <span>Start</span>
               </button>
 
               <button
-                className="btn-power btn-power-restart"
+                className="btn-power btn-power-restart d-flex items-center gap-1.5"
                 onClick={() => handleAction('restart', api.restart)}
                 disabled={actionLoading || isInstallingBds || serverState === 'stopped' || !isInstalled}
-                title="Gracefully restart server"
+                title="Restart Bedrock server process"
               >
-                <span className="btn-icon">🔄</span>
+                <RotateCcw size={13} />
                 <span>Restart</span>
               </button>
 
               <button
-                className="btn-power btn-power-stop"
+                className="btn-power btn-power-stop d-flex items-center gap-1.5"
                 onClick={() => handleAction('stop', api.stop)}
                 disabled={actionLoading || isInstallingBds || serverState === 'stopped' || serverState === 'stopping'}
-                title="Write 'stop' to BDS stdin to prevent world corruption"
+                title="Stop Bedrock server process"
               >
-                <span className="btn-icon">⏹</span>
+                <Square size={13} fill="currentColor" />
                 <span>Stop</span>
               </button>
 
-              {/* 1-Click Master Control: Start All & Restart All */}
+              {/* Master Control: Start All & Restart All */}
               <button
-                className="btn-power btn-power-start-all"
-                onClick={() => handleAction('start all services (Server, Playit, and Xbox Bot)', api.Server.startAll)}
+                className="btn-power btn-secondary d-flex items-center gap-1.5"
+                onClick={() => handleAction('start all services', api.Server.startAll)}
                 disabled={actionLoading || isInstallingBds}
-                title="Start Bedrock server, Playit internet tunnel, and Xbox Bot relay all at once"
+                title="Start server, public tunnel, and Xbox relay"
               >
-                <span className="btn-icon">⚡</span>
-                <span>Start All</span>
+                <Play size={13} fill="currentColor" />
+                <span>Start all</span>
               </button>
 
               <button
-                className="btn-power btn-power-restart-all"
-                onClick={() => handleAction('restart all services (Server, Playit, and Xbox Bot)', api.Server.restartAll)}
+                className="btn-power btn-secondary d-flex items-center gap-1.5"
+                onClick={() => handleAction('restart all services', api.Server.restartAll)}
                 disabled={actionLoading || isInstallingBds}
-                title="Restart Bedrock server, Playit internet tunnel, and Xbox Bot relay all at once"
+                title="Restart server, public tunnel, and Xbox relay"
               >
-                <span className="btn-icon">🔄</span>
-                <span>Restart All</span>
+                <RotateCcw size={13} />
+                <span>Restart all</span>
               </button>
 
-              {/* 1-Click Update Server Button (Admin only) */}
               {isAdmin && (
                 <button
-                  className="btn-power btn-power-update"
+                  className="btn-power btn-secondary d-flex items-center gap-1.5"
                   onClick={handleInstallLatest}
                   disabled={actionLoading || isInstallingBds}
-                  title="Fetch latest official Bedrock server build from Mojang while preserving all worlds and settings"
+                  title="Check and install newest BDS release"
                 >
-                  <span className="btn-icon">{isInstallingBds ? '⏳' : '⬆️'}</span>
-                  <span>{isInstallingBds ? 'Updating...' : 'Update Server'}</span>
+                  <Download size={13} />
+                  <span>{isInstallingBds ? 'Updating...' : 'Update build'}</span>
                 </button>
               )}
             </div>
@@ -389,96 +414,95 @@ export const Dashboard = () => {
         {/* Hero Metadata Strip */}
         <div className="hero-meta-strip">
           <div className="meta-pill">
-            <span className="meta-icon">⏱️</span>
+            <Clock size={14} className="text-muted" />
             <div className="meta-info">
               <span className="meta-title">Uptime</span>
-              <span className="meta-highlight">{formatUptime(uptimeSeconds)}</span>
+              <span className="meta-highlight font-mono">{formatUptime(uptimeSeconds)}</span>
             </div>
           </div>
           <div className="meta-pill">
-            <span className="meta-icon">🌐</span>
+            <Radio size={14} className="text-muted" />
             <div className="meta-info">
-              <span className="meta-title">Network Bind</span>
-              <span className="meta-highlight">0.0.0.0:{status?.port || 19132}</span>
+              <span className="meta-title">Network bind</span>
+              <span className="meta-highlight font-mono">0.0.0.0:{status?.port || 19132}</span>
             </div>
           </div>
           <div className="meta-pill">
-            <span className="meta-icon">🌍</span>
+            <FolderArchive size={14} className="text-muted" />
             <div className="meta-info">
-              <span className="meta-title">Active World</span>
+              <span className="meta-title">Active world</span>
               <span className="meta-highlight">{activeWorldName}</span>
             </div>
           </div>
           <div className="meta-pill">
-            <span className="meta-icon">📦</span>
+            <Package size={14} className="text-muted" />
             <div className="meta-info">
-              <span className="meta-title">Binary Status</span>
+              <span className="meta-title">Binary status</span>
               <span className={`meta-highlight ${isInstalled ? 'text-primary' : 'text-danger'}`}>
-                {isInstalled ? 'Installed ✓' : 'Missing'}
+                {isInstalled ? 'Installed' : 'Missing'}
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* CONSOLE & PUBLIC ACCESS QUICK STATUS BAR */}
+      {/* Crossplay & Public Access Quick Bar */}
       <div className="modern-card remote-access-summary-card mb-6">
         <div className="d-flex items-center justify-between flex-wrap gap-3 p-4">
           <div className="d-flex items-center gap-3">
-            <div className="icon-badge-box">🌐</div>
+            <Radio size={18} className="text-emerald" />
             <div>
               <div className="d-flex items-center gap-2">
-                <h3 className="m-0 text-sm font-bold text-white">Console & Public Access</h3>
-                <span className="badge badge-primary text-xs">Crossplay</span>
+                <h3 className="m-0 text-sm font-medium text-white">Crossplay and public access</h3>
+                <span className="badge badge-primary text-xs">Playit + Xbox</span>
               </div>
               <p className="m-0 text-xs text-sub mt-0.5">
-                Playit.gg Zero-Port Tunnel & Xbox Live Console Friend Relay
+                Tunnel endpoints and Xbox Live console friend relay
               </p>
             </div>
           </div>
 
           <div className="d-flex items-center gap-3 flex-wrap">
-            {/* Playit Tunnel Status Pill */}
             <div className="remote-status-chip">
-              <span className="text-xs text-sub font-semibold">Public Tunnel:</span>
+              <span className="text-xs text-sub font-normal">Tunnel:</span>
               {tunnelStatus?.isRunning && tunnelStatus?.publicAddress ? (
                 <div className="d-flex items-center gap-1.5">
-                  <span className="channel-pill-online font-mono text-xs font-bold text-emerald">
-                    🟢 {tunnelStatus.publicAddress}
+                  <span className="channel-pill-online font-mono text-xs text-emerald">
+                    {tunnelStatus.publicAddress}
                   </span>
                   <button
                     type="button"
-                    className="btn btn-xs btn-outline"
-                    title="Copy Public Minecraft Address"
+                    className="btn btn-xs btn-secondary d-flex items-center gap-1"
+                    title="Copy address"
                     onClick={() => handleCopyAddress(tunnelStatus.publicAddress)}
                   >
-                    📋 Copy
+                    <Copy size={11} />
+                    <span>Copy</span>
                   </button>
                 </div>
               ) : tunnelStatus?.claimUrl || tunnelStatus?.state === 'awaiting_claim' ? (
-                <span className="badge badge-warning text-xs">🟡 Setup Required</span>
+                <span className="badge badge-warning text-xs">Setup required</span>
               ) : tunnelStatus?.isRunning ? (
-                <span className="badge badge-info text-xs">🔵 Connected</span>
+                <span className="badge badge-info text-xs">Connected</span>
               ) : (
-                <span className="badge badge-secondary text-xs">⚪ Offline</span>
+                <span className="badge badge-secondary text-xs">Offline</span>
               )}
             </div>
 
-            {/* Xbox Live Bot Relay Pill */}
             <div className="remote-status-chip">
-              <span className="text-xs text-sub font-semibold">Console Bot Relay:</span>
+              <span className="text-xs text-sub font-normal">Xbox relay:</span>
               {xboxStatus?.state === 'running' ? (
-                <span className="badge badge-success text-xs" style={{ textTransform: 'none' }}>
-                  🟢 Online {xboxStatus?.account?.gamertag ? `(${xboxStatus.account.gamertag})` : ''}
+                <span className="badge badge-success text-xs">
+                  Online {xboxStatus?.account?.gamertag ? `(${xboxStatus.account.gamertag})` : ''}
                 </span>
               ) : xboxStatus?.state === 'starting' ? (
-                <span className="badge badge-warning text-xs" style={{ textTransform: 'none' }}>🔄 Starting...</span>
+                <span className="badge badge-warning text-xs">Starting...</span>
               ) : xboxStatus?.account?.authenticated ? (
-                <span className="badge badge-secondary text-xs" style={{ textTransform: 'none' }}>
-                  ⚪ Offline {xboxStatus?.account?.gamertag ? `(${xboxStatus.account.gamertag})` : ''}
+                <span className="badge badge-secondary text-xs">
+                  Offline {xboxStatus?.account?.gamertag ? `(${xboxStatus.account.gamertag})` : ''}
                 </span>
               ) : (
-                <span className="badge badge-secondary text-xs" style={{ textTransform: 'none' }}>⚪ Not Linked</span>
+                <span className="badge badge-secondary text-xs">Not linked</span>
               )}
             </div>
 
@@ -486,8 +510,8 @@ export const Dashboard = () => {
               to="/xbox"
               className="btn btn-secondary btn-sm d-flex items-center gap-1.5"
             >
-              <span>Manage Access</span>
-              <span className="text-xs">→</span>
+              <span>Manage access</span>
+              <ArrowRight size={13} />
             </Link>
           </div>
         </div>
@@ -495,21 +519,19 @@ export const Dashboard = () => {
         {copyToast && (
           <div className="px-4 pb-3">
             <div className="alert-toast alert-success py-1.5 px-3 text-xs m-0">
-              <span>✓ {copyToast}</span>
+              <span>{copyToast}</span>
             </div>
           </div>
         )}
       </div>
-
-
 
       {/* Telemetry Stats Grid */}
       <div className="telemetry-grid">
         {/* Players Card */}
         <div className="telemetry-card">
           <div className="card-header-flex">
-            <span className="telemetry-label">PLAYERS ONLINE</span>
-            <span className="telemetry-icon-badge">👥</span>
+            <span className="telemetry-label">Players online</span>
+            <Users size={16} className="text-muted" />
           </div>
           <div className="telemetry-main-metric">
             <span className="metric-number">{playersCount}</span>
@@ -519,15 +541,15 @@ export const Dashboard = () => {
             <div className="meter-fill fill-green" style={{ width: `${Math.max(5, playerPercent)}%` }} />
           </div>
           <div className="telemetry-footer-text">
-            <span>{playerPercent}% Server Capacity</span>
+            <span>{playerPercent}% server capacity</span>
           </div>
         </div>
 
         {/* TPS Card */}
         <div className="telemetry-card">
           <div className="card-header-flex">
-            <span className="telemetry-label">ENGINE TICK RATE</span>
-            <span className="telemetry-icon-badge">⚡</span>
+            <span className="telemetry-label">Simulation tick rate</span>
+            <Activity size={16} className="text-muted" />
           </div>
           <div className="telemetry-main-metric">
             <span className="metric-number">{tpsVal}</span>
@@ -537,15 +559,15 @@ export const Dashboard = () => {
             <div className="meter-fill fill-emerald" style={{ width: `${(Number(tpsVal) / 20) * 100}%` }} />
           </div>
           <div className="telemetry-footer-text">
-            <span className="metric-status-good">● 100% Target Simulation Speed</span>
+            <span>20.0 target rate</span>
           </div>
         </div>
 
         {/* CPU Card */}
         <div className="telemetry-card">
           <div className="card-header-flex">
-            <span className="telemetry-label">CPU UTILIZATION</span>
-            <span className="telemetry-icon-badge">📈</span>
+            <span className="telemetry-label">CPU utilization</span>
+            <Cpu size={16} className="text-muted" />
           </div>
           <div className="telemetry-main-metric">
             <span className="metric-number">{cpuUsageNum}</span>
@@ -555,20 +577,20 @@ export const Dashboard = () => {
             <div className="meter-fill fill-cyan" style={{ width: `${Math.min(100, Math.max(3, cpuUsageNum))}%` }} />
           </div>
           <div className="telemetry-footer-text">
-            <span>{status?.pid ? `PID #${status.pid} • bedrock_server.exe` : 'Engine Idle / Process Stopped'}</span>
+            <span>{status?.pid ? `PID ${status.pid} • bedrock_server.exe` : 'Process idle'}</span>
           </div>
         </div>
 
         {/* RAM Card */}
         <div className="telemetry-card">
           <div className="card-header-flex">
-            <span className="telemetry-label">MEMORY ALLOCATION</span>
-            <span className="telemetry-icon-badge">💾</span>
+            <span className="telemetry-label">Memory allocation</span>
+            <HardDrive size={16} className="text-muted" />
           </div>
           <div className="telemetry-main-metric">
             <span className="metric-number">{memoryMb >= 1024 ? (memoryMb / 1024).toFixed(2) : memoryMb}</span>
             <span className="metric-denom">
-              {memoryMb >= 1024 ? 'GB' : 'MB'} / {allocatedRamMb >= 1024 ? `${(allocatedRamMb / 1024).toFixed(0)} GB Limit` : `${allocatedRamMb} MB Limit`}
+              {memoryMb >= 1024 ? 'GB' : 'MB'} / {allocatedRamMb >= 1024 ? `${(allocatedRamMb / 1024).toFixed(0)} GB` : `${allocatedRamMb} MB`}
             </span>
           </div>
           <div className="telemetry-meter-bar">
@@ -585,65 +607,73 @@ export const Dashboard = () => {
       {/* Quick Action Hub */}
       <div className="quick-hub-section">
         <div className="hub-section-header">
-          <h2 className="hub-title">Administrative Actions</h2>
-          <span className="hub-subtitle">Quick shortcuts to core server management modules</span>
+          <h2 className="hub-title">Administrative modules</h2>
+          <span className="hub-subtitle">Quick shortcuts to core server operations</span>
         </div>
 
         <div className="quick-hub-grid">
           <div className="hub-tile" onClick={() => navigate('/players')}>
-            <div className="tile-icon-box">🎮</div>
-            <div className="tile-content">
-              <h3 className="tile-heading">Players & Operators</h3>
-              <p className="tile-description">Live connected roster, historical offline players, and OP/DEOP permissions.</p>
+            <div className="tile-icon-box">
+              <Users size={18} className="text-muted" />
             </div>
-            <span className="tile-arrow">→</span>
+            <div className="tile-content">
+              <h3 className="tile-heading">Players and operators</h3>
+              <p className="tile-description">Connected roster, historical directory, and permission tiers.</p>
+            </div>
+            <ArrowRight size={14} className="tile-arrow text-muted" />
           </div>
 
           <div className="hub-tile" onClick={() => navigate('/console')}>
-            <div className="tile-icon-box">🖥️</div>
-            <div className="tile-content">
-              <h3 className="tile-heading">Live Interactive Console</h3>
-              <p className="tile-description">Send BDS stdin commands, monitor sanitized logs, and track player activity.</p>
+            <div className="tile-icon-box">
+              <Terminal size={18} className="text-muted" />
             </div>
-            <span className="tile-arrow">→</span>
+            <div className="tile-content">
+              <h3 className="tile-heading">Live console</h3>
+              <p className="tile-description">Direct standard input and log stream for BDS process commands.</p>
+            </div>
+            <ArrowRight size={14} className="tile-arrow text-muted" />
           </div>
 
           <div className="hub-tile" onClick={() => navigate('/properties')}>
-            <div className="tile-icon-box">⚙️</div>
-            <div className="tile-content">
-              <h3 className="tile-heading">Server Properties</h3>
-              <p className="tile-description">Configure gamemodes, render distance, allowlists, and auto-sanitized offline mode.</p>
+            <div className="tile-icon-box">
+              <Sliders size={18} className="text-muted" />
             </div>
-            <span className="tile-arrow">→</span>
+            <div className="tile-content">
+              <h3 className="tile-heading">Server properties</h3>
+              <p className="tile-description">Gamemodes, simulation distance, allowlists, and configuration parameters.</p>
+            </div>
+            <ArrowRight size={14} className="tile-arrow text-muted" />
           </div>
 
           <div className="hub-tile" onClick={() => navigate('/backups')}>
-            <div className="tile-icon-box">💾</div>
-            <div className="tile-content">
-              <h3 className="tile-heading">Snapshots & Backups</h3>
-              <p className="tile-description">Create compressed `.zip` archives of active worlds with auto-backup scheduling.</p>
+            <div className="tile-icon-box">
+              <Archive size={18} className="text-muted" />
             </div>
-            <span className="tile-arrow">→</span>
+            <div className="tile-content">
+              <h3 className="tile-heading">Snapshots and backups</h3>
+              <p className="tile-description">Save-hold LevelDB chunk snapshots and automated archives.</p>
+            </div>
+            <ArrowRight size={14} className="tile-arrow text-muted" />
           </div>
         </div>
       </div>
 
-      {/* IN-GAME WORLD & TIME OF DAY CONTROLS */}
+      {/* World & Time of Day Controls */}
       {isAdmin && (
         <div className="gameplay-controls-card">
           <div className="gameplay-header">
             <div className="gameplay-title-group">
-              <span className="gameplay-icon">⏱️</span>
+              <Clock size={16} className="text-muted" />
               <div>
-                <h3 className="gameplay-heading">In-Game World & Time of Day Controls</h3>
+                <h3 className="gameplay-heading">World environment and time controls</h3>
                 <p className="gameplay-desc">
-                  Instantly change the in-game sun/moon cycle and weather without typing console commands.
+                  Adjust daylight cycle and atmospheric weather conditions in the active world.
                 </p>
               </div>
             </div>
             <div className="gameplay-status-pill">
-              <span className={`dot ${serverState === 'running' ? 'dot-active' : 'dot-idle'}`}></span>
-              <span>{serverState === 'running' ? 'Live World Connected' : 'Server Must Be Running'}</span>
+              <span className={`dot ${serverState === 'running' ? 'dot-active' : 'dot-idle'}`} />
+              <span>{serverState === 'running' ? 'Server connected' : 'Server stopped'}</span>
             </div>
           </div>
 
@@ -651,44 +681,48 @@ export const Dashboard = () => {
             {/* Primary Time of Day Toggle */}
             <div className="gameplay-subcard">
               <div className="subcard-title-row">
-                <span className="subcard-icon">☀️ / 🌙</span>
-                <span className="subcard-title">Quick Time of Day Switch</span>
+                <Sun size={14} className="text-muted" />
+                <span className="subcard-title">Daylight control</span>
               </div>
-              <p className="subcard-hint">One-click toggle between Day and Night in the active world.</p>
+              <p className="subcard-hint">Switch time of day in the active world.</p>
               
               <div className="time-toggle-actions">
                 <button
-                  className="btn-time-quick btn-time-day"
+                  className="btn-time-quick btn-time-day d-flex items-center gap-2"
                   disabled={serverState !== 'running' || actionLoading}
                   onClick={async () => {
                     try {
                       await api.Server.setTime('day');
-                      setActionMessage({ type: 'success', text: '☀️ In-game time set to Day (1000 ticks)!' });
+                      setActionMessage({ type: 'success', text: 'Time set to day (1000 ticks).' });
                     } catch (e) {
                       setActionMessage({ type: 'error', text: e.message || 'Failed to change time' });
                     }
                   }}
                 >
-                  <span className="btn-glyph">☀️</span>
-                  <span className="btn-label-bold">Set Day</span>
-                  <span className="btn-label-sub">Sunrise (1000)</span>
+                  <Sun size={15} />
+                  <div>
+                    <span className="btn-label-bold">Day</span>
+                    <span className="btn-label-sub">1000 ticks</span>
+                  </div>
                 </button>
 
                 <button
-                  className="btn-time-quick btn-time-night"
+                  className="btn-time-quick btn-time-night d-flex items-center gap-2"
                   disabled={serverState !== 'running' || actionLoading}
                   onClick={async () => {
                     try {
                       await api.Server.setTime('night');
-                      setActionMessage({ type: 'success', text: '🌙 In-game time set to Night (13000 ticks)!' });
+                      setActionMessage({ type: 'success', text: 'Time set to night (13000 ticks).' });
                     } catch (e) {
                       setActionMessage({ type: 'error', text: e.message || 'Failed to change time' });
                     }
                   }}
                 >
-                  <span className="btn-glyph">🌙</span>
-                  <span className="btn-label-bold">Set Night</span>
-                  <span className="btn-label-sub">Sunset (13000)</span>
+                  <Moon size={15} />
+                  <div>
+                    <span className="btn-label-bold">Night</span>
+                    <span className="btn-label-sub">13000 ticks</span>
+                  </div>
                 </button>
               </div>
 
@@ -697,46 +731,46 @@ export const Dashboard = () => {
                 <button
                   className="preset-pill"
                   disabled={serverState !== 'running'}
-                  onClick={() => api.Server.setTime('noon').then(() => setActionMessage({ type: 'success', text: '☀️ Time set to Noon!' }))}
+                  onClick={() => api.Server.setTime('noon').then(() => setActionMessage({ type: 'success', text: 'Time set to noon.' }))}
                 >
-                  ☀️ Noon
+                  <Sun size={12} className="inline mr-1" /> Noon
                 </button>
                 <button
                   className="preset-pill"
                   disabled={serverState !== 'running'}
-                  onClick={() => api.Server.setTime('sunset').then(() => setActionMessage({ type: 'success', text: '🌇 Time set to Sunset!' }))}
+                  onClick={() => api.Server.setTime('sunset').then(() => setActionMessage({ type: 'success', text: 'Time set to sunset.' }))}
                 >
-                  🌇 Sunset
+                  <Sunset size={12} className="inline mr-1" /> Sunset
                 </button>
                 <button
                   className="preset-pill"
                   disabled={serverState !== 'running'}
-                  onClick={() => api.Server.setTime('midnight').then(() => setActionMessage({ type: 'success', text: '🌌 Time set to Midnight!' }))}
+                  onClick={() => api.Server.setTime('midnight').then(() => setActionMessage({ type: 'success', text: 'Time set to midnight.' }))}
                 >
-                  🌌 Midnight
+                  <Moon size={12} className="inline mr-1" /> Midnight
                 </button>
                 <button
                   className="preset-pill preset-lock"
                   disabled={serverState !== 'running'}
-                  title="Freeze time and lock daylight cycle"
+                  title="Freeze daylight cycle"
                   onClick={() => {
                     api.Server.setDaylightCycle(false)
                       .then(() => api.Server.setTime('day'))
-                      .then(() => setActionMessage({ type: 'success', text: '🔒 Daylight cycle locked to permanent Day!' }));
+                      .then(() => setActionMessage({ type: 'success', text: 'Daylight cycle locked to permanent day.' }));
                   }}
                 >
-                  🔒 Lock Day (Always Day)
+                  <Lock size={11} className="inline mr-1" /> Lock day
                 </button>
                 <button
                   className="preset-pill"
                   disabled={serverState !== 'running'}
-                  title="Enable natural cycle"
+                  title="Enable natural daylight cycle"
                   onClick={() => {
                     api.Server.setDaylightCycle(true)
-                      .then(() => setActionMessage({ type: 'success', text: '🔄 Natural Daylight cycle restored!' }));
+                      .then(() => setActionMessage({ type: 'success', text: 'Natural daylight cycle enabled.' }));
                   }}
                 >
-                  🔄 Normal Cycle
+                  <RotateCcw size={11} className="inline mr-1" /> Normal cycle
                 </button>
               </div>
             </div>
@@ -744,58 +778,58 @@ export const Dashboard = () => {
             {/* Weather Controls */}
             <div className="gameplay-subcard">
               <div className="subcard-title-row">
-                <span className="subcard-icon">🌧️</span>
-                <span className="subcard-title">Atmosphere & Weather</span>
+                <CloudSun size={14} className="text-muted" />
+                <span className="subcard-title">Weather control</span>
               </div>
-              <p className="subcard-hint">Change weather conditions in real-time across all biomes.</p>
+              <p className="subcard-hint">Set weather state across active chunks.</p>
               
               <div className="weather-btn-grid">
                 <button
-                  className="btn-weather btn-clear"
+                  className="btn-weather btn-clear d-flex items-center gap-1.5"
                   disabled={serverState !== 'running'}
                   onClick={async () => {
                     try {
                       await api.Server.setWeather('clear');
-                      setActionMessage({ type: 'success', text: '☀️ Weather cleared! Blue skies ahead.' });
+                      setActionMessage({ type: 'success', text: 'Weather cleared.' });
                     } catch (e) {
                       setActionMessage({ type: 'error', text: e.message || 'Failed to set weather' });
                     }
                   }}
                 >
-                  <span className="weather-glyph">🌤️</span>
-                  <span>Clear Skies</span>
+                  <CloudSun size={14} />
+                  <span>Clear</span>
                 </button>
 
                 <button
-                  className="btn-weather btn-rain"
+                  className="btn-weather btn-rain d-flex items-center gap-1.5"
                   disabled={serverState !== 'running'}
                   onClick={async () => {
                     try {
                       await api.Server.setWeather('rain');
-                      setActionMessage({ type: 'success', text: '🌧️ Rain storm activated!' });
+                      setActionMessage({ type: 'success', text: 'Rain enabled.' });
                     } catch (e) {
                       setActionMessage({ type: 'error', text: e.message || 'Failed to set weather' });
                     }
                   }}
                 >
-                  <span className="weather-glyph">🌧️</span>
+                  <CloudRain size={14} />
                   <span>Rain</span>
                 </button>
 
                 <button
-                  className="btn-weather btn-thunder"
+                  className="btn-weather btn-thunder d-flex items-center gap-1.5"
                   disabled={serverState !== 'running'}
                   onClick={async () => {
                     try {
                       await api.Server.setWeather('thunder');
-                      setActionMessage({ type: 'success', text: '⚡ Thunderstorm summoned!' });
+                      setActionMessage({ type: 'success', text: 'Thunderstorm enabled.' });
                     } catch (e) {
                       setActionMessage({ type: 'error', text: e.message || 'Failed to set weather' });
                     }
                   }}
                 >
-                  <span className="weather-glyph">⚡</span>
-                  <span>Thunderstorm</span>
+                  <CloudLightning size={14} />
+                  <span>Thunder</span>
                 </button>
               </div>
             </div>

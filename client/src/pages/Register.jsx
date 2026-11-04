@@ -57,7 +57,7 @@ export const Register = () => {
       <div className="auth-card">
         <div className="auth-header">
           <div className="auth-logo-badge">
-            <span className="auth-logo-glyph">🎟️</span>
+            
           </div>
           <h1 className="auth-title">Create Account</h1>
           <p className="auth-subtitle">Join the Bedrock Server Management Team</p>
@@ -77,7 +77,7 @@ export const Register = () => {
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label className="form-label" htmlFor="username">
-              <span className="label-icon">👤</span>
+              
               <span>Choose Username</span>
             </label>
             <div className="input-wrapper">
@@ -97,7 +97,7 @@ export const Register = () => {
 
           <div className="form-group">
             <label className="form-label" htmlFor="password">
-              <span className="label-icon">🔒</span>
+              
               <span>Create Password</span>
             </label>
             <div className="input-wrapper">
@@ -118,14 +118,14 @@ export const Register = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
               >
-                {showPassword ? '👁️' : '👁️‍🗨️'}
+                {showPassword ? 'Hide' : 'Show'}
               </button>
             </div>
           </div>
 
           <div className="form-group">
             <label className="form-label" htmlFor="confirmPassword">
-              <span className="label-icon">🛡️</span>
+              
               <span>Confirm Password</span>
             </label>
             <div className="input-wrapper">

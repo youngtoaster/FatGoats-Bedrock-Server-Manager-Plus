@@ -23,7 +23,7 @@ export const ProtectedRoute = ({ children, requireAdmin = false }) => {
     return (
       <div className="access-denied-container">
         <div className="access-denied-card">
-          <div className="access-denied-icon">🚫</div>
+          <div className="access-denied-icon mb-2">Access restricted</div>
           <h2>Access Denied</h2>
           <p>You do not have administrative privileges to access this page.</p>
           <a href="/" className="btn btn-primary">Return to Dashboard</a>

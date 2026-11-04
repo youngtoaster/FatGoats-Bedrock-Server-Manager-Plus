@@ -88,28 +88,28 @@ export const Audit = () => {
       return { className: 'badge badge-warning', icon: '↻', text: actionStr };
     }
     if (action.includes('BACKUP')) {
-      return { className: 'badge badge-info', icon: '📦', text: actionStr };
+      return { className: 'badge badge-info', icon: '', text: actionStr };
     }
     if (action.includes('RESTORE')) {
       return { className: 'badge badge-warning', icon: '⏪', text: actionStr };
     }
     if (action.includes('ADDON') || action.includes('PACK')) {
-      return { className: 'badge badge-behavior', icon: '🧩', text: actionStr };
+      return { className: 'badge badge-behavior', icon: '', text: actionStr };
     }
     if (action.includes('USER') || action.includes('ROLE') || action.includes('INVITE') || action.includes('AUTH') || action.includes('LOGIN')) {
-      return { className: 'badge badge-admin', icon: '👤', text: actionStr };
+      return { className: 'badge badge-admin', icon: '', text: actionStr };
     }
     if (action.includes('WORLD')) {
-      return { className: 'badge badge-secondary', icon: '🌍', text: actionStr };
+      return { className: 'badge badge-secondary', icon: '', text: actionStr };
     }
     if (action.includes('VERSION') || action.includes('UPDATE')) {
-      return { className: 'badge badge-info', icon: '🚀', text: actionStr };
+      return { className: 'badge badge-info', icon: '', text: actionStr };
     }
     if (action.includes('CONFIG') || action.includes('PROPERTIES')) {
       return { className: 'badge badge-secondary', icon: '⚙️', text: actionStr };
     }
 
-    return { className: 'badge badge-secondary', icon: '📝', text: actionStr || 'UNKNOWN' };
+    return { className: 'badge badge-secondary', icon: '', text: actionStr || 'UNKNOWN' };
   };
 
   const formatTimestamp = (dateVal) => {
@@ -271,7 +271,7 @@ export const Audit = () => {
             </div>
           ) : filteredLogs.length === 0 ? (
             <div className="empty-state py-12 text-center">
-              <div className="empty-state-icon">📋</div>
+              <div className="empty-state-icon mb-2 text-muted">Empty audit log</div>
               <h3>No Audit Entries Found</h3>
               <p className="text-muted">
                 {searchTerm || selectedFilter !== 'ALL'
@@ -304,7 +304,7 @@ export const Audit = () => {
                           {timestampStr}
                         </td>
                         <td className="font-medium text-primary whitespace-nowrap">
-                          <span className="user-icon-sm mr-1">👤</span>
+                          
                           {userDisplay}
                         </td>
                         <td>

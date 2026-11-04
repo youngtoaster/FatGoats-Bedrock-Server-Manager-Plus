@@ -5,57 +5,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  /* Color Palette */
-  --bg-main: #090a10;
-  --bg-subtle: #0d0f17;
-  --bg-card: rgba(18, 22, 33, 0.75);
-  --bg-card-hover: rgba(26, 32, 48, 0.85);
-  --bg-sidebar: #0b0d14;
-  --bg-input: #10131d;
-  --bg-glass: rgba(13, 16, 25, 0.82);
+  /* Graphite Neutral Ramp (Dark) */
+  --bg-sidebar: #0f0f10;
+  --bg-main: #141415;
+  --bg-card: #19191b;
+  --bg-card-hover: #212124;
+  --bg-raised: #232325;
+  --bg-input: #1a1a1d;
+  --bg-subtle: #161618;
+  --bg-glass: rgba(25, 25, 27, 0.95);
 
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-hover: rgba(255, 255, 255, 0.15);
+  /* Hairlines (Primary text at 8% opacity) */
+  --border-subtle: rgba(237, 237, 237, 0.08);
+  --border-hover: rgba(237, 237, 237, 0.16);
   --border-focus: #10b981;
 
-  /* Accents */
+  /* Accent (Bedrock Emerald) */
   --emerald: #10b981;
-  --emerald-glow: rgba(16, 185, 129, 0.25);
+  --emerald-glow: transparent;
   --emerald-subtle: rgba(16, 185, 129, 0.12);
   --emerald-hover: #059669;
 
   --amber: #f59e0b;
   --amber-subtle: rgba(245, 158, 11, 0.12);
-  --amber-glow: rgba(245, 158, 11, 0.25);
+  --amber-glow: transparent;
 
-  --rose: #f43f5e;
-  --rose-subtle: rgba(244, 63, 94, 0.12);
-  --rose-glow: rgba(244, 63, 94, 0.25);
+  --rose: #e5484d;
+  --rose-subtle: rgba(229, 72, 77, 0.12);
+  --rose-glow: transparent;
 
-  --cyan: #06b6d4;
-  --cyan-subtle: rgba(6, 182, 212, 0.12);
+  --cyan: #38bdf8;
+  --cyan-subtle: rgba(56, 189, 248, 0.12);
 
-  --purple: #a855f7;
-  --purple-subtle: rgba(168, 85, 247, 0.12);
+  --purple: #818cf8;
+  --purple-subtle: rgba(129, 140, 248, 0.12);
 
-  /* Typography */
-  --text-main: #f1f5f9;
-  --text-sub: #94a3b8;
-  --text-muted: #64748b;
+  /* Three Text Roles */
+  --text-main: #ededed;
+  --text-sub: #a1a1a6;
+  --text-muted: #85858b;
   --text-white: #ffffff;
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Sizing & Radius */
+  /* Sizing & Radius (Nested Radius: inner = outer - padding) */
+  --radius-xs: 4px;
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-full: 9999px;
 
-  --header-height: 64px;
-  --sidebar-width: 260px;
+  --header-height: 56px;
+  --sidebar-width: 256px;
+
+  /* Purposeful Timing & Easing */
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 140ms;
+  --duration-normal: 200ms;
+  --duration-entrance: 280ms;
 }
 
 *, *::before, *::after {
@@ -106,9 +115,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  background: radial-gradient(circle at 85% 5%, rgba(16, 185, 129, 0.04), transparent 45%),
-              radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.02), transparent 40%),
-              var(--bg-main);
+  background: var(--bg-main);
 }
 
 .content-container {

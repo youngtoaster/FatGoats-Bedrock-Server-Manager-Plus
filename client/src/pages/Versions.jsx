@@ -178,7 +178,7 @@ export const Versions = () => {
 
       {/* Preservation Notice Alert */}
       <div className="alert alert-info d-flex items-center gap-3 mb-6">
-        <span className="text-xl">🛡️</span>
+        
         <div>
           <strong>Safe Upgrades:</strong> Installing a new version will preserve your worlds, <code>server.properties</code>, <code>permissions.json</code>, and active addons. Only the core server binaries and base assets are updated.
         </div>
@@ -195,7 +195,7 @@ export const Versions = () => {
         <div className="card-body">
           <div className="d-flex items-center justify-between flex-wrap gap-4">
             <div className="d-flex items-center gap-4">
-              <div className="server-cube-icon">🧊</div>
+              
               <div>
                 <div className="text-xs uppercase font-semibold text-muted">Minecraft Bedrock Dedicated Server</div>
                 <div className="current-version-display font-mono">
@@ -210,7 +210,7 @@ export const Versions = () => {
                 onClick={checkForUpdates}
                 disabled={checkingUpdates || !!installingUrl}
               >
-                {checkingUpdates ? 'Querying Mojang API...' : '🔍 Check for Updates'}
+                {checkingUpdates ? 'Querying Mojang API...' : 'Check for updates'}
               </button>
             </div>
           </div>
@@ -325,7 +325,7 @@ export const Versions = () => {
             />
 
             <div className="upload-zone-content text-center py-6">
-              <div className="upload-icon mb-2">📦</div>
+              
               <h3 className="upload-title mb-1">
                 {isDraggingZip ? 'Drop Bedrock Server ZIP here' : 'Upload Custom Server ZIP'}
               </h3>
@@ -415,7 +415,7 @@ export const Versions = () => {
                 Install Bedrock Dedicated Server <strong>"{confirmInstallTarget.version || 'Selected Build'}"</strong>?
               </p>
               <div className="alert alert-info mt-3">
-                🛡️ <strong>Safety Guarantee:</strong> Your world folders, configuration files (<code>server.properties</code>), and player whitelist will remain intact.
+                <strong>Safety guarantee:</strong> Your world folders, configuration files (<code>server.properties</code>), and player whitelist will remain intact.
               </div>
               <p className="text-secondary text-sm mt-2">
                 If the server is currently online, it will be safely stopped before swapping binaries.

@@ -1,3 +1,11 @@
+import {
+  Search,
+  Save,
+  RotateCcw,
+  Sliders,
+  CheckCircle2,
+  AlertTriangle
+} from 'lucide-react';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
@@ -6,27 +14,27 @@ const PROPERTY_METADATA = {
   'server-name': {
     label: 'Server Display Name',
     category: 'general',
-    icon: '🏷️',
+    icon: '',
     description: 'The server name displayed in the in-game Minecraft Bedrock server browser list.',
   },
   gamemode: {
     label: 'Default Game Mode',
     category: 'general',
-    icon: '⚔️',
+    icon: '',
     description: 'The default game mode applied to players joining the world.',
     options: ['survival', 'creative', 'adventure'],
   },
   difficulty: {
     label: 'World Difficulty',
     category: 'general',
-    icon: '💀',
+    icon: '',
     description: 'Controls hostile mob damage, hunger depletion, and hostile creature spawning.',
     options: ['peaceful', 'easy', 'normal', 'hard'],
   },
   'max-players': {
     label: 'Maximum Player Capacity',
     category: 'general',
-    icon: '👥',
+    icon: '',
     description: 'The maximum number of concurrent players that can join this Bedrock server.',
     min: 1,
     max: 200,
@@ -34,7 +42,7 @@ const PROPERTY_METADATA = {
   'server-ram-limit': {
     label: 'Server RAM Allocation (Memory Limit)',
     category: 'general',
-    icon: '💾',
+    icon: '',
     description: 'Target memory limit allocated for Bedrock chunk caching, ticking simulation, and addon scripting (in Megabytes). Presets: 2GB (2048), 4GB (4096), 8GB (8192), 16GB (16384).',
     min: 1024,
     max: 65536,
@@ -43,26 +51,26 @@ const PROPERTY_METADATA = {
   'level-name': {
     label: 'Active World Name',
     category: 'world',
-    icon: '🌍',
+    icon: '',
     description: 'Directory name of the active world stored inside the worlds/ directory.',
   },
   'level-seed': {
     label: 'World Generation Seed',
     category: 'world',
-    icon: '🌱',
+    icon: '',
     description: 'Seed string or number used by the world generator algorithm.',
   },
   'level-type': {
     label: 'World Terrain Type',
     category: 'world',
-    icon: '🏔️',
+    icon: '',
     description: 'Generation style of the world landscape (DEFAULT, FLAT, or LEGACY).',
     options: ['DEFAULT', 'FLAT', 'LEGACY'],
   },
   'view-distance': {
     label: 'Render View Distance (Chunks)',
     category: 'world',
-    icon: '👁️',
+    icon: '',
     description: 'Maximum chunk view distance sent to connected clients. Higher values require more RAM.',
     min: 4,
     max: 64,
@@ -70,7 +78,7 @@ const PROPERTY_METADATA = {
   'tick-distance': {
     label: 'Simulation Tick Distance (Chunks)',
     category: 'world',
-    icon: '⏱️',
+    icon: '',
     description: 'Radius in chunks where entities, crops, and redstone are actively updated.',
     min: 4,
     max: 12,
@@ -78,7 +86,7 @@ const PROPERTY_METADATA = {
   'max-chunks-per-tick': {
     label: 'Max Chunks Per Tick',
     category: 'world',
-    icon: '📦',
+    icon: '',
     description: 'Throttle limit on the number of chunks loaded/generated per single server tick.',
     min: 1,
     max: 50,
@@ -86,38 +94,38 @@ const PROPERTY_METADATA = {
   'online-mode': {
     label: 'Online Mode (Xbox Authentication)',
     category: 'security',
-    icon: '🛡️',
+    icon: '',
     description: 'When true, all players must authenticate through Xbox Live. When false, allowlists are relaxed.',
   },
   'allow-list': {
     label: 'Enforce Allowlist',
     category: 'security',
-    icon: '📋',
+    icon: '',
     description: 'If enabled, only players listed inside allowlist.json can join.',
   },
   'white-list': {
     label: 'Legacy Whitelist Alias',
     category: 'security',
-    icon: '📋',
+    icon: '',
     description: 'Legacy alias for allow-list in older Bedrock Dedicated Server builds.',
   },
   'allow-cheats': {
     label: 'Allow In-Game Cheats',
     category: 'security',
-    icon: '⚡',
+    icon: '',
     description: 'Enables in-game slash commands like /gamemode, /give, /time, and /tp for players.',
   },
   'default-player-permission-level': {
     label: 'Default Permission Level',
     category: 'security',
-    icon: '🔑',
+    icon: '',
     description: 'Starting permission level assigned to new players joining for the first time.',
     options: ['visitor', 'member', 'operator'],
   },
   'player-idle-timeout': {
     label: 'Idle Player Kick Timeout (Minutes)',
     category: 'security',
-    icon: '⏳',
+    icon: '',
     description: 'Automatically kicks players who are AFK/idle for this many minutes (0 = disabled).',
     min: 0,
     max: 1440,
@@ -125,13 +133,13 @@ const PROPERTY_METADATA = {
   'texturepack-required': {
     label: 'Require Server Texture Packs',
     category: 'security',
-    icon: '🎨',
+    icon: '',
     description: 'Forces joining clients to download server resource packs before entering world.',
   },
   'server-port': {
     label: 'IPv4 Server Port',
     category: 'network',
-    icon: '🔌',
+    icon: '',
     description: 'The standard Bedrock UDP port for IPv4 connections (Default: 19132).',
     min: 1024,
     max: 65535,
@@ -139,7 +147,7 @@ const PROPERTY_METADATA = {
   'server-portv6': {
     label: 'IPv6 Server Port',
     category: 'network',
-    icon: '🌐',
+    icon: '',
     description: 'The Bedrock UDP port for IPv6 connections (Default: 19133).',
     min: 1024,
     max: 65535,
@@ -147,7 +155,7 @@ const PROPERTY_METADATA = {
   'max-threads': {
     label: 'Max CPU Worker Threads',
     category: 'network',
-    icon: '💻',
+    icon: '',
     description: 'Maximum threads utilized by BDS for physics, pathfinding, and ticking (0 = auto-detect).',
     min: 0,
     max: 64,
@@ -155,7 +163,7 @@ const PROPERTY_METADATA = {
   'compression-threshold': {
     label: 'Packet Compression Threshold',
     category: 'network',
-    icon: '🗜️',
+    icon: '',
     description: 'Minimum packet size (bytes) before network compression is applied.',
     min: 0,
     max: 65535,
@@ -163,26 +171,26 @@ const PROPERTY_METADATA = {
   'content-log-file-enabled': {
     label: 'Enable Content Log File',
     category: 'network',
-    icon: '📝',
+    icon: '',
     description: 'Logs errors from addons, scripting APIs, and behavior packs to a dedicated file.',
   },
   transport: {
     label: 'Network Transport Protocol',
     category: 'network',
-    icon: '📡',
+    icon: '',
     description: 'Network transport protocol. "nethernet" is Mojang\'s required transport protocol in BDS 1.26+. "raknet" is legacy Bedrock UDP routing.',
     options: ['nethernet', 'raknet'],
   },
 };
 
 const CATEGORIES = [
-  { id: 'all', label: 'All Settings', icon: '🌟' },
-  { id: 'experiments', label: 'World Experiments (Add-Ons)', icon: '🧪' },
+  { id: 'all', label: 'All settings', icon: '' },
+  { id: 'experiments', label: 'World experiments', icon: '' },
   { id: 'general', label: 'General & Gameplay', icon: '⚔️' },
-  { id: 'world', label: 'World & Simulation', icon: '🌍' },
-  { id: 'security', label: 'Security & Access', icon: '🛡️' },
+  { id: 'world', label: 'World and simulation', icon: '' },
+  { id: 'security', label: 'Security and access', icon: '' },
   { id: 'network', label: 'Network & Engine', icon: '⚡' },
-  { id: 'advanced', label: 'Advanced BDS Raw', icon: '🔧' },
+  { id: 'advanced', label: 'Advanced raw', icon: '' },
 ];
 
 export const Properties = () => {
@@ -703,7 +711,7 @@ export const Properties = () => {
         </div>
 
         <div className="prop-search-wrapper">
-          <span className="search-glyph">🔍</span>
+          <Search size={14} className="search-glyph text-muted" />
           <input
             type="text"
             className="search-field-pill"
@@ -724,7 +732,7 @@ export const Properties = () => {
         <div className="card world-experiments-card mb-6">
           <div className="card-header d-flex justify-between items-center flex-wrap gap-3">
             <div className="d-flex items-center gap-2.5">
-              <span className="experiments-title-icon">🧪</span>
+              <Sliders size={16} className="text-muted mr-1.5" />
               <div>
                 <div className="d-flex items-center gap-2">
                   <h3 className="m-0 text-base font-bold text-white">World Experimental Features</h3>
@@ -788,7 +796,7 @@ export const Properties = () => {
                   </>
                 ) : (
                   <>
-                    <span>💾</span> Save Experiments
+                    <span>Save experiments</span>
                   </>
                 )}
               </button>
@@ -836,7 +844,7 @@ export const Properties = () => {
                     </>
                   ) : (
                     <>
-                      <span>🔄</span>
+                      <RotateCcw size={13} className="text-muted" />
                       <span>Restart Server to Apply</span>
                     </>
                   )}
@@ -923,7 +931,7 @@ export const Properties = () => {
       {activeCategory !== 'experiments' && (
         filteredKeys.length === 0 ? (
           <div className="empty-properties-state">
-            <div className="empty-icon">🔍</div>
+            <div className="empty-icon mb-2"><Search size={28} className="text-muted" /></div>
             <h3>No Properties Match "{searchQuery}"</h3>
             <p>Try searching for a different keyword or switch to the "All Settings" category tab.</p>
           </div>

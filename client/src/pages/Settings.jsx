@@ -1,3 +1,21 @@
+import {
+  Sliders,
+  Lock,
+  ArrowUpCircle,
+  ClipboardList,
+  User,
+  Key,
+  Eye,
+  EyeOff,
+  RefreshCw,
+  Folder,
+  Globe,
+  Radio,
+  ExternalLink,
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle
+} from 'lucide-react';
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
@@ -241,7 +259,7 @@ export const Settings = () => {
       setCredToast({
         type: res.updateAvailable ? 'info' : 'success',
         text: res.updateAvailable
-          ? `🚀 Update available! ${res.commitsBehind} new commit(s) found on GitHub.`
+          ? `Update available: ${res.commitsBehind} new commit(s) found on GitHub.`
           : '✓ App is up to date! You are running the latest version from GitHub.',
       });
     } catch (err) {
@@ -387,7 +405,7 @@ export const Settings = () => {
     if (ok) {
       setCopiedLink(true);
       setTimeout(() => setCopiedLink(false), 3000);
-      setCredToast({ type: 'success', text: `📋 Copied player portal link to clipboard: ${fullUrl}` });
+      setCredToast({ type: 'success', text: `Copied player portal link to clipboard: ${fullUrl}` });
     } else {
       setCredToast({ type: 'info', text: `Player portal link: ${fullUrl}` });
     }
@@ -421,7 +439,7 @@ export const Settings = () => {
           className={`settings-tab-btn ${activeTab === 'portal' ? 'active' : ''}`}
           onClick={() => setActiveTab('portal')}
         >
-          <span className="tab-icon">🎮</span>
+          <Sliders size={14} className="inline mr-1" />
           <span>Player Quick-Start Portal</span>
         </button>
         <button
@@ -437,7 +455,7 @@ export const Settings = () => {
           className={`settings-tab-btn ${activeTab === 'admin' ? 'active' : ''}`}
           onClick={() => setActiveTab('admin')}
         >
-          <span className="tab-icon">🔐</span>
+          <Lock size={14} className="inline mr-1" />
           <span>Admin Credentials</span>
         </button>
         <button
@@ -445,7 +463,7 @@ export const Settings = () => {
           className={`settings-tab-btn ${activeTab === 'updates' ? 'active' : ''}`}
           onClick={() => setActiveTab('updates')}
         >
-          <span className="tab-icon">🚀</span>
+          <ArrowUpCircle size={14} className="inline mr-1" />
           <span>App Updates &amp; GitHub Sync</span>
           {updateStatus?.updateAvailable && (
             <span className="badge badge-warning text-2xs ml-1.5 px-1.5 py-0.5">NEW</span>
@@ -456,7 +474,7 @@ export const Settings = () => {
           className={`settings-tab-btn ${activeTab === 'all' ? 'active' : ''}`}
           onClick={() => setActiveTab('all')}
         >
-          <span className="tab-icon">📋</span>
+          <ClipboardList size={14} className="inline mr-1" />
           <span>View All</span>
         </button>
       </div>
@@ -468,7 +486,7 @@ export const Settings = () => {
         <div className="modern-card settings-card">
           <div className="card-header-styled">
             <div className="header-badge-title">
-              <span className="icon-badge">🔐</span>
+              <Lock size={16} className="text-muted" />
               <h2>Admin Login Credentials</h2>
             </div>
             <span className="header-meta">Username &amp; Password Vault</span>
@@ -483,7 +501,7 @@ export const Settings = () => {
               <div className="profile-info">
                 <div className="profile-name-row">
                   <span className="profile-name">{user?.username || 'admin'}</span>
-                  <span className="role-tag-admin">🛡️ Administrator Account</span>
+                  <span className="role-tag-admin">Administrator account</span>
                 </div>
                 <span className="profile-sub">
                   Account ID: #{user?.id || 1} &bull; Active JWT Session &bull; Role: {user?.role || 'admin'}
@@ -498,7 +516,7 @@ export const Settings = () => {
                   Admin Username:
                 </label>
                 <div className="input-with-icon">
-                  <span className="input-icon">👤</span>
+                  <User size={14} className="text-muted" />
                   <input
                     type="text"
                     required
@@ -522,7 +540,7 @@ export const Settings = () => {
                   New Password:
                 </label>
                 <div className="input-with-icon">
-                  <span className="input-icon">🔑</span>
+                  <Key size={14} className="text-muted" />
                   <input
                     type={showNewPass ? 'text' : 'password'}
                     placeholder="Leave blank to keep existing password"
@@ -535,7 +553,7 @@ export const Settings = () => {
                     onClick={() => setShowNewPass(!showNewPass)}
                     tabIndex="-1"
                   >
-                    {showNewPass ? '👁️' : '🔒'}
+                    {showNewPass ? <EyeOff size={13} /> : <Eye size={13} />}
                   </button>
                 </div>
                 <small className="field-hint">
@@ -550,7 +568,7 @@ export const Settings = () => {
                     Confirm New Password:
                   </label>
                   <div className="input-with-icon">
-                    <span className="input-icon">🔒</span>
+                    <Lock size={14} className="text-muted" />
                     <input
                       type={showConfirmPass ? 'text' : 'password'}
                       required={!!newPassword}
@@ -564,7 +582,7 @@ export const Settings = () => {
                       onClick={() => setShowConfirmPass(!showConfirmPass)}
                       tabIndex="-1"
                     >
-                      {showConfirmPass ? '👁️' : '🔒'}
+                      {showConfirmPass ? <EyeOff size={13} /> : <Eye size={13} />}
                     </button>
                   </div>
                   {confirmPassword && newPassword !== confirmPassword && (
@@ -579,7 +597,7 @@ export const Settings = () => {
                   Current Password (Required to authorize changes) *
                 </label>
                 <div className="input-with-icon">
-                  <span className="input-icon">🛡️</span>
+                  <ShieldCheck size={14} className="text-muted" />
                   <input
                     type={showCurrentPass ? 'text' : 'password'}
                     required
@@ -593,7 +611,7 @@ export const Settings = () => {
                     onClick={() => setShowCurrentPass(!showCurrentPass)}
                     tabIndex="-1"
                   >
-                    {showCurrentPass ? '👁️' : '🔒'}
+                    {showCurrentPass ? <EyeOff size={13} /> : <Eye size={13} />}
                   </button>
                 </div>
                 <small className="field-hint text-sub">
@@ -612,7 +630,7 @@ export const Settings = () => {
                       <span className="spinner-sm mr-2" /> Saving Credentials...
                     </>
                   ) : (
-                    '💾 Update Admin Credentials'
+                    'Update credentials'
                   )}
                 </button>
               </div>
@@ -637,7 +655,7 @@ export const Settings = () => {
             <div className="setting-toggle-row mb-5 pb-4 border-bottom">
               <div className="setting-toggle-info">
                 <div className="d-flex items-center gap-2 mb-1">
-                  <span className="setting-icon">🔄</span>
+                  <RefreshCw size={14} className="text-muted" />
                   <h4 className="setting-title m-0">Auto-Update Bedrock Dedicated Server</h4>
                 </div>
                 <p className="setting-desc m-0">
@@ -659,7 +677,7 @@ export const Settings = () => {
             <div className="setting-toggle-row mb-4">
               <div className="setting-toggle-info">
                 <div className="d-flex items-center gap-2 mb-1">
-                  <span className="setting-icon">💾</span>
+                  <Folder size={14} className="text-muted" />
                   <h4 className="setting-title m-0">Automated World Snapshot Backups</h4>
                 </div>
                 <p className="setting-desc m-0">
@@ -699,7 +717,7 @@ export const Settings = () => {
 
             {/* Storage & Environment Information */}
             <div className="engine-paths-card p-4">
-              <h5 className="engine-paths-title mb-3">📁 Filesystem &amp; Process Paths</h5>
+              <h5 className="engine-paths-title mb-3">Filesystem and process paths</h5>
               <div className="path-row mb-2">
                 <span className="path-label">Server Binary:</span>
                 <span className="path-code font-mono">{serverStatus?.exePath || 'bds/bedrock_server.exe'}</span>
@@ -726,7 +744,7 @@ export const Settings = () => {
         <div className={`modern-card settings-card ${activeTab === 'all' ? 'mt-6' : ''}`}>
           <div className="card-header-styled">
             <div className="header-badge-title">
-              <span className="icon-badge">🎮</span>
+              <Radio size={16} className="text-muted" />
               <h2>Player Quick-Start Portal</h2>
             </div>
             <span className="header-meta">Dedicated Player Control Page</span>
@@ -752,7 +770,7 @@ export const Settings = () => {
                     className="btn btn-secondary btn-sm"
                     onClick={handleCopyPortalLink}
                   >
-                    {copiedLink ? '✓ Copied!' : '📋 Copy Link'}
+                    {copiedLink ? 'Copied' : 'Copy link'}
                   </button>
                   <a
                     href={`/${(portalSlug || 'server').trim().replace(/^\/+|\/+$/g, '')}`}
@@ -770,7 +788,7 @@ export const Settings = () => {
             <div className="setting-toggle-row mb-5 pb-4 border-bottom">
               <div className="setting-toggle-info">
                 <div className="d-flex items-center gap-2 mb-1">
-                  <span className="setting-icon">🌐</span>
+                  <Globe size={14} className="text-muted" />
                   <h4 className="setting-title m-0">Enable Player Quick-Start Portal</h4>
                 </div>
                 <p className="setting-desc m-0">
@@ -796,7 +814,7 @@ export const Settings = () => {
             <div className="setting-toggle-row mb-5 pb-4 border-bottom">
               <div className="setting-toggle-info">
                 <div className="d-flex items-center gap-2 mb-1">
-                  <span className="setting-icon">🔒</span>
+                  <Lock size={14} className="text-muted" />
                   <h4 className="setting-title m-0">Require Account Login for Players</h4>
                 </div>
                 <p className="setting-desc m-0">
@@ -823,7 +841,7 @@ export const Settings = () => {
             <div className="setting-toggle-row mb-5 pb-4 border-bottom">
               <div className="setting-toggle-info">
                 <div className="d-flex items-center gap-2 mb-1">
-                  <span className="setting-icon">🎮</span>
+                  <Radio size={14} className="text-muted" />
                   <h4 className="setting-title m-0">Display Xbox Live Bot in Player Portal</h4>
                 </div>
                 <p className="setting-desc m-0">
@@ -850,7 +868,7 @@ export const Settings = () => {
               <div className="d-flex justify-between items-center mb-3 flex-wrap gap-2">
                 <div>
                   <h4 className="setting-title m-0 d-flex items-center gap-2">
-                    <span>📐</span>
+                    
                     <span>Portal Sections &amp; Layout Customizer</span>
                   </h4>
                   <p className="setting-desc m-0 mt-1">
@@ -896,7 +914,7 @@ export const Settings = () => {
                         disabled={!isAdmin || portalSaving}
                         title={sec.enabled ? 'Hide this section from players' : 'Show this section to players'}
                       >
-                        {sec.enabled ? '👁️ Shown' : '🚫 Hidden'}
+                        {sec.enabled ? 'Shown' : 'Hidden'}
                       </button>
 
                       {/* Move Up */}
@@ -999,7 +1017,7 @@ export const Settings = () => {
               <div className="portal-logo-scale-control mb-4">
                 <div className="d-flex items-center justify-between mb-2">
                   <label className="field-label-bold m-0 d-flex items-center gap-2">
-                    <span>📏</span>
+                    
                     <span>Logo Scaling / Size Slider:</span>
                   </label>
                   <span className="logo-scale-badge">{portalLogoSize}px</span>
@@ -1069,7 +1087,7 @@ export const Settings = () => {
                       <span className="spinner-sm mr-2" /> Saving Portal Settings...
                     </>
                   ) : (
-                    '💾 Save Portal Settings'
+                    'Save settings'
                   )}
                 </button>
               </div>
@@ -1083,7 +1101,7 @@ export const Settings = () => {
           <div className="modern-card settings-card">
             <div className="card-header-styled">
               <div className="header-badge-title">
-                <span className="icon-badge">🚀</span>
+                <ArrowUpCircle size={16} className="text-muted" />
                 <h2>App Version &amp; GitHub Updates</h2>
               </div>
               <span className="header-meta">Sync engine with GitHub repository</span>
@@ -1093,7 +1111,7 @@ export const Settings = () => {
               {/* Repository info banner */}
               <div className="user-profile-summary-box mb-5">
                 <div className="profile-avatar" style={{ background: 'linear-gradient(135deg, #24292e, #0d1117)', border: '1px solid rgba(255, 255, 255, 0.15)' }}>
-                  🐙
+                  
                 </div>
                 <div className="profile-info flex-1">
                   <div className="profile-name-row d-flex items-center justify-between flex-wrap gap-2">
@@ -1109,7 +1127,7 @@ export const Settings = () => {
                       rel="noopener noreferrer"
                       className="btn btn-secondary btn-xs font-mono"
                     >
-                      🔗 Open GitHub Repo ↗
+                      Open GitHub repository
                     </a>
                   </div>
                   <span className="profile-sub d-block mt-1">
@@ -1124,7 +1142,7 @@ export const Settings = () => {
                   <div className="p-4 rounded-xl mb-4" style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
                     <div className="d-flex items-center justify-between flex-wrap gap-2 mb-2">
                       <div className="d-flex items-center gap-2">
-                        <span className="text-xl">🚀</span>
+                        <ArrowUpCircle size={20} className="text-emerald" />
                         <strong className="text-white text-base">New Version Available on GitHub!</strong>
                       </div>
                       <span className="badge badge-warning font-bold text-xs">
@@ -1176,11 +1194,11 @@ export const Settings = () => {
 
                         <div className="update-steps-stepper">
                           {[
-                            { num: 1, label: 'Safety Backup', icon: '🛡️' },
-                            { num: 2, label: 'Pull Commits', icon: '📥' },
-                            { num: 3, label: 'Dependencies', icon: '📦' },
+                            { num: 1, label: 'Safety Backup', icon: '' },
+                            { num: 2, label: 'Pull Commits', icon: '' },
+                            { num: 3, label: 'Dependencies', icon: '' },
                             { num: 4, label: 'Build Client', icon: '⚡' },
-                            { num: 5, label: 'Launcher Binary', icon: '🪟' },
+                            { num: 5, label: 'Launcher Binary', icon: '' },
                           ].map((s) => {
                             const isDone = updateProgressData.stage > s.num;
                             const isActive = updateProgressData.stage === s.num;
@@ -1189,7 +1207,7 @@ export const Settings = () => {
                                 key={s.num}
                                 className={`update-step-pill ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''}`}
                               >
-                                <span>{isDone ? '✓' : s.icon}</span>
+                                <span>{isDone ? '✓' : s.num}</span>
                                 <span className="truncate">{s.label}</span>
                               </div>
                             );
@@ -1210,7 +1228,7 @@ export const Settings = () => {
                         onClick={handleApplyAppUpdate}
                         disabled={updatingApp || !isAdmin}
                       >
-                        {updatingApp ? 'Applying Update (zero data loss)...' : '🚀 Update App Now (Zero Data Loss)'}
+                        {updatingApp ? 'Applying update...' : 'Update application'}
                       </button>
 
                       {updateStatus.isIgnored && (
@@ -1241,7 +1259,7 @@ export const Settings = () => {
                       onClick={handleCheckUpdates}
                       disabled={checkingUpdates}
                     >
-                      {checkingUpdates ? 'Checking GitHub...' : '🔄 Check for Updates'}
+                      {checkingUpdates ? 'Checking GitHub...' : 'Check for updates'}
                     </button>
                   </div>
                 )}
@@ -1271,7 +1289,7 @@ export const Settings = () => {
               {/* Zero Data Loss Guarantee Callout */}
               <div className="p-4 rounded-xl" style={{ background: 'rgba(16, 185, 129, 0.06)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
                 <div className="d-flex items-center gap-2 text-emerald font-bold text-sm mb-1">
-                  <span>🛡️</span>
+                  <ShieldCheck size={14} className="text-emerald inline mr-1" />
                   <span>Zero Data Loss Guarantee</span>
                 </div>
                 <p className="text-sub text-xs m-0">
@@ -1290,7 +1308,7 @@ export const Settings = () => {
                   onClick={handleCheckUpdates}
                   disabled={checkingUpdates}
                 >
-                  {checkingUpdates ? 'Connecting to GitHub...' : '🔄 Check for App Updates'}
+                  {checkingUpdates ? 'Checking GitHub...' : 'Check for updates'}
                 </button>
               </div>
             </div>

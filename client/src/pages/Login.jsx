@@ -78,7 +78,7 @@ export const Login = () => {
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label className="form-label" htmlFor="username">
-              <span className="label-icon">👤</span>
+              
               <span>Username</span>
             </label>
             <div className="input-wrapper">
@@ -98,7 +98,7 @@ export const Login = () => {
 
           <div className="form-group">
             <label className="form-label" htmlFor="password">
-              <span className="label-icon">🔒</span>
+              
               <span>Password</span>
             </label>
             <div className="input-wrapper">
@@ -120,7 +120,7 @@ export const Login = () => {
                 title={showPassword ? 'Hide password' : 'Show password'}
                 tabIndex={-1}
               >
-                {showPassword ? '👁️' : '👁️‍🗨️'}
+                {showPassword ? 'Hide' : 'Show'}
               </button>
             </div>
           </div>
@@ -156,7 +156,7 @@ export const Login = () => {
               className="btn-invite-link"
               onClick={() => setShowInviteInput(true)}
             >
-              <span>🎟️ Have an invite token?</span>
+              <span>Have an invite token?</span>
               <span className="link-highlight">Register an account</span>
             </button>
           ) : (

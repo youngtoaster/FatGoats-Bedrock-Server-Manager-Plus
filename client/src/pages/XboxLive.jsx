@@ -1,3 +1,24 @@
+import {
+  Radio,
+  Globe,
+  RefreshCw,
+  Copy,
+  ExternalLink,
+  Key,
+  Users,
+  Bell,
+  Award,
+  BookOpen,
+  Sliders,
+  CheckCircle2,
+  AlertTriangle,
+  Search,
+  Lock,
+  Play,
+  Square,
+  Check,
+  Server
+} from 'lucide-react';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
@@ -286,7 +307,7 @@ export const XboxLive = () => {
         await safeCopyToClipboard(res.pendingLogin.userCode);
         setToast({
           type: 'info',
-          text: `🔑 Device code [${res.pendingLogin.userCode}] copied to clipboard! Click "Open Microsoft Login" below.`,
+          text: `Device code [${res.pendingLogin.userCode}] copied to clipboard. Click "Open Microsoft Login" below.`,
         });
       } else if (res && res.authenticated) {
         setToast({ type: 'success', text: `✓ Signed in as ${res.account?.gamertag || 'Xbox Bot'}!` });
@@ -470,7 +491,7 @@ export const XboxLive = () => {
       const uri = codeObj.verificationUri || `https://www.microsoft.com/link?otc=${codeObj.userCode}`;
       setToast({
         type: 'success',
-        text: `📋 Copied code [${codeObj.userCode}] to clipboard! Opening Microsoft login...`,
+        text: `Copied code [${codeObj.userCode}] to clipboard. Opening Microsoft login...`,
       });
       window.open(uri, '_blank', 'noopener,noreferrer');
     }
@@ -513,7 +534,7 @@ export const XboxLive = () => {
       <div className="page-header-row mb-6">
         <div>
           <div className="d-flex items-center gap-3">
-            <span className="xbox-sphere-icon">🌐</span>
+            <Radio size={24} className="text-emerald" />
             <div>
               <h1 className="page-main-title m-0">Console &amp; Public Access</h1>
               <p className="page-sub-title m-0">
@@ -543,7 +564,7 @@ export const XboxLive = () => {
                 disabled={actionLoading || !isRunning}
                 title="Restart bot"
               >
-                <span>🔄 Restart Bot</span>
+                <><RefreshCw size={13} className="mr-1 inline" /><span>Restart bot</span></>
               </button>
               <button
                 type="button"
@@ -598,14 +619,14 @@ export const XboxLive = () => {
             className={`channel-tab-btn ${accessTab === 'all' ? 'active' : ''}`}
             onClick={() => setAccessTab('all')}
           >
-            <span>🌐</span> All Access Channels
+            <span>All channels</span>
           </button>
           <button
             type="button"
             className={`channel-tab-btn ${accessTab === 'tunnel' ? 'active' : ''}`}
             onClick={() => setAccessTab('tunnel')}
           >
-            <span>📡</span> Public Internet Tunnel (Playit.gg)
+            <><Radio size={13} className="mr-1 inline text-muted" /><span>Public tunnel (Playit.gg)</span></>
             {tunnelStatus?.isRunning && tunnelStatus?.publicAddress && (
               <span className="channel-pill-online">Online</span>
             )}
@@ -615,7 +636,7 @@ export const XboxLive = () => {
             className={`channel-tab-btn ${accessTab === 'console' ? 'active' : ''}`}
             onClick={() => setAccessTab('console')}
           >
-            <span>🎮</span> Console Friend Relay (Xbox Bot)
+            <><Users size={13} className="mr-1 inline text-muted" /><span>Console relay (Xbox Bot)</span></>
             {isRunning && (
               <span className="channel-pill-online">Online</span>
             )}
@@ -628,7 +649,7 @@ export const XboxLive = () => {
         <div className={`modern-card tunnel-hero-card mb-6 ${tunnelStatus?.isRunning ? 'tunnel-online' : ''}`}>
           <div className="card-header-styled">
             <div className="header-badge-title">
-              <span className="icon-badge">🌐</span>
+              <Radio size={16} className="text-emerald" />
               <div>
                 <h2 className="m-0 text-base font-bold text-white">Public Internet Access (Zero Port Forwarding)</h2>
                 <span className="text-xs text-sub">
@@ -649,13 +670,13 @@ export const XboxLive = () => {
                   : 'badge-secondary'
               } text-xs`}>
                 {tunnelStatus?.isRunning && tunnelStatus?.publicAddress
-                  ? '🟢 Tunnel Online'
+                  ? 'Tunnel online'
                   : tunnelStatus?.claimUrl || tunnelStatus?.state === 'awaiting_claim'
-                  ? '🟡 Setup: Claim Agent'
+                  ? 'Setup: Claim agent'
                   : tunnelStatus?.isRunning && tunnelStatus?.isClaimed
-                  ? '🔵 Agent Connected'
+                  ? 'Agent connected'
                   : tunnelStatus?.state === 'starting'
-                  ? '🔄 Initializing...'
+                  ? 'Initializing...'
                   : '⚪ Tunnel Offline'}
               </span>
             </div>
@@ -682,7 +703,7 @@ export const XboxLive = () => {
                         onClick={() => handleCopyAddress(tunnelStatus.publicAddress)}
                         title="Copy public address to clipboard"
                       >
-                        📋 Copy Server Address
+                        Copy server address
                       </button>
                     )}
                   </div>
@@ -721,7 +742,7 @@ export const XboxLive = () => {
                         onClick={handleRestartTunnel}
                         disabled={tunnelLoading}
                       >
-                        🔄 Restart Tunnel
+                        Restart tunnel
                       </button>
                     </div>
                     <button
@@ -754,7 +775,7 @@ export const XboxLive = () => {
                     rel="noreferrer"
                     className="btn btn-primary py-2 px-4"
                   >
-                    🔗 Open Playit.gg Claim Link ↗
+                    Open Playit.gg claim link
                   </a>
                   <button
                     type="button"
@@ -763,7 +784,7 @@ export const XboxLive = () => {
                     disabled={tunnelLoading}
                     title="Generate a fresh claim link and code"
                   >
-                    🔄 Regenerate Link
+                    Regenerate link
                   </button>
                   <span className="text-xs font-mono text-muted">
                     Code: <strong className="text-white font-bold">{tunnelStatus.claimCode}</strong>
@@ -786,7 +807,7 @@ export const XboxLive = () => {
               <div className="tunnel-claim-box p-4 rounded mb-2">
                 <div className="d-flex items-center justify-between flex-wrap gap-2 mb-2">
                   <div className="d-flex items-center gap-2">
-                    <span className="badge badge-success text-xs">🟢 Agent Connected</span>
+                    <span className="badge badge-success text-xs">Agent connected</span>
                     <h4 className="m-0 text-white font-bold text-sm">Add Bedrock Tunnel on Playit.gg</h4>
                   </div>
                   <button
@@ -795,7 +816,7 @@ export const XboxLive = () => {
                     onClick={handleRestartTunnel}
                     disabled={tunnelLoading}
                   >
-                    🔄 Sync Tunnels
+                    Sync tunnels
                   </button>
                 </div>
                 <p className="text-xs text-sub mb-3">
@@ -808,7 +829,7 @@ export const XboxLive = () => {
                     rel="noreferrer"
                     className="btn btn-primary py-2 px-4"
                   >
-                    🌐 Open Playit.gg Tunnels Dashboard ↗
+                    Open Playit.gg dashboard
                   </a>
                   {canControlServer && (
                     <button
@@ -853,7 +874,7 @@ export const XboxLive = () => {
                         </>
                       ) : (
                         <>
-                          <span className="mr-2">🌐</span> Open Server to Internet (Start Tunnel)
+                          Start tunnel
                         </>
                       )}
                     </button>
@@ -864,7 +885,7 @@ export const XboxLive = () => {
                     onClick={() => setShowSecretModal(true)}
                     title="Manually paste a Playit Secret Key"
                   >
-                    🔑 Enter Secret Key Manually
+                    Enter secret key manually
                   </button>
                 </div>
               </div>
@@ -954,21 +975,21 @@ export const XboxLive = () => {
                       disabled={actionLoading || !isRunning}
                       title="Restart bot"
                     >
-                      <span>🔄 Restart</span>
+                      <span>Restart</span>
                     </button>
                   </div>
                 )}
 
                 <div className="hero-meta-strip p-0 m-0 border-0 bg-transparent">
                   <div className="meta-pill">
-                    <span className="meta-icon">👥</span>
+                    <Users size={14} className="text-muted" />
                     <div className="meta-info">
                       <span className="meta-title">Redirects</span>
                       <span className="meta-highlight">{status?.stats?.totalRedirects || 0}</span>
                     </div>
                   </div>
                   <div className="meta-pill">
-                    <span className="meta-icon">🎮</span>
+                    <Radio size={14} className="text-muted" />
                     <div className="meta-info">
                       <span className="meta-title">Friends</span>
                       <span className="meta-highlight">{friends.length || status?.stats?.friendsCount || 0}</span>
@@ -976,7 +997,7 @@ export const XboxLive = () => {
                   </div>
                   {requests.length > 0 && (
                     <div className="meta-pill" style={{ borderColor: 'rgba(234, 179, 8, 0.4)' }}>
-                      <span className="meta-icon">🔔</span>
+                      <Bell size={14} className="text-muted" />
                       <div className="meta-info">
                         <span className="meta-title">Requests</span>
                         <span className="meta-highlight" style={{ color: '#fbbf24' }}>{requests.length}</span>
@@ -992,7 +1013,7 @@ export const XboxLive = () => {
       <div className="modern-card xbox-account-banner mb-6">
         <div className="card-header-styled">
           <div className="header-badge-title">
-            <span className="icon-badge">🟢</span>
+            <CheckCircle2 size={16} className="text-emerald" />
             <h2>Microsoft Xbox Live Account</h2>
           </div>
           <div className="d-flex items-center gap-2">
@@ -1041,18 +1062,18 @@ export const XboxLive = () => {
                       className="btn-code-copy"
                       onClick={async () => {
                         await safeCopyToClipboard(status.account.gamertag);
-                        setToast({ type: 'success', text: `📋 Copied Gamertag "${status.account.gamertag}" to clipboard!` });
+                        setToast({ type: 'success', text: `Copied gamertag "${status.account.gamertag}" to clipboard!` });
                       }}
                       title="Copy Gamertag to share with players"
                     >
-                      📋 Copy Gamertag
+                      Copy gamertag
                     </button>
                   </div>
 
                   <div className="profile-meta-row">
                     <span className="profile-xuid-tag">XUID: {status.account.xuid}</span>
                     {status.account.gamerscore && status.account.gamerscore !== '0' && (
-                      <span className="profile-gamerscore-tag">🏆 {status.account.gamerscore} G</span>
+                      <span className="profile-gamerscore-tag">{status.account.gamerscore} gamerscore</span>
                     )}
                     <span className="badge badge-success text-xs">NetherNet Live</span>
                   </div>
@@ -1090,7 +1111,7 @@ export const XboxLive = () => {
                         disabled={actionLoading || !isRunning}
                         title="Restart bot"
                       >
-                        <span>🔄</span>
+                        <RefreshCw size={13} className="text-muted" />
                         <span>Restart</span>
                       </button>
                     </>
@@ -1101,7 +1122,7 @@ export const XboxLive = () => {
               {/* Player Connection Instructions Callout */}
               <div className="xbox-banner-guide">
                 <div className="d-flex items-center gap-2 mb-2">
-                  <span className="text-emerald font-bold text-xs uppercase tracking-wide">📖 How Players Connect</span>
+                  <span className="text-emerald font-bold text-xs uppercase tracking-wide">How players connect</span>
                 </div>
                 <div className="xbox-steps-grid">
                   <div className="xbox-step-pill">
@@ -1155,11 +1176,11 @@ export const XboxLive = () => {
                         await safeCopyToClipboard(pendingLogin.userCode);
                         setToast({
                           type: 'success',
-                          text: `📋 Copied code [${pendingLogin.userCode}]! Opening Microsoft login...`,
+                          text: `Copied code [${pendingLogin.userCode}]. Opening Microsoft login...`,
                         });
                       }}
                     >
-                      <span>📋</span>
+                      <Copy size={13} className="text-muted" />
                       <span>Copy Code &amp; Open Microsoft Login ↗</span>
                     </a>
                     <button
@@ -1167,7 +1188,7 @@ export const XboxLive = () => {
                       className="btn btn-secondary btn-lg"
                       onClick={async () => {
                         await safeCopyToClipboard(pendingLogin.userCode);
-                        setToast({ type: 'success', text: `📋 Code [${pendingLogin.userCode}] copied to clipboard!` });
+                        setToast({ type: 'success', text: `Code [${pendingLogin.userCode}] copied to clipboard!` });
                       }}
                     >
                       Copy Code
@@ -1197,7 +1218,7 @@ export const XboxLive = () => {
                       </>
                     ) : (
                       <>
-                        <span className="icon">🔑</span>
+                        <Key size={14} className="text-muted" />
                         <span>Connect Microsoft Account (1-Click Link)</span>
                       </>
                     )}
@@ -1215,7 +1236,7 @@ export const XboxLive = () => {
         <div className="modern-card">
           <div className="card-header-styled">
             <div className="header-badge-title">
-              <span className="icon-badge">🎯</span>
+              <CheckCircle2 size={14} className="text-muted" />
               <h2>Destination &amp; Redirection Engine</h2>
             </div>
             <button
@@ -1247,7 +1268,7 @@ export const XboxLive = () => {
                     </span>
                   </div>
                 </div>
-                <span className="badge badge-success text-xs font-mono">🟢 Live Synced</span>
+                <span className="badge badge-success text-xs font-mono">Synced</span>
               </div>
             )}
 
@@ -1256,7 +1277,7 @@ export const XboxLive = () => {
               <div className="setting-toggle-row py-3 border-top border-bottom mb-4">
                 <div className="setting-toggle-info">
                   <div className="d-flex items-center gap-2 mb-1">
-                    <span className="setting-icon">🌐</span>
+                    <Globe size={14} className="text-muted" />
                     <h4 className="setting-title m-0">Auto-Sync with Playit.gg Tunnel</h4>
                     <span className="badge badge-primary text-xs">Recommended</span>
                   </div>
@@ -1360,7 +1381,7 @@ export const XboxLive = () => {
               <div className="setting-toggle-row py-3 border-top border-bottom mb-4">
                 <div className="setting-toggle-info">
                   <div className="d-flex items-center gap-2 mb-1">
-                    <span className="setting-icon">🤝</span>
+                    <Users size={14} className="text-muted" />
                     <h4 className="setting-title m-0">Auto-Accept Friend Requests</h4>
                   </div>
                   <p className="setting-desc m-0">
@@ -1381,7 +1402,7 @@ export const XboxLive = () => {
               <div className="setting-toggle-row py-3 border-bottom mb-5">
                 <div className="setting-toggle-info">
                   <div className="d-flex items-center gap-2 mb-1">
-                    <span className="setting-icon">🌐</span>
+                    <Globe size={14} className="text-muted" />
                     <h4 className="setting-title m-0">Show Bot in Player Quick-Start Portal</h4>
                   </div>
                   <p className="setting-desc m-0">
@@ -1404,7 +1425,7 @@ export const XboxLive = () => {
                   className="btn btn-primary"
                   disabled={configSaving}
                 >
-                  {configSaving ? 'Applying Settings...' : '💾 Save Settings'}
+                  {configSaving ? 'Saving...' : 'Save settings'}
                 </button>
               </div>
             </form>
@@ -1417,7 +1438,7 @@ export const XboxLive = () => {
           <div className="modern-card">
             <div className="card-header-styled">
               <div className="header-badge-title">
-                <span className="icon-badge">👥</span>
+                <Users size={14} className="text-muted" />
                 <h2>Xbox Social Roster ({friends.length + requests.length})</h2>
               </div>
               {isAuth && (
@@ -1464,7 +1485,7 @@ export const XboxLive = () => {
                     </div>
 
                     <div className="xbox-search-input-wrap">
-                      <span className="xbox-search-icon">🔍</span>
+                      <Search size={14} className="text-muted" />
                       <input
                         type="text"
                         className="xbox-search-input"
@@ -1506,14 +1527,14 @@ export const XboxLive = () => {
                               <div className="friend-name-col">
                                 <span className="friend-name">{f.gamertag}</span>
                                 <span className={`friend-presence-text ${f.presence === 'Online' ? 'online' : ''}`}>
-                                  {f.presence === 'Online' ? '🟢 Online' : f.presenceText || 'Offline'}
+                                  {f.presence === 'Online' ? 'Online' : f.presenceText || 'Offline'}
                                 </span>
                               </div>
                             </div>
 
                             <div className="friend-actions-col">
                               {f.gamerScore && f.gamerScore !== '0' && (
-                                <span className="text-muted text-xs font-mono">🏆 {f.gamerScore}</span>
+                                <span className="text-muted text-xs font-mono">{f.gamerScore} G</span>
                               )}
                               <span className="badge-mutual">✓ Friend</span>
                             </div>
@@ -1580,7 +1601,7 @@ export const XboxLive = () => {
           <div className="modern-card">
             <div className="card-header-styled">
               <div className="header-badge-title">
-                <span className="icon-badge">📋</span>
+                <Copy size={14} className="text-muted" />
                 <h2>Live Player Redirects &amp; Activity</h2>
               </div>
               <span className="badge badge-success text-xs">
@@ -1625,7 +1646,7 @@ export const XboxLive = () => {
           <div className="modal-dialog max-w-md">
             <div className="modal-header">
               <h3 className="modal-title font-bold text-white flex items-center gap-2">
-                <span>🔑</span> Enter Playit.gg Secret Key
+                <span>Enter Playit.gg secret key</span>
               </h3>
               <button
                 type="button"

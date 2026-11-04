@@ -105,18 +105,25 @@ async function main() {
   const releaseTitle = `${tagName} - FatGoats Bedrock Server Manager+`;
   const releaseNotes = `### FatGoats Bedrock Server Manager+ ${tagName}
 
-#### Included Native Windows Executables:
-- **BedrockServerManager-Setup.exe**: Complete one-click installer with prerequisite verification, desktop shortcuts, and auto-updater.
+#### Pre-built Native Windows Executables:
+- **BedrockServerManager-Setup.exe**: Interactive Windows setup installer with prerequisite verification, desktop shortcuts, and automated in-place updater.
 - **BedrockServerManager.exe**: Lightweight standalone Windows system tray watchdog launcher.
 
-#### Key Features:
-- Real-time Minecraft Bedrock Dedicated Server process supervisor and ANSI console.
-- 1-Click Instant Addon Auto-Installer (.mcaddon, .mcpack, .zip) with automatic BP/RP separation and active world UUID injection.
-- 1-Click Instant Heal (20 HP), Food/Saturation restoration, and zero-delay kicks/bans.
-- World Manager & Importer (.mcworld zip) with custom seed world generator.
-- Integrated Playit & Cloudflare zero-port tunneling.
-- Native Xbox Live friend bridging for console crossplay.
-- Automated LevelDB safe snapshots (save hold protocol).
+#### What's New in v1.2.4:
+- **Complete 9-Pass Unslop UI Redesign**: Transformed application interface into a precise, utilitarian, industrial Minecraft BDS control console.
+- **Unified Lucide Iconography**: Replaced 370+ irregular emojis across all 15 screens with unified Lucide icons for crisp visual alignment.
+- **Craft Neutral Palette**: Unified Graphite dark ramp (\`#0f0f10\`, \`#141415\`, \`#19191b\`, \`#232325\`) with 8% hairlines and single emerald accent.
+- **Optimized Performance & Battery**: Eliminated continuous 140px blur loops, radar sweeps, and bouncing hover animations.
+- **Optical Typography & Spacing**: Strict 8pt spatial grid, sentence case headings, and tabular numbers (\`font-variant-numeric: tabular-nums\`) on all telemetry gauges.
+
+#### Core Capabilities:
+- **1-Click Instant Addon Auto-Installer**: Drag-and-drop \`.mcaddon\`, \`.mcpack\`, and \`.zip\` files. Automatically decompresses nested packs, splits BP/RP, pairs companion packs, and injects valid UUID manifests directly into your active world configs in < 1 second.
+- **Direct Real-Time BDS Process Engine**: Unbuffered standard input/output IPC piping to \`bedrock_server.exe\` with real-time ANSI terminal logging, CPU/RAM/TPS performance telemetry, and automated crash recovery.
+- **Player & Security Matrix**: 1-Click Instant Heal (20 HP), Food/Saturation restoration, zero-delay kicks, and persistent SQLite ban lists with automatic reconnection rejection.
+- **World Importer & Custom Generator**: Full \`.mcworld\` drag-and-drop import with directory unpack, levelname detection, and built-in world generator with custom seed randomization and presets.
+- **Playit Zero-Port Tunneling**: Integrated Playit tunnel allocating global public Bedrock IP/port to bypass CGNAT and strict routers without opening ports.
+- **MCXboxBroadcast Friend Bridging**: Native Xbox Live friend bridging allowing console players on Xbox Series X/S, PlayStation, and Nintendo Switch to join directly from their Friends tab without DNS tricks.
+- **Safe Snapshot Engine**: Automated LevelDB snapshots using official Mojang \`save hold\` and \`save query\` chunk-freezing protocol.
 `;
 
   try {

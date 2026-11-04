@@ -1,6 +1,19 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import {
+  FolderArchive,
+  Upload,
+  Download,
+  Trash2,
+  CheckCircle2,
+  AlertTriangle,
+  RefreshCw,
+  Plus,
+  Sparkles,
+  Check,
+  X
+} from 'lucide-react';
 export const Worlds = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin' || user?.role === 'operator';
@@ -250,7 +263,7 @@ export const Worlds = () => {
       {/* Header */}
       <div className="page-header d-flex justify-between items-center flex-wrap gap-3">
         <div>
-          <h1 className="page-title">World Management</h1>
+          <h1 className="page-title">World management</h1>
           <p className="page-subtitle">Configure, generate new worlds, import <code>.mcworld</code> saves, export, and switch active Bedrock worlds</p>
         </div>
         <div className="header-actions d-flex items-center gap-2 flex-wrap">
@@ -261,8 +274,8 @@ export const Worlds = () => {
             disabled={actionLoading || !isAdmin}
             title={!isAdmin ? 'Admin/Operator permission required to generate worlds' : 'Generate a brand new Bedrock world'}
           >
-            <span>✨</span>
-            <span>Generate World</span>
+            <Plus size={14} />
+            <span>Generate world</span>
           </button>
 
           <button
@@ -272,7 +285,7 @@ export const Worlds = () => {
             disabled={actionLoading || !isAdmin}
             title={!isAdmin ? 'Admin permission required to import worlds' : 'Import a .mcworld or world .zip archive'}
           >
-            <span>📥</span>
+            <Upload size={14} />
             <span>Import (.mcworld)</span>
           </button>
 
@@ -282,7 +295,7 @@ export const Worlds = () => {
             onClick={loadWorlds}
             disabled={loading || actionLoading}
           >
-            <span className={`refresh-icon ${loading ? 'rotating' : ''}`}>↻</span>
+            <RefreshCw size={13} className={loading ? "spinning" : ""} />
             <span>Refresh</span>
           </button>
         </div>
@@ -291,14 +304,14 @@ export const Worlds = () => {
       {/* Notifications */}
       {error && (
         <div className="toast toast-error mb-4" role="alert">
-          <span className="toast-icon">⚠️</span>
+          <AlertTriangle size={15} className="toast-icon" />
           <div className="toast-content">{error}</div>
           <button type="button" className="toast-close" onClick={() => setError(null)}>✕</button>
         </div>
       )}
       {successMsg && (
         <div className="toast toast-success mb-4" role="alert">
-          <span className="toast-icon">✓</span>
+          <CheckCircle2 size={15} className="toast-icon" />
           <div className="toast-content">{successMsg}</div>
           <button type="button" className="toast-close" onClick={() => setSuccessMsg(null)}>✕</button>
         </div>
@@ -343,15 +356,14 @@ export const Worlds = () => {
                         width: 72,
                         height: 72,
                         borderRadius: 12,
-                        background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.3) 100%)',
-                        border: '2px solid rgba(16, 185, 129, 0.4)',
+                        background: 'var(--bg-raised, #232325)',
+                        border: '1px solid var(--border-subtle, rgba(237, 237, 237, 0.08))',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '2.2rem',
                       }}
                     >
-                      🌍
+                      <FolderArchive size={28} className="text-muted" />
                     </div>
                   )}
                 </div>
@@ -392,7 +404,7 @@ export const Worlds = () => {
                     download={`${activeWorldObj.name}.mcworld`}
                     title="Export and download as .mcworld"
                   >
-                    <span>⬇️</span>
+                    <Download size={13} />
                     <span>Export .mcworld</span>
                   </a>
                 </div>
@@ -423,7 +435,7 @@ export const Worlds = () => {
         </div>
       ) : worlds.length === 0 ? (
         <div className="card empty-state-card py-12 text-center">
-          <div className="empty-state-icon" style={{ fontSize: '3rem' }}>🗺️</div>
+          <div className="empty-state-icon mb-2"><FolderArchive size={36} className="text-muted" /></div>
           <h3>No Worlds Found</h3>
           <p className="text-muted mb-4">You can import an existing <code>.mcworld</code> or start the server to generate a fresh vanilla world.</p>
           <button
@@ -432,7 +444,7 @@ export const Worlds = () => {
             onClick={() => setImportModalOpen(true)}
             disabled={!isAdmin}
           >
-            📥 Import Your First World (.mcworld)
+            Import world (.mcworld)
           </button>
         </div>
       ) : (
@@ -460,7 +472,7 @@ export const Worlds = () => {
                         onError={(e) => { e.target.style.display = 'none'; }}
                       />
                     ) : (
-                      <span className="world-icon" style={{ fontSize: '1.6rem', flexShrink: 0 }}>🗺️</span>
+                      <FolderArchive size={24} className="text-muted" style={{ flexShrink: 0 }} />
                     )}
                     <div className="overflow-hidden">
                       <h3 className="world-title text-truncate m-0" title={world.displayName || world.name} style={{ fontSize: '1rem', fontWeight: 600 }}>
@@ -531,7 +543,7 @@ export const Worlds = () => {
                       download={`${world.name}.mcworld`}
                       title="Export and download as .mcworld"
                     >
-                      <span>⬇️</span>
+                      <Download size={13} />
                       <span>Export</span>
                     </a>
                   </div>
@@ -570,8 +582,8 @@ export const Worlds = () => {
           >
             <div className="modal-header d-flex justify-between items-center">
               <div className="d-flex items-center gap-2">
-                <span style={{ fontSize: '1.3rem' }}>📥</span>
-                <h3 className="modal-title m-0">Import Minecraft World (.mcworld)</h3>
+                <Upload size={18} className="text-muted" />
+                <h3 className="modal-title m-0">Import world (.mcworld)</h3>
               </div>
               <button
                 type="button"
@@ -630,7 +642,7 @@ export const Worlds = () => {
 
                   {selectedFile ? (
                     <div className="file-selected-box" style={{ pointerEvents: 'none', position: 'relative', zIndex: 1 }}>
-                      <div className="mb-2" style={{ fontSize: '2.4rem' }}>🗺️</div>
+                      <div className="mb-2"><FolderArchive size={32} className="text-emerald" /></div>
                       <div className="font-semibold text-white mb-1" style={{ wordBreak: 'break-all' }}>
                         {selectedFile.name}
                       </div>
@@ -643,7 +655,7 @@ export const Worlds = () => {
                     </div>
                   ) : (
                     <div className="file-prompt-box" style={{ pointerEvents: 'none', position: 'relative', zIndex: 1 }}>
-                      <div className="mb-2" style={{ fontSize: '2.4rem' }}>📦</div>
+                      <div className="mb-2"><Upload size={32} className="text-muted" /></div>
                       <div className="font-semibold text-white mb-1">
                         {isDragging ? 'Drop .mcworld file here' : 'Tap or click to browse .mcworld save'}
                       </div>
@@ -754,7 +766,7 @@ export const Worlds = () => {
                     </>
                   ) : (
                     <>
-                      <span>📥</span>
+                      <Upload size={14} className="inline mr-1" />
                       <span>Import & Install World</span>
                     </>
                   )}
@@ -815,7 +827,7 @@ export const Worlds = () => {
                       }}
                       disabled={isGenerating}
                     >
-                      ⚔️ Standard Survival
+                      Standard survival
                     </button>
                     <button
                       type="button"
@@ -828,7 +840,7 @@ export const Worlds = () => {
                       }}
                       disabled={isGenerating}
                     >
-                      🎨 Flat Creative
+                      Flat creative
                     </button>
                     <button
                       type="button"
@@ -841,7 +853,7 @@ export const Worlds = () => {
                       }}
                       disabled={isGenerating}
                     >
-                      💀 Hard Survival
+                      Hard survival
                     </button>
                   </div>
                 </div>
@@ -887,7 +899,7 @@ export const Worlds = () => {
                       disabled={isGenerating}
                       title="Generate a random numerical seed"
                     >
-                      <span className="dice-icon">🎲</span>
+                      <Sparkles size={13} />
                       <span>Random</span>
                     </button>
                   </div>
@@ -908,9 +920,9 @@ export const Worlds = () => {
                       onChange={(e) => setGenGameMode(e.target.value)}
                       disabled={isGenerating}
                     >
-                      <option value="survival">⚔️ Survival</option>
-                      <option value="creative">🎨 Creative</option>
-                      <option value="adventure">🧭 Adventure</option>
+                      <option value="survival">Survival</option>
+                      <option value="creative">Creative</option>
+                      <option value="adventure">Adventure</option>
                     </select>
                   </div>
 
@@ -924,10 +936,10 @@ export const Worlds = () => {
                       onChange={(e) => setGenDifficulty(e.target.value)}
                       disabled={isGenerating}
                     >
-                      <option value="peaceful">🕊️ Peaceful</option>
-                      <option value="easy">🌱 Easy</option>
-                      <option value="normal">⚖️ Normal</option>
-                      <option value="hard">🔥 Hard</option>
+                      <option value="peaceful">Peaceful</option>
+                      <option value="easy">Easy</option>
+                      <option value="normal">Normal</option>
+                      <option value="hard">Hard</option>
                     </select>
                   </div>
                 </div>
@@ -942,8 +954,8 @@ export const Worlds = () => {
                     onChange={(e) => setGenWorldType(e.target.value)}
                     disabled={isGenerating}
                   >
-                    <option value="DEFAULT">🌍 Default (Infinite Mountains, Caves &amp; Biomes)</option>
-                    <option value="FLAT">🧱 Flat World (Bedrock + Dirt Surface)</option>
+                    <option value="DEFAULT">Default (infinite terrain)</option>
+                    <option value="FLAT">Flat world</option>
                   </select>
                 </div>
 
@@ -974,7 +986,7 @@ export const Worlds = () => {
                         disabled={isGenerating}
                       />
                       <label htmlFor="genStartOrRestartCheck" className="form-check-label text-xs text-sub cursor-pointer m-0">
-                        ⚡ <strong>Start / Restart Bedrock server now</strong> to immediately generate world terrain chunks
+                        <strong>Start or restart server now</strong> to immediately generate world terrain chunks
                       </label>
                     </div>
                   )}
@@ -1093,7 +1105,7 @@ export const Worlds = () => {
                 This updates <code>level-name={activeModalTarget}</code> in your <code>server.properties</code> configuration.
               </p>
               <div className="alert alert-warning mt-3">
-                💡 If the dedicated server is currently online, you must restart it for Minecraft to load the new world.
+                If the dedicated server is currently online, you must restart it for Minecraft to load the new world.
               </div>
             </div>
             <div className="modal-footer">

@@ -204,7 +204,7 @@ export const Users = () => {
       )}
       {copyFeedback && (
         <div className="toast toast-success" role="alert">
-          <span className="toast-icon">📋</span>
+          
           <div className="toast-content">{copyFeedback}</div>
           <button type="button" className="toast-close" onClick={() => setCopyFeedback(null)}>✕</button>
         </div>
@@ -246,7 +246,7 @@ export const Users = () => {
                     return (
                       <tr key={u.id || u.username}>
                         <td className="font-semibold text-primary">
-                          <span className="user-avatar-icon mr-2">👤</span>
+                          
                           {u.username}
                           {isSelf && <span className="badge badge-secondary ml-2">You</span>}
                         </td>

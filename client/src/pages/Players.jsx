@@ -2,6 +2,27 @@ import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 import { safeCopyToClipboard } from '../utils/clipboard';
+import {
+  Heart,
+  Utensils,
+  ShieldCheck,
+  Check,
+  X,
+  UserMinus,
+  Ban,
+  UserPlus,
+  RefreshCw,
+  Search,
+  Users,
+  Radio,
+  Trash2,
+  AlertTriangle,
+  CheckCircle2,
+  Info,
+  ShieldAlert,
+  Unlock,
+  Folder
+} from 'lucide-react';
 
 const KICK_REASON_PRESETS = [
   'AFK / Inactive too long',
@@ -101,7 +122,7 @@ export const Players = () => {
     setActionLoading(`${player.name}-heal`);
     try {
       const res = await api.Players.heal(player.name);
-      showToast('success', res.message || `💖 Instantly healed ${player.name} to full health!`);
+      showToast('success', res.message || `Instantly healed ${player.name} to full health!`);
     } catch (err) {
       showToast('error', err.message || `Failed to heal ${player.name}`);
     } finally {
@@ -120,7 +141,7 @@ export const Players = () => {
     setActionLoading(`${player.name}-feed`);
     try {
       const res = await api.Players.feed(player.name);
-      showToast('success', res.message || `🍖 Instantly filled food & saturation for ${player.name}!`);
+      showToast('success', res.message || `Instantly filled food & saturation for ${player.name}!`);
     } catch (err) {
       showToast('error', err.message || `Failed to feed ${player.name}`);
     } finally {
@@ -187,7 +208,7 @@ export const Players = () => {
     setActionLoading(kickModalPlayer.name);
     try {
       const res = await api.Players.kick(kickModalPlayer.name, kickReason);
-      showToast('success', res.message || `👢 Player ${kickModalPlayer.name} kicked`);
+      showToast('success', res.message || `Player ${kickModalPlayer.name} kicked`);
       setKickModalPlayer(null);
       setKickReason('Kicked by administrator');
       await fetchPlayers();
@@ -205,7 +226,7 @@ export const Players = () => {
     setActionLoading(banModalPlayer.name);
     try {
       const res = await api.Players.ban(banModalPlayer.name, banReason);
-      showToast('success', res.message || `🚫 Player ${banModalPlayer.name} has been banned!`);
+      showToast('success', res.message || `Player ${banModalPlayer.name} has been banned!`);
       setBanModalPlayer(null);
       setBanReason('Banned by administrator');
       await fetchPlayers();
@@ -225,7 +246,7 @@ export const Players = () => {
     setActionLoading(player.name);
     try {
       const res = await api.Players.unban(player.name);
-      showToast('success', res.message || `🔓 Unbanned player ${player.name}`);
+      showToast('success', res.message || `<><Unlock size={12} className="inline mr-1" />Unban</>ned player ${player.name}`);
       await fetchPlayers();
     } catch (err) {
       showToast('error', err.message || `Failed to unban ${player.name}`);
@@ -289,7 +310,7 @@ export const Players = () => {
   const copyToClipboard = async (text, label) => {
     if (!text) return;
     await safeCopyToClipboard(text);
-    showToast('info', `📋 Copied ${label} (${text}) to clipboard!`);
+    showToast('info', `Copied ${label} (${text}) to clipboard!`);
   };
 
   const formatDate = (dateStr) => {
@@ -349,9 +370,9 @@ export const Players = () => {
       {toast && (
         <div className={`alert-toast alert-${toast.type} mb-5`}>
           <span className="toast-icon">
-            {toast.type === 'success' && '✓'}
-            {toast.type === 'error' && '⚠️'}
-            {toast.type === 'info' && 'ℹ️'}
+            {toast.type === 'success' && <CheckCircle2 size={15} />}
+            {toast.type === 'error' && <AlertTriangle size={15} />}
+            {toast.type === 'info' && <Info size={15} />}
           </span>
           <span className="toast-text">{toast.text}</span>
           <button className="toast-dismiss" onClick={() => setToast(null)}>✕</button>
@@ -361,7 +382,7 @@ export const Players = () => {
       {/* Header with Title & Action */}
       <div className="section-header">
         <div>
-          <h1 className="page-title">Players & Operators</h1>
+          <h1 className="page-title">Players and operators</h1>
           <p className="page-subtitle">
             Real-time telemetry of live Bedrock players, permission tiers (OP, Member, Visitor), instant healing, instant food, kicking, and ban management.
           </p>
@@ -373,7 +394,7 @@ export const Players = () => {
               className="btn btn-primary btn-sm d-flex items-center gap-1.5"
               onClick={() => setShowAddModal(true)}
             >
-              <span>➕ Add / Pre-OP Gamertag</span>
+              <><UserPlus size={14} /><span>Add player</span></>
             </button>
           )}
           <button
@@ -383,7 +404,7 @@ export const Players = () => {
             disabled={actionLoading !== null}
             title="Refresh status"
           >
-            <span>🔄</span> Refresh
+            <><RefreshCw size={13} className={actionLoading ? "spinning" : ""} /><span>Refresh</span></>
           </button>
         </div>
       </div>
@@ -395,9 +416,9 @@ export const Players = () => {
           onClick={() => setActiveFilter(activeFilter === 'online' ? 'all' : 'online')}
           style={{ cursor: 'pointer' }}
         >
-          <div className="stat-icon-wrapper">🟢</div>
+          <div className="stat-icon-wrapper"><Radio size={16} className="text-emerald" /></div>
           <div className="stat-content">
-            <span className="stat-label">Online Players</span>
+            <span className="stat-label">Online players</span>
             <span className="stat-number">{onlineList.length}</span>
             <span className="stat-sub">
               {serverState === 'running' ? 'Active in Minecraft BDS' : 'Server is offline'}
@@ -410,9 +431,9 @@ export const Players = () => {
           onClick={() => setActiveFilter(activeFilter === 'ops' ? 'all' : 'ops')}
           style={{ cursor: 'pointer' }}
         >
-          <div className="stat-icon-wrapper">👑</div>
+          <div className="stat-icon-wrapper"><ShieldCheck size={16} className="text-amber" /></div>
           <div className="stat-content">
-            <span className="stat-label">Operators (OPs)</span>
+            <span className="stat-label">Operators</span>
             <span className="stat-number">{totalOps}</span>
             <span className="stat-sub">Admin permissions in BDS</span>
           </div>
@@ -423,9 +444,9 @@ export const Players = () => {
           onClick={() => setActiveFilter(activeFilter === 'allowlist' ? 'all' : 'allowlist')}
           style={{ cursor: 'pointer' }}
         >
-          <div className="stat-icon-wrapper">🛡️</div>
+          <div className="stat-icon-wrapper"><CheckCircle2 size={16} className="text-cyan" /></div>
           <div className="stat-content">
-            <span className="stat-label">Allowlisted Players</span>
+            <span className="stat-label">Allowlisted players</span>
             <span className="stat-number">{totalAllowlisted}</span>
             <span className="stat-sub">Synced with allowlist.json</span>
           </div>
@@ -436,9 +457,9 @@ export const Players = () => {
           onClick={() => setActiveFilter(activeFilter === 'banned' ? 'all' : 'banned')}
           style={{ cursor: 'pointer' }}
         >
-          <div className="stat-icon-wrapper">🚫</div>
+          <div className="stat-icon-wrapper"><Ban size={16} className="text-danger" /></div>
           <div className="stat-content">
-            <span className="stat-label">Banned Players</span>
+            <span className="stat-label">Banned players</span>
             <span className="stat-number">{totalBanned}</span>
             <span className="stat-sub">Blocked from connecting</span>
           </div>
@@ -449,9 +470,9 @@ export const Players = () => {
           onClick={() => setActiveFilter('all')}
           style={{ cursor: 'pointer' }}
         >
-          <div className="stat-icon-wrapper">👥</div>
+          <div className="stat-icon-wrapper"><Users size={16} className="text-muted" /></div>
           <div className="stat-content">
-            <span className="stat-label">Total Unique Players</span>
+            <span className="stat-label">Total players</span>
             <span className="stat-number">{allList.length}</span>
             <span className="stat-sub">Recorded across all sessions</span>
           </div>
@@ -461,7 +482,7 @@ export const Players = () => {
       {/* Filter / Search Bar */}
       <div className="player-search-bar-wrap">
         <div className="search-input-pill">
-          <span className="search-icon">🔍</span>
+          <Search size={14} className="search-icon text-muted" />
           <input
             type="text"
             placeholder="Search players by Xbox Gamertag, XUID, or Ban reason..."
@@ -481,42 +502,42 @@ export const Players = () => {
           className={`player-filter-tab ${activeFilter === 'all' ? 'active' : ''}`}
           onClick={() => setActiveFilter('all')}
         >
-          <span>🌐</span> All Players ({allList.length})
+          <span>All players</span> ({allList.length})
         </button>
         <button
           type="button"
           className={`player-filter-tab ${activeFilter === 'online' ? 'active' : ''}`}
           onClick={() => setActiveFilter('online')}
         >
-          <span>🟢</span> Online ({onlineList.length})
+          <span>Online</span> ({onlineList.length})
         </button>
         <button
           type="button"
           className={`player-filter-tab ${activeFilter === 'ops' ? 'active' : ''}`}
           onClick={() => setActiveFilter('ops')}
         >
-          <span>👑</span> Operators ({totalOps})
+          <span>Operators</span> ({totalOps})
         </button>
         <button
           type="button"
           className={`player-filter-tab ${activeFilter === 'allowlist' ? 'active' : ''}`}
           onClick={() => setActiveFilter('allowlist')}
         >
-          <span>🛡️</span> Allowlisted ({totalAllowlisted})
+          <span>Allowlisted</span> ({totalAllowlisted})
         </button>
         <button
           type="button"
           className={`player-filter-tab ${activeFilter === 'banned' ? 'active' : ''}`}
           onClick={() => setActiveFilter('banned')}
         >
-          <span>🚫</span> Banned ({totalBanned})
+          <span>Banned</span> ({totalBanned})
         </button>
         <button
           type="button"
           className={`player-filter-tab ${activeFilter === 'offline' ? 'active' : ''}`}
           onClick={() => setActiveFilter('offline')}
         >
-          <span>⚪</span> Offline Roster ({filteredOffline.length})
+          <span>Offline</span> ({filteredOffline.length})
         </button>
       </div>
 
@@ -535,7 +556,7 @@ export const Players = () => {
 
           {filteredOnline.length === 0 ? (
             <div className="empty-players-state">
-              <div className="empty-icon">🎮</div>
+              <div className="empty-icon"><Users size={32} className="text-muted" /></div>
               <h3>No Players Currently Online</h3>
               <p>
                 {serverState === 'running'
@@ -586,23 +607,23 @@ export const Players = () => {
                             onChange={(e) => handlePermissionChange(player, e.target.value)}
                             disabled={actionLoading === player.name}
                           >
-                            <option value="operator">👑 Operator (OP)</option>
-                            <option value="member">🛡️ Member</option>
-                            <option value="visitor">👁️ Visitor</option>
+                            <option value="operator">Operator (OP)</option>
+                            <option value="member">Member</option>
+                            <option value="visitor">Visitor</option>
                           </select>
                         ) : player.isOp ? (
-                          <span className="role-pill op-pill">👑 Operator</span>
+                          <span className="role-pill op-pill">Operator</span>
                         ) : player.permission === 'visitor' ? (
-                          <span className="role-pill visitor-pill">👁️ Visitor</span>
+                          <span className="role-pill visitor-pill">Visitor</span>
                         ) : (
-                          <span className="role-pill member-pill">🛡️ Member</span>
+                          <span className="role-pill member-pill">Member</span>
                         )}
                       </td>
                       <td>
                         {player.isAllowlisted ? (
-                          <span className="allowlist-pill">✓ Allowed</span>
+                          <span className="allowlist-pill">Allowed</span>
                         ) : (
-                          <span className="not-allowlist-pill">✕ None</span>
+                          <span className="not-allowlist-pill">None</span>
                         )}
                       </td>
                       <td>
@@ -629,7 +650,7 @@ export const Players = () => {
                                 onClick={() => handleHealPlayer(player)}
                                 title="Instantly heal player to full 20 HP health"
                               >
-                                {actionLoading === `${player.name}-heal` ? '...' : '💖 Heal'}
+                                {actionLoading === `${player.name}-heal` ? '...' : <><Heart size={12} className="inline mr-1" />Heal</>}
                               </button>
                               <button
                                 type="button"
@@ -638,7 +659,7 @@ export const Players = () => {
                                 onClick={() => handleFeedPlayer(player)}
                                 title="Instantly fill hunger and saturation meters to full"
                               >
-                                {actionLoading === `${player.name}-feed` ? '...' : '🍖 Feed'}
+                                {actionLoading === `${player.name}-feed` ? '...' : <><Utensils size={12} className="inline mr-1" />Feed</>}
                               </button>
                               <button
                                 type="button"
@@ -647,7 +668,7 @@ export const Players = () => {
                                 onClick={() => handleToggleOp(player)}
                                 title={player.isOp ? 'Revoke Operator privileges' : 'Grant Operator privileges'}
                               >
-                                {player.isOp ? 'De-OP' : '👑 Make OP'}
+                                {player.isOp ? 'De-OP' : <><ShieldCheck size={12} className="inline mr-1" />Make OP</>}
                               </button>
                               <button
                                 type="button"
@@ -656,7 +677,7 @@ export const Players = () => {
                                 onClick={() => handleToggleAllowlist(player)}
                                 title={player.isAllowlisted ? 'Remove from allowlist' : 'Add to allowlist'}
                               >
-                                {player.isAllowlisted ? '✕ Unallow' : '✓ Allow'}
+                                {player.isAllowlisted ? 'Unallow' : 'Allow'}
                               </button>
                               <button
                                 type="button"
@@ -668,7 +689,7 @@ export const Players = () => {
                                 }}
                                 title="Kick player from server"
                               >
-                                👢 Kick
+                                <><UserMinus size={12} className="inline mr-1" />Kick</>
                               </button>
                               <button
                                 type="button"
@@ -680,7 +701,7 @@ export const Players = () => {
                                 }}
                                 title="Ban player from server (ejects and blocks reconnection)"
                               >
-                                🚫 Ban
+                                <><Ban size={12} className="inline mr-1" />Ban</>
                               </button>
                             </>
                           )}
@@ -712,7 +733,7 @@ export const Players = () => {
 
           {filteredBanned.length === 0 ? (
             <div className="empty-players-state">
-              <div className="empty-icon">🛡️</div>
+              <div className="empty-icon"><ShieldAlert size={32} className="text-muted" /></div>
               <h3>No Banned Players</h3>
               <p>No players are currently banned from the server.</p>
             </div>
@@ -782,7 +803,7 @@ export const Players = () => {
                                 onClick={() => handleUnbanPlayer(player)}
                                 title="Unban player and allow them to join"
                               >
-                                🔓 Unban Player
+                                <><Unlock size={12} className="inline mr-1" />Unban player</>
                               </button>
                               <button
                                 type="button"
@@ -791,7 +812,7 @@ export const Players = () => {
                                 onClick={() => handleDeletePlayer(player)}
                                 title="Delete record from database"
                               >
-                                🗑️ Delete
+                                <><Trash2 size={12} className="inline mr-1" />Delete</>
                               </button>
                             </>
                           )}
@@ -827,7 +848,7 @@ export const Players = () => {
 
           {(activeFilter === 'ops' || activeFilter === 'allowlist' ? filteredAll : filteredOffline).length === 0 ? (
             <div className="empty-players-state">
-              <div className="empty-icon">📁</div>
+              <div className="empty-icon"><Folder size={32} className="text-muted" /></div>
               <h3>No Players Matching Filter</h3>
               <p>
                 {activeFilter === 'ops'
@@ -883,16 +904,16 @@ export const Players = () => {
                             onChange={(e) => handlePermissionChange(player, e.target.value)}
                             disabled={actionLoading === player.name}
                           >
-                            <option value="operator">👑 Operator (OP)</option>
-                            <option value="member">🛡️ Member</option>
-                            <option value="visitor">👁️ Visitor</option>
+                            <option value="operator">Operator (OP)</option>
+                            <option value="member">Member</option>
+                            <option value="visitor">Visitor</option>
                           </select>
                         ) : player.isOp ? (
-                          <span className="role-pill op-pill">👑 Operator</span>
+                          <span className="role-pill op-pill">Operator</span>
                         ) : player.permission === 'visitor' ? (
-                          <span className="role-pill visitor-pill">👁️ Visitor</span>
+                          <span className="role-pill visitor-pill">Visitor</span>
                         ) : (
-                          <span className="role-pill member-pill">🛡️ Member</span>
+                          <span className="role-pill member-pill">Member</span>
                         )}
                       </td>
                       <td>
@@ -930,7 +951,7 @@ export const Players = () => {
                                   onClick={() => handleUnbanPlayer(player)}
                                   title="Unban player"
                                 >
-                                  🔓 Unban
+                                  <><Unlock size={12} className="inline mr-1" />Unban</>
                                 </button>
                               ) : (
                                 <>
@@ -941,7 +962,7 @@ export const Players = () => {
                                     onClick={() => handleToggleOp(player)}
                                     title={player.isOp ? 'Revoke Operator privileges' : 'Grant Operator privileges'}
                                   >
-                                    {player.isOp ? 'De-OP' : '👑 Make OP'}
+                                    {player.isOp ? 'De-OP' : <><ShieldCheck size={12} className="inline mr-1" />Make OP</>}
                                   </button>
                                   <button
                                     type="button"
@@ -962,7 +983,7 @@ export const Players = () => {
                                     }}
                                     title="Ban player from server"
                                   >
-                                    🚫 Ban
+                                    Ban
                                   </button>
                                 </>
                               )}
@@ -973,7 +994,7 @@ export const Players = () => {
                                 onClick={() => handleDeletePlayer(player)}
                                 title="Remove player from database and configs"
                               >
-                                🗑️ Delete
+                                <><Trash2 size={12} className="inline mr-1" />Delete</>
                               </button>
                             </>
                           )}
@@ -993,7 +1014,7 @@ export const Players = () => {
         <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <div className="modal-header">
-              <h3 className="modal-title">➕ Add / Pre-register Gamertag</h3>
+              <h3 className="modal-title">Add player</h3>
               <button className="modal-close-btn" onClick={() => setShowAddModal(false)}>✕</button>
             </div>
             <form onSubmit={handleAddPlayer}>
@@ -1037,9 +1058,9 @@ export const Players = () => {
                     onChange={(e) => setNewPermission(e.target.value)}
                     disabled={newIsBanned}
                   >
-                    <option value="member">🛡️ Member (Standard survival gameplay)</option>
-                    <option value="operator">👑 Operator (Full admin commands / cheats / teleport)</option>
-                    <option value="visitor">👁️ Visitor (Read-only / spectator view)</option>
+                    <option value="member">Member (standard survival)</option>
+                    <option value="operator">Operator (full admin permissions)</option>
+                    <option value="visitor">Visitor (read-only view)</option>
                   </select>
                 </div>
 
@@ -1052,7 +1073,7 @@ export const Players = () => {
                       onChange={(e) => setNewIsAllowlisted(e.target.checked)}
                     />
                     <span className="text-sm text-white">
-                      🛡️ Add directly to Bedrock <code>allowlist.json</code>
+                      Add to Bedrock <code>allowlist.json</code>
                     </span>
                   </label>
                 </div>
@@ -1068,7 +1089,7 @@ export const Players = () => {
                       }}
                     />
                     <span className="text-sm text-danger font-semibold">
-                      🚫 Pre-ban this gamertag immediately (block connection attempts)
+                      Ban gamertag immediately (block connection attempts)
                     </span>
                   </label>
                 </div>
@@ -1100,7 +1121,7 @@ export const Players = () => {
         <div className="modal-overlay" onClick={() => setKickModalPlayer(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <div className="modal-header">
-              <h3 className="modal-title">👢 Kick Player</h3>
+              <h3 className="modal-title">Kick player</h3>
               <button className="modal-close-btn" onClick={() => setKickModalPlayer(null)}>✕</button>
             </div>
             <form onSubmit={handleKickConfirm}>
@@ -1157,7 +1178,7 @@ export const Players = () => {
         <div className="modal-overlay" onClick={() => setBanModalPlayer(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <div className="modal-header">
-              <h3 className="modal-title" style={{ color: '#f87171' }}>🚫 Ban Player</h3>
+              <h3 className="modal-title" style={{ color: '#f87171' }}>Ban player</h3>
               <button className="modal-close-btn" onClick={() => setBanModalPlayer(null)}>✕</button>
             </div>
             <form onSubmit={handleBanConfirm}>

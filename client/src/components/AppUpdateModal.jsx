@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../api';
+import {
+  ArrowUpCircle,
+  CheckCircle2,
+  AlertTriangle,
+  RefreshCw,
+  ShieldCheck,
+  Check,
+  X
+} from 'lucide-react';
 
 export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
   const [updating, setUpdating] = useState(false);
@@ -88,11 +97,11 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
   };
 
   const updateSteps = [
-    { num: 1, label: 'Safety Backup', icon: '🛡️' },
-    { num: 2, label: 'Pull Commits', icon: '📥' },
-    { num: 3, label: 'Dependencies', icon: '📦' },
-    { num: 4, label: 'Build Client', icon: '⚡' },
-    { num: 5, label: 'Launcher Binary', icon: '🪟' },
+    { num: 1, label: 'Safety backup' },
+    { num: 2, label: 'Pull commits' },
+    { num: 3, label: 'Dependencies' },
+    { num: 4, label: 'Build client' },
+    { num: 5, label: 'Launcher' },
   ];
 
   return (
@@ -101,9 +110,9 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
         {/* Modal Header */}
         <div className="modal-header d-flex justify-between items-center">
           <div className="d-flex items-center gap-2.5">
-            <span className="text-2xl">🚀</span>
+            <ArrowUpCircle size={22} className="text-emerald" />
             <div>
-              <h3 className="modal-title font-bold text-white m-0">Application Update Available</h3>
+              <h3 className="modal-title font-medium text-white m-0">Application update available</h3>
               <span className="text-xs text-sub">FatGoats Bedrock Server Manager Plus</span>
             </div>
           </div>
@@ -118,8 +127,8 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
         <div className="modal-body p-5">
           {successResult ? (
             <div className="text-center py-4">
-              <div className="text-5xl mb-3">🎉</div>
-              <h4 className="text-white font-bold text-xl mb-1">Update Installed Successfully!</h4>
+              <div className="mb-3"><CheckCircle2 size={36} className="text-emerald" /></div>
+              <h4 className="text-white font-medium text-lg mb-1">Update completed successfully</h4>
               <p className="text-sub text-sm mb-4">
                 The application has been safely upgraded to commit{' '}
                 <strong className="text-emerald">#{successResult.newCommit || updateInfo.remoteCommit}</strong>.
@@ -135,14 +144,14 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                 className="btn btn-primary font-bold px-6 py-2.5 text-sm"
                 onClick={() => window.location.reload()}
               >
-                🔄 Reload App Now
+                Reload application
               </button>
             </div>
           ) : (
             <>
               {error && (
-                <div className="alert-toast alert-error mb-4">
-                  ⚠️ {error}
+                <div className="alert-toast alert-error mb-4 d-flex items-center gap-1.5">
+                  <AlertTriangle size={14} className="text-danger" /><span>{error}</span>
                 </div>
               )}
 
@@ -175,7 +184,7 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                           key={s.num}
                           className={`update-step-pill ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''}`}
                         >
-                          <span>{isDone ? '✓' : s.icon}</span>
+                          <span>{isDone ? <Check size={12} className="text-emerald" /> : s.num}</span>
                           <span className="truncate">{s.label}</span>
                         </div>
                       );
@@ -242,8 +251,8 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                   {/* Zero Data Loss Guarantee Shield */}
                   <div className="p-3 rounded-xl mb-2" style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)' }}>
                     <div className="d-flex items-center gap-2 text-emerald font-semibold text-xs mb-1">
-                      <span>🛡️</span>
-                      <span>Zero Data Loss Protection Guarantee</span>
+                      <ShieldCheck size={15} className="text-emerald" />
+                      <span>Data protection guarantee</span>
                     </div>
                     <p className="text-sub text-xs m-0 leading-relaxed" style={{ fontSize: '0.74rem' }}>
                       Updates execute git fast-forward pulls and rebuild the client interface. Worlds (<code>worlds/</code>), SQLite database (<code>data/db/manager.db</code>), player data, backups, and custom addons are completely preserved.
@@ -266,7 +275,7 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                 disabled={updating}
                 title="Do not show notification again for this commit"
               >
-                🚫 Ignore
+                Ignore
               </button>
               <button
                 type="button"
@@ -275,7 +284,7 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                 disabled={updating}
                 title="Remind me again in 24 hours"
               >
-                ⏰ Ask Later
+                Ask later
               </button>
             </div>
 
@@ -285,7 +294,7 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
               onClick={handleUpdateNow}
               disabled={updating}
             >
-              {updating ? 'Applying Update...' : '🚀 Update Now (Zero Data Loss)'}
+              {updating ? 'Applying update...' : 'Update now'}
             </button>
           </div>
         )}

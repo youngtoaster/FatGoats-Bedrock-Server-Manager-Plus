@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import {
+  Archive,
+  RefreshCw,
+  Clock,
+  AlertTriangle,
+  CheckCircle2,
+  FileArchive,
+  Plus
+} from 'lucide-react';
 
 export const Backups = () => {
   const { user } = useAuth();
@@ -204,7 +213,7 @@ export const Backups = () => {
       {/* Header */}
       <div className="page-header">
         <div>
-          <h1 className="page-title">Backups & Snapshots</h1>
+          <h1 className="page-title">Backups and snapshots</h1>
           <p className="page-subtitle">Create archives of your worlds and restore when needed</p>
         </div>
         <div className="header-actions">
@@ -214,7 +223,7 @@ export const Backups = () => {
             onClick={loadData}
             disabled={loading || creatingBackup || restoringBackup || deletingBackup}
           >
-            <span className={`refresh-icon ${loading ? 'rotating' : ''}`}>↻</span> Refresh
+            <RefreshCw size={13} className={loading ? "spinning" : ""} /><span>Refresh</span>
           </button>
         </div>
       </div>
@@ -222,14 +231,14 @@ export const Backups = () => {
       {/* Notifications */}
       {error && (
         <div className="toast toast-error" role="alert">
-          <span className="toast-icon">⚠️</span>
+          <AlertTriangle size={15} className="toast-icon" />
           <div className="toast-content">{error}</div>
           <button type="button" className="toast-close" onClick={() => setError(null)}>✕</button>
         </div>
       )}
       {successMsg && (
         <div className="toast toast-success" role="alert">
-          <span className="toast-icon">✓</span>
+          <CheckCircle2 size={15} className="toast-icon" />
           <div className="toast-content">{successMsg}</div>
           <button type="button" className="toast-close" onClick={() => setSuccessMsg(null)}>✕</button>
         </div>
@@ -253,11 +262,11 @@ export const Backups = () => {
       <div className="card mb-6 auto-backup-card">
         <div className="card-header d-flex justify-between items-center">
           <div className="d-flex items-center gap-2">
-            <span className="card-header-icon">🔄</span>
-            <h2 className="card-title m-0">Automated World Backups & Scheduler</h2>
+            <Clock size={16} className="text-muted" />
+            <h2 className="card-title m-0">Automated world backups and schedule</h2>
           </div>
           <span className={`badge ${autoBackupEnabled ? 'badge-success' : 'badge-secondary'}`}>
-            {autoBackupEnabled ? '● ACTIVE SCHEDULER' : 'DISABLED'}
+            {autoBackupEnabled ? 'Active schedule' : 'Disabled'}
           </span>
         </div>
         <div className="card-body">
@@ -361,7 +370,7 @@ export const Backups = () => {
                     <span className="spinner-sm mr-2" /> Archiving World...
                   </>
                 ) : (
-                  '📦 Create Backup'
+                  <><span>Create backup</span></>
                 )}
               </button>
             </div>
@@ -383,7 +392,7 @@ export const Backups = () => {
             </div>
           ) : backups.length === 0 ? (
             <div className="empty-state py-12 text-center">
-              <div className="empty-state-icon">📦</div>
+              <div className="empty-state-icon mb-2"><Archive size={32} className="text-muted" /></div>
               <h3>No Backups Created Yet</h3>
               <p className="text-muted">Use the selector above to create your first world snapshot.</p>
             </div>
@@ -409,7 +418,7 @@ export const Backups = () => {
                     return (
                       <tr key={filename}>
                         <td className="font-mono text-primary font-medium">
-                          <span className="backup-file-icon mr-2">🗜️</span>
+                          <FileArchive size={14} className="text-muted mr-1.5 inline" />
                           {filename}
                         </td>
                         <td>

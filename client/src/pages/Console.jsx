@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../api';
+import { Lock, Trash2, ArrowDown, ArrowUp } from 'lucide-react';
 
 export const Console = () => {
   const { isAdmin } = useAuth();
@@ -127,7 +128,7 @@ export const Console = () => {
     <div className="console-page">
       <div className="console-header">
         <div>
-          <h1 className="page-title">Server Console</h1>
+          <h1 className="page-title">Server console</h1>
           <p className="page-subtitle">Real-time Minecraft Bedrock logs and command interface</p>
         </div>
         <div className="console-actions">
@@ -141,14 +142,14 @@ export const Console = () => {
               }
             }}
           >
-            {autoScroll ? 'Auto-scroll: ON' : 'Scroll to Bottom'}
+            {autoScroll ? 'Auto-scroll: on' : 'Scroll to bottom'}
           </button>
           <button
             type="button"
             className="btn btn-secondary btn-sm"
             onClick={() => setLogs([])}
           >
-            Clear Screen
+            Clear output
           </button>
         </div>
       </div>
@@ -186,12 +187,12 @@ export const Console = () => {
           <div className="console-quick-chips">
             <span className="chips-label">Quick:</span>
             {[
-              { label: '👥 list', cmd: 'list' },
-              { label: '💾 save-all', cmd: 'save-all' },
-              { label: '☀️ day', cmd: 'time set day' },
-              { label: '🌙 night', cmd: 'time set night' },
-              { label: '🌤️ clear', cmd: 'weather clear' },
-              { label: '❓ help', cmd: 'help' },
+              { label: 'list', cmd: 'list' },
+              { label: 'save-all', cmd: 'save-all' },
+              { label: 'time day', cmd: 'time set day' },
+              { label: 'time night', cmd: 'time set night' },
+              { label: 'weather clear', cmd: 'weather clear' },
+              { label: 'help', cmd: 'help' },
             ].map((chip) => (
               <button
                 key={chip.cmd}
@@ -222,7 +223,7 @@ export const Console = () => {
         </div>
       ) : (
         <div className="console-viewer-notice">
-          <span>🔒 You are viewing console in read-only mode. Administrator permissions required to send commands.</span>
+          <span className="d-flex items-center gap-1.5"><Lock size={14} className="text-muted" /><span>Console is in read-only mode. Administrator permissions required to send commands.</span></span>
         </div>
       )}
     </div>
