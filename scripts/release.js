@@ -109,14 +109,14 @@ async function main() {
 - **BedrockServerManager-Setup.exe**: Interactive Windows setup installer with prerequisite verification, desktop shortcuts, and automated in-place updater.
 - **BedrockServerManager.exe**: Lightweight standalone Windows system tray watchdog launcher.
 
-#### What's New in v1.2.5:
-- **Physics-Based Spring Transitions**: Integrated CSS \`linear()\` physics easing curves (\`--ease-spring\`, \`--ease-spring-snappy\`) from Modern Web Guidance for tactile micro-damped movement with physical weight.
-- **Native Entry/Exit Animations**: Applied \`@starting-style\` to all modals, overlays, alert toasts, and dialogs for smooth, fluid entrances without layout thrashing.
-- **Instrument-Grade Telemetry Fluidity**: CPU, RAM, and TPS gauges glide naturally via spring-interpolated transitions during live server heartbeats.
-- **Tactile Button & Control Physics**: Physical spring feedback on hover (\`-1px\` lift) and click (\`scale(0.97)\` press) across all primary, secondary, and player action buttons.
-- **Calm Industrial Status Beacon**: Replaced abrupt status state updates with an ambient 3.2s breathing aura indicating active BDS process health.
-- **Smooth Navigation & Stream Animations**: Fluid spring micro-slide on sidebar links and animated line entrance for the live BDS terminal log stream.
-- **Accessible Motion Engine**: Full \`@media (prefers-reduced-motion: reduce)\` compliance for sensitive setups.
+#### What's New in v1.2.6:
+- **Full Precision Cyber-Industrial Overhaul**: Overhauled the entire look and feel across both the Showcase Website and the App utilizing UsePlanes kinetic physics, React Bits spotlight illumination, and modern web design standards.
+- **Floating Island Glass Navbar**: Implemented floating frosted glass navbar (\`backdrop-filter: blur(24px)\`) with gliding magnetic pill indicator and Lucide SVG icons.
+- **Spotlight Cards (React Bits)**: Added dynamic 60fps radial mouse-tracking glow across all feature bento cards and dashboard panels.
+- **Interactive Addon Auto-Installer Showcase**: Real-time simulated drag-and-drop file inspection executing the full 4-step pipeline (< 1s) directly on the website.
+- **Live BDS Supervisor Simulator Deck**: Authentic telemetry HUD previewing real-time CPU/RAM/TPS gauges, 1-click moderation buttons, and ANSI terminal execution.
+- **Magnetic Buttons & Decrypted Text**: Tactile physical spring buttons with micro-lifts and hacker matrix title reveals.
+- **Pre-Built Executables**: Latest compiled native Windows tray watchdog and installer binaries uploaded directly to release.
 
 #### Core Capabilities:
 - **1-Click Instant Addon Auto-Installer**: Drag-and-drop \`.mcaddon\`, \`.mcpack\`, and \`.zip\` files. Automatically decompresses nested packs, splits BP/RP, pairs companion packs, and injects valid UUID manifests directly into your active world configs in < 1 second.

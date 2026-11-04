@@ -76,7 +76,8 @@
 .backup-card,
 .world-card,
 .addon-card,
-.gameplay-controls-card {
+.gameplay-controls-card,
+.spotlight-card {
   background: var(--bg-card, #19191b) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -89,7 +90,48 @@
               background-color var(--duration-tactile) var(--ease-out-quint) !important;
   transform: translateY(0) !important;
   position: relative;
+  overflow: hidden;
   will-change: transform, box-shadow;
+}
+
+/* React Bits Spotlight radial cursor glare */
+.modern-card::before,
+.telemetry-card::before,
+.hero-status-panel::before,
+.remote-access-summary-card::before,
+.panel-card::before,
+.properties-section-card::before,
+.backup-card::before,
+.world-card::before,
+.addon-card::before,
+.gameplay-controls-card::before,
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    480px circle at var(--mouse-x, -500px) var(--mouse-y, -500px),
+    rgba(16, 185, 129, 0.07),
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.modern-card:hover::before,
+.telemetry-card:hover::before,
+.hero-status-panel:hover::before,
+.remote-access-summary-card:hover::before,
+.panel-card:hover::before,
+.properties-section-card:hover::before,
+.backup-card:hover::before,
+.world-card:hover::before,
+.addon-card:hover::before,
+.gameplay-controls-card:hover::before,
+.spotlight-card:hover::before {
+  opacity: 1;
 }
 
 .modern-card:hover,

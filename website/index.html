@@ -4,149 +4,345 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FatGoats Bedrock Server Manager+ | Next-Gen Minecraft BDS Administration</title>
-  <meta name="description" content="A modern, full-stack administration panel and real-time command center for Minecraft Bedrock Dedicated Server. Features instant healing, zero-delay banning, world generation, addon management, and crossplay friend bridging.">
+  <meta name="description" content="A modern, high-performance administration panel and real-time command center for Minecraft Bedrock Dedicated Server. Features 1-click instant addon auto-installer, zero-delay banning, instant healing, world generation, and crossplay friend bridging.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Background Interactive 3D Voxel Canvas -->
+  <!-- Interactive 3D Voxel Canvas Background -->
   <canvas id="bg-canvas"></canvas>
   <div class="ambient-glow-1"></div>
   <div class="ambient-glow-2"></div>
   <div class="grid-overlay"></div>
 
   <div class="site-content">
-    <!-- Navigation Bar -->
-    <header class="navbar">
-      <div class="container nav-container">
+    <!-- Floating Island Glass Navbar (Navbar Gallery & Glass by Sam Asante) -->
+    <header class="navbar-wrapper">
+      <nav class="navbar-floating" id="main-nav">
         <a href="#" class="brand-link">
-          <div class="brand-logo-icon">🟩</div>
-          <div class="brand-text-wrap">
-            <span class="brand-name">FatGoats BSM+</span>
+          <div class="brand-icon">
+            <svg viewBox="0 0 64 64" width="22" height="22" fill="none">
+              <polygon points="32,8 54,20 32,32 10,20" fill="#34d399" />
+              <polygon points="10,20 32,32 32,56 10,44" fill="#10b981" />
+              <polygon points="32,32 54,20 54,44 32,56" fill="#047857" />
+              <path d="M32 24v16M24 32h16" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="brand-info">
+            <span class="brand-title">FatGoats BSM+</span>
             <span class="brand-sub">Bedrock Dedicated Server</span>
           </div>
         </a>
 
-        <ul class="nav-links">
-          <li><a href="#features">Features</a></li>
-          <li><a href="#comparison">Comparison</a></li>
-          <li><a href="#downloads">Downloads</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases" target="_blank" rel="noopener noreferrer">Releases ↗</a></li>
-        </ul>
+        <div class="nav-links-wrap">
+          <ul class="nav-links">
+            <li class="nav-item active"><a href="#hero">Overview</a></li>
+            <li class="nav-item"><a href="#addon-installer">Addon Installer</a></li>
+            <li class="nav-item"><a href="#features">Features</a></li>
+            <li class="nav-item"><a href="#comparison">Comparison</a></li>
+            <li class="nav-item"><a href="#downloads">Downloads</a></li>
+            <li class="nav-item"><a href="#faq">FAQ</a></li>
+          </ul>
+          <div class="nav-pill-tracker" id="nav-pill-tracker"></div>
+        </div>
 
         <div class="nav-actions">
-          <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
-            <span>⭐ Star on GitHub</span>
+          <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm magnetic-btn" title="Star repository on GitHub">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>GitHub</span>
           </a>
-          <a href="#downloads" class="btn btn-primary btn-sm">
-            <span>⬇️ Download .exe</span>
+          <a href="#downloads" class="btn btn-primary btn-sm magnetic-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download .exe</span>
           </a>
         </div>
-      </div>
+      </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="container">
+    <!-- Hero Section (SupaHero & MotionSites) -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-container">
+        <!-- Live Server Status Badge with Shiny Text Effect -->
         <div class="hero-pill-wrap">
-          <span class="badge badge-emerald">
-            <span class="pulse-dot"></span>
-            Minecraft Bedrock v1.21+ Ready • Windows Native Watchdog
-          </span>
+          <div class="status-chip shiny-badge">
+            <span class="beacon-dot"></span>
+            <span class="chip-text">Minecraft Bedrock v1.21+ Ready</span>
+            <span class="chip-sep">•</span>
+            <span class="chip-label">Windows Native Watchdog Engine</span>
+          </div>
         </div>
 
+        <!-- Kinetic Headline with Decrypted Text Hook -->
         <h1 class="hero-title">
-          The Ultimate Command Center for <br>
-          <span class="text-gradient">Minecraft Bedrock Dedicated Server</span>
+          The Ultimate Command Deck for<br>
+          <span class="text-gradient decrypted-text" data-original="Minecraft Bedrock Dedicated Server">Minecraft Bedrock Dedicated Server</span>
         </h1>
 
         <p class="hero-subtitle">
-          Say goodbye to fragile command prompts and manual config edits. Operate, supervise, backup, and customize your Bedrock world with fluid real-time telemetry, instant player controls, and zero-headache automation.
+          Eliminate clunky command prompts and manual configuration file edits. Supervise, protect, optimize, and customize your Bedrock world with fluid real-time telemetry, 1-click instant addon auto-installation, zero-delay moderation, and automated failover recovery.
         </p>
 
+        <!-- CTA Buttons with Magnetic Physics -->
         <div class="hero-actions">
-          <a href="#downloads" class="btn btn-primary btn-lg">
-            <span>⬇️ Download Windows Setup (.exe)</span>
+          <a href="#downloads" class="btn btn-primary btn-lg magnetic-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download Windows Installer (.exe)</span>
           </a>
-          <a href="#features" class="btn btn-secondary btn-lg">
-            <span>✨ Explore Features</span>
+          <a href="#addon-installer" class="btn btn-secondary btn-lg magnetic-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+            <span>Interactive Addon Demo</span>
           </a>
-          <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
-            <span>📂 View on GitHub ↗</span>
+          <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-lg magnetic-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            <span>Source Code</span>
           </a>
         </div>
 
-        <!-- Metric Counters -->
+        <!-- Key Metrics Strip -->
         <div class="metrics-grid">
-          <div class="metric-card">
-            <span class="metric-number">100% Native</span>
-            <span class="metric-label">Windows Tray Watchdog & Auto-Restart</span>
+          <div class="metric-card spotlight-card">
+            <div class="metric-value font-mono">100% Native</div>
+            <div class="metric-label">Windows C# System Tray Watchdog</div>
           </div>
-          <div class="metric-card">
-            <span class="metric-number">1-Click</span>
-            <span class="metric-label">Heal, Feed, Kick & Ban</span>
+          <div class="metric-card spotlight-card">
+            <div class="metric-value font-mono">&lt; 1 Second</div>
+            <div class="metric-label">Instant Addon Decompression & Inject</div>
           </div>
-          <div class="metric-card">
-            <span class="metric-number">0 Ports</span>
-            <span class="metric-label">Cloudflare / Playit Tunnel</span>
+          <div class="metric-card spotlight-card">
+            <div class="metric-value font-mono">0 Ports</div>
+            <div class="metric-label">Cloudflare & Playit CGNAT Bypass</div>
           </div>
-          <div class="metric-card">
-            <span class="metric-number">100% Safe</span>
-            <span class="metric-label">Addon & World Safe (SQLite + WASM)</span>
+          <div class="metric-card spotlight-card">
+            <div class="metric-value font-mono">1-Click</div>
+            <div class="metric-label">Heal (20 HP), Food, Kick & Ban</div>
           </div>
         </div>
 
-        <!-- Command Deck Spotlight Preview -->
-        <div class="command-deck-grid">
-          <div class="deck-card">
-            <div class="deck-icon">🖥️</div>
-            <h3>Real-Time BDS Process Engine</h3>
-            <p>Direct standard input/output IPC piping to <code>bedrock_server.exe</code> with sub-millisecond command execution, ANSI syntax parsing, and automated crash recovery.</p>
+        <!-- Interactive Real-Time BDS Server Simulator Deck (Godly & Collect UI) -->
+        <div class="deck-preview-wrapper spotlight-card" id="interactive-preview">
+          <div class="deck-window-header">
+            <div class="window-controls">
+              <span class="control-dot close"></span>
+              <span class="control-dot min"></span>
+              <span class="control-dot max"></span>
+            </div>
+            <div class="window-title font-mono">bedrock_server.exe • Live Supervisor Console</div>
+            <div class="window-status-badge">
+              <span class="live-indicator"></span>
+              <span>Running • Port 19132</span>
+            </div>
           </div>
 
-          <div class="deck-card">
-            <div class="deck-icon">🧩</div>
-            <h3>1-Click Addon Auto-Installer</h3>
-            <p>Drag and drop any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code>. Automatically splits BP/RP, extracts UUIDs, and registers to your active world in &lt; 1 second.</p>
-          </div>
+          <div class="deck-window-body">
+            <!-- Telemetry Bar Strip -->
+            <div class="deck-telemetry-row">
+              <div class="telemetry-item">
+                <div class="telemetry-meta">
+                  <span class="meta-name">BDS Process TPS</span>
+                  <span class="meta-val font-mono" id="sim-tps">20.0 TPS</span>
+                </div>
+                <div class="telemetry-bar">
+                  <div class="telemetry-fill emerald" style="width: 100%;"></div>
+                </div>
+              </div>
 
-          <div class="deck-card">
-            <div class="deck-icon">👑</div>
-            <h3>Instant Player & Security Matrix</h3>
-            <p>Instant one-click 20 HP health and saturation restoration, zero-delay kicking, and persistent SQLite ban lists with automatic reconnection rejection.</p>
-          </div>
+              <div class="telemetry-item">
+                <div class="telemetry-meta">
+                  <span class="meta-name">CPU Usage</span>
+                  <span class="meta-val font-mono" id="sim-cpu">4.2%</span>
+                </div>
+                <div class="telemetry-bar">
+                  <div class="telemetry-fill emerald" id="sim-cpu-bar" style="width: 22%;"></div>
+                </div>
+              </div>
 
-          <div class="deck-card">
-            <div class="deck-icon">🌍</div>
-            <h3>World Importer & Generator</h3>
-            <p>Full support for drag-and-drop <code>.mcworld</code> archives, automated level switching, and a built-in world generator with custom seed randomization and presets.</p>
+              <div class="telemetry-item">
+                <div class="telemetry-meta">
+                  <span class="meta-name">Memory (RAM)</span>
+                  <span class="meta-val font-mono" id="sim-ram">482 MB / 8 GB</span>
+                </div>
+                <div class="telemetry-bar">
+                  <div class="telemetry-fill cyan" id="sim-ram-bar" style="width: 28%;"></div>
+                </div>
+              </div>
+
+              <div class="telemetry-item">
+                <div class="telemetry-meta">
+                  <span class="meta-name">Online Players</span>
+                  <span class="meta-val font-mono" id="sim-players">4 / 20</span>
+                </div>
+                <div class="telemetry-bar">
+                  <div class="telemetry-fill purple" style="width: 20%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Player Action Strip -->
+            <div class="deck-interactive-actions">
+              <div class="action-label">Test 1-Click Moderation Actions:</div>
+              <div class="action-chips-group">
+                <button type="button" class="sim-btn sim-heal" data-action="heal" data-player="Steve">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                  <span>Instant Heal (Steve)</span>
+                </button>
+                <button type="button" class="sim-btn sim-feed" data-action="feed" data-player="Alex">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 8 4 4-4 4"/><path d="M2 12h20"/></svg>
+                  <span>Restore Food (Alex)</span>
+                </button>
+                <button type="button" class="sim-btn sim-kick" data-action="kick" data-player="Griefer99">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="18" y1="8" x2="23" y2="13"/><line x1="23" y1="8" x2="18" y2="13"/></svg>
+                  <span>Zero-Delay Kick</span>
+                </button>
+                <button type="button" class="sim-btn sim-ban" data-action="ban" data-player="SpammerBot">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                  <span>Permanent SQLite Ban</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Terminal Output Stream -->
+            <div class="deck-terminal-box font-mono" id="sim-terminal">
+              <div class="terminal-line info"><span class="t-time">10:14:02</span> <span class="t-tag">[INFO]</span> Dedicated server version 1.21.30.03 initialized.</div>
+              <div class="terminal-line success"><span class="t-time">10:14:03</span> <span class="t-tag">[SUPERVISOR]</span> Direct IPC pipe attached to bedrock_server.exe PID 11420.</div>
+              <div class="terminal-line info"><span class="t-time">10:14:04</span> <span class="t-tag">[NETWORK]</span> IPv4 port 19132 UDP bound. Playit global tunnel connected.</div>
+              <div class="terminal-line success"><span class="t-time">10:14:05</span> <span class="t-tag">[XBOX]</span> Xbox Live Broadcast active: Server advertised to Friends List.</div>
+              <div class="terminal-line info"><span class="t-time">10:14:18</span> <span class="t-tag">[PLAYER]</span> Player connected: Steve, xuid: 2535418912837461</div>
+              <div class="terminal-line info"><span class="t-time">10:14:22</span> <span class="t-tag">[PLAYER]</span> Player connected: Alex, xuid: 2535418912839920</div>
+            </div>
+
+            <!-- Terminal Interactive Input -->
+            <form class="deck-terminal-input" id="sim-terminal-form">
+              <span class="prompt-sym font-mono">&gt;</span>
+              <input type="text" class="font-mono" id="sim-input" placeholder="Type a command (e.g. /time set day, /weather clear, /heal Steve)..." autocomplete="off">
+              <button type="submit" class="btn btn-secondary btn-sm">Send</button>
+            </form>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ==========================================================================
-         BENTO FEATURES GRID
+         SPOTLIGHT: 1-CLICK ADDON AUTO-INSTALLER (Recent Design & Inspora)
+         ========================================================================== -->
+    <section class="section addon-section" id="addon-installer">
+      <div class="container">
+        <div class="section-head text-center">
+          <div class="badge badge-emerald shiny-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Game-Changing Automation</span>
+          </div>
+          <h2 class="section-title">
+            1-Click Instant Addon Auto-Installer
+          </h2>
+          <p class="section-desc">
+            Installing Bedrock addons and mods has always been an exhausting, error-prone chore—renaming archives, hunting down subfolders, opening Notepad to copy cryptic UUID strings, and manually editing JSON manifests. <br>
+            <strong>FatGoats BSM+ completely eliminates the headache.</strong> Drag and drop any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code> file: our intelligent parser decompresses, splits BP/RP, extracts manifests, and injects valid active world configurations in under 1 second.
+          </p>
+        </div>
+
+        <!-- Interactive Drag-and-Drop Simulator Card -->
+        <div class="addon-simulator-card spotlight-card">
+          <div class="simulator-grid">
+            <!-- Dropzone Area -->
+            <div class="sim-dropzone" id="sim-addon-dropzone">
+              <div class="dropzone-icon">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <h3 class="dropzone-title">Click to Test 1-Click Install Demo</h3>
+              <p class="dropzone-desc">Simulate dropping <code>TrueWeapons_v4.2.mcaddon</code> (Behavior &amp; Resource packs)</p>
+              <div class="dropzone-badge font-mono">Supports .mcaddon • .mcpack • .zip</div>
+            </div>
+
+            <!-- Live Processing Pipeline Visualization -->
+            <div class="sim-pipeline">
+              <div class="pipeline-header">
+                <span class="pipeline-title font-mono">Automated Pipeline Inspector</span>
+                <span class="pipeline-time font-mono" id="pipeline-status">Ready</span>
+              </div>
+
+              <!-- Pipeline Progress Bar -->
+              <div class="pipeline-progress-track">
+                <div class="pipeline-progress-fill" id="pipeline-progress-fill"></div>
+              </div>
+
+              <!-- 4 Granular Automated Stages -->
+              <div class="pipeline-steps-list">
+                <div class="pipe-step" id="step-1">
+                  <div class="pipe-step-num font-mono">01</div>
+                  <div class="pipe-step-info">
+                    <div class="pipe-step-name">Instant Decompression</div>
+                    <div class="pipe-step-detail">Unpacks nested archives into isolated staging directory in &lt; 200ms.</div>
+                  </div>
+                  <div class="pipe-step-state font-mono" id="step-1-state">Waiting</div>
+                </div>
+
+                <div class="pipe-step" id="step-2">
+                  <div class="pipe-step-num font-mono">02</div>
+                  <div class="pipe-step-info">
+                    <div class="pipe-step-name">Deep Manifest &amp; Icon Parsing</div>
+                    <div class="pipe-step-detail">Extracts pack UUIDs, format version, and pack_icon.png without notepad.</div>
+                  </div>
+                  <div class="pipe-step-state font-mono" id="step-2-state">Waiting</div>
+                </div>
+
+                <div class="pipe-step" id="step-3">
+                  <div class="pipe-step-num font-mono">03</div>
+                  <div class="pipe-step-info">
+                    <div class="pipe-step-name">Intelligent BP &amp; RP Separation</div>
+                    <div class="pipe-step-detail">Routes behaviors to <code>behavior_packs/</code> and textures to <code>resource_packs/</code>.</div>
+                  </div>
+                  <div class="pipe-step-state font-mono" id="step-3-state">Waiting</div>
+                </div>
+
+                <div class="pipe-step" id="step-4">
+                  <div class="pipe-step-num font-mono">04</div>
+                  <div class="pipe-step-info">
+                    <div class="pipe-step-name">Atomic World UUID Injection</div>
+                    <div class="pipe-step-detail">Registers companion UUIDs into active world configs with zero JSON syntax errors.</div>
+                  </div>
+                  <div class="pipe-step-state font-mono" id="step-4-state">Waiting</div>
+                </div>
+              </div>
+
+              <div class="pipeline-success-banner" id="pipeline-success-banner">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Addon successfully installed and registered to active world in 0.84 seconds!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         BENTO FEATURES GRID (Godly, Land-Book, Collect UI)
          ========================================================================== -->
     <section class="section" id="features">
       <div class="container">
-        <div class="section-head">
-          <span class="section-tag">Enterprise Bedrock Architecture</span>
-          <h2 class="section-title">Engineered for Seamless Server Management</h2>
+        <div class="section-head text-center">
+          <div class="badge badge-cyan shiny-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 9 6 6"/><path d="m15 9-6 6"/></svg>
+            <span>Engineered for Bedrock</span>
+          </div>
+          <h2 class="section-title">Complete Administration Suite</h2>
           <p class="section-desc">
-            Everything you need to host, protect, and scale your Minecraft Bedrock realm with zero technical friction.
+            A comprehensive matrix of native tools built from the ground up for modern Bedrock Dedicated Server operators.
           </p>
         </div>
 
         <div class="bento-grid">
-          <!-- Row 1: Core Runtime (Wide 2-col) + Player Matrix (1-col) -->
-          <div class="bento-card bento-wide">
-            <div class="bento-badge">CORE RUNTIME</div>
-            <h3 class="bento-title">Native BDS Process Controller & Watchdog</h3>
+          <!-- Card 1: BDS Process Engine (Wide) -->
+          <div class="bento-card bento-wide spotlight-card">
+            <div class="bento-header">
+              <div class="bento-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+              <span class="bento-tag font-mono">Process Supervisor</span>
+            </div>
+            <h3 class="bento-title">Native BDS Process Controller &amp; Watchdog</h3>
             <p class="bento-desc">
               Directly spawns, supervises, and monitors the official Mojang <code>bedrock_server.exe</code> binary with unbuffered stdin/stdout pipes. Real-time CPU, RAM, and TPS telemetry with automatic crash detection and instant recovery.
             </p>
@@ -158,9 +354,15 @@
             </div>
           </div>
 
-          <div class="bento-card">
-            <div class="bento-badge">SECURITY & MODERATION</div>
-            <h3 class="bento-title">1-Click Player Controls & Banlist</h3>
+          <!-- Card 2: 1-Click Moderation -->
+          <div class="bento-card spotlight-card">
+            <div class="bento-header">
+              <div class="bento-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <span class="bento-tag font-mono">Security Matrix</span>
+            </div>
+            <h3 class="bento-title">1-Click Player Controls &amp; Banlist</h3>
             <p class="bento-desc">
               Execute instant 20 HP heals, saturation boosts, administrative kicks, and persistent bans saved directly to SQLite. Blocked players are automatically disconnected if they attempt to reconnect.
             </p>
@@ -172,55 +374,15 @@
             </div>
           </div>
 
-          <!-- Row 2: Addon Auto-Installer (Full 3-col Spotlight) -->
-          <div class="bento-card bento-full addon-spotlight-card">
-            <div class="bento-badge">🚀 GAME-CHANGING AUTOMATION • 1-CLICK INSTANT</div>
-            <h3 class="bento-title" style="font-size: 1.6rem; margin-top: 0.35rem;">Instant Addon & Mod Auto-Installer (.mcaddon, .mcpack, .zip)</h3>
-            <p class="bento-desc" style="max-width: 900px; font-size: 0.96rem; line-height: 1.65;">
-              Installing Bedrock addons used to be an exhausting chore—renaming files, hunting for nested folders, opening Notepad to copy cryptic UUID strings, and manually editing JSON. 
-              <strong>FatGoats BSM+ completely eliminates the headache:</strong> simply drag and drop any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code> file directly into the manager. In less than 1 second, our intelligent engine unpacks nested archives, auto-separates Behavior and Resource packs, extracts high-res icons and localized names, pairs sync groups, and injects valid UUID manifests directly into your active world. It's lightning-fast, 100% automated, and completely crash-proof!
-            </p>
-
-            <div class="addon-pipeline-steps">
-              <div class="pipeline-step">
-                <span class="step-num-badge">Step 01</span>
-                <div class="step-title">📥 Drag & Drop</div>
-                <div class="step-desc">Upload any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code> directly in your browser.</div>
+          <!-- Card 3: World Importer & Generator -->
+          <div class="bento-card spotlight-card">
+            <div class="bento-header">
+              <div class="bento-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
               </div>
-
-              <div class="pipeline-step">
-                <span class="step-num-badge">Step 02</span>
-                <div class="step-title">⚡ Deep Inspection</div>
-                <div class="step-desc">Reads <code>manifest.json</code>, extracts pack icons, and parses <code>en_US.lang</code> in &lt; 500ms.</div>
-              </div>
-
-              <div class="pipeline-step">
-                <span class="step-num-badge">Step 03</span>
-                <div class="step-title">🔄 Auto-Split BP & RP</div>
-                <div class="step-desc">Routes Behavior Packs to <code>behavior_packs/</code> and Resource Packs to <code>resource_packs/</code>.</div>
-              </div>
-
-              <div class="pipeline-step">
-                <span class="step-num-badge">Step 04</span>
-                <div class="step-title">✓ Atomic World Injection</div>
-                <div class="step-desc">Injects verified UUIDs into active world JSON configs without typing a single line of code.</div>
-              </div>
+              <span class="bento-tag font-mono">World Architecture</span>
             </div>
-
-            <div class="bento-tags">
-              <span>Drag & Drop .mcaddon</span>
-              <span>Sub-Second Extraction</span>
-              <span>Intelligent BP/RP Auto-Split</span>
-              <span>Paired Sync Groups</span>
-              <span>Zero-Crash JSON Guard</span>
-              <span>Under 1 Second</span>
-            </div>
-          </div>
-
-          <!-- Row 3: Worlds (1-col) + Backups (1-col) + Tunneling (1-col) -->
-          <div class="bento-card">
-            <div class="bento-badge">WORLDS & GENERATION</div>
-            <h3 class="bento-title">World Importer & Custom Generator</h3>
+            <h3 class="bento-title">World Importer &amp; Custom Generator</h3>
             <p class="bento-desc">
               Import <code>.mcworld</code> zip archives with automatic directory unpack and <code>levelname.txt</code> inspection. Generate brand-new worlds with custom seeds, gamemodes, and presets with a single click.
             </p>
@@ -231,11 +393,17 @@
             </div>
           </div>
 
-          <div class="bento-card">
-            <div class="bento-badge">DISASTER RECOVERY</div>
-            <h3 class="bento-title">Zero-Corruption Backup Snapshots</h3>
+          <!-- Card 4: Disaster Recovery Safe Snapshots -->
+          <div class="bento-card spotlight-card">
+            <div class="bento-header">
+              <div class="bento-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              </div>
+              <span class="bento-tag font-mono">Zero Corruption</span>
+            </div>
+            <h3 class="bento-title">LevelDB Safe Snapshots (Save Hold)</h3>
             <p class="bento-desc">
-              Issues Mojang-compliant <code>save hold</code> and <code>save query</code> commands to freeze world LevelDB chunks before archiving, guaranteeing 100% corruption-free zip snapshots with automated cron scheduling.
+              Issues official Mojang <code>save hold</code> and <code>save query</code> commands to freeze world LevelDB chunks before archiving, guaranteeing 100% corruption-free zip snapshots with automated cron scheduling.
             </p>
             <div class="bento-tags">
               <span>Save Hold Protocol</span>
@@ -244,9 +412,15 @@
             </div>
           </div>
 
-          <div class="bento-card">
-            <div class="bento-badge">NETWORKING</div>
-            <h3 class="bento-title">Playit Tunneling & Zero Port Forwarding</h3>
+          <!-- Card 5: Playit Tunneling -->
+          <div class="bento-card spotlight-card">
+            <div class="bento-header">
+              <div class="bento-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </div>
+              <span class="bento-tag font-mono">CGNAT Bypass</span>
+            </div>
+            <h3 class="bento-title">Playit Tunneling &amp; Zero Port Forwarding</h3>
             <p class="bento-desc">
               Host your Bedrock server behind strict CGNAT, college dorms, or home routers without configuring port forwarding. Integrated Playit connector allocates a global public Bedrock IP/port automatically.
             </p>
@@ -257,9 +431,14 @@
             </div>
           </div>
 
-          <!-- Row 4: Xbox Friend Bridging (1-col) + In-App Updates (1-col) + Windows Tray (1-col) -->
-          <div class="bento-card">
-            <div class="bento-badge">CROSSPLAY BRIDGE</div>
+          <!-- Card 6: Xbox Console Crossplay -->
+          <div class="bento-card spotlight-card">
+            <div class="bento-header">
+              <div class="bento-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+              </div>
+              <span class="bento-tag font-mono">Console Bridge</span>
+            </div>
             <h3 class="bento-title">MCXboxBroadcast Friend Bridging</h3>
             <p class="bento-desc">
               Authenticate with your Microsoft Xbox Live account. The server advertises itself directly to your Xbox Friends List, allowing console players on Xbox Series X/S, PS5, and Switch to join from their Friends tab without DNS tricks.
@@ -271,8 +450,14 @@
             </div>
           </div>
 
-          <div class="bento-card">
-            <div class="bento-badge">MAINTENANCE</div>
+          <!-- Card 7: Safe In-App Updater -->
+          <div class="bento-card spotlight-card">
+            <div class="bento-header">
+              <div class="bento-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              </div>
+              <span class="bento-tag font-mono">Continuous Delivery</span>
+            </div>
             <h3 class="bento-title">Safe Git Pull In-App Updater</h3>
             <p class="bento-desc">
               Fetch and apply updates directly from GitHub with a single click. The updater re-builds client assets and recompiles executables while strictly safeguarding user databases, worlds, and configs.
@@ -284,9 +469,15 @@
             </div>
           </div>
 
-          <div class="bento-card">
-            <div class="bento-badge">NATIVE SYSTEM</div>
-            <h3 class="bento-title">Native Windows System Tray Minimization</h3>
+          <!-- Card 8: Windows Native System Tray Minimization -->
+          <div class="bento-card spotlight-card">
+            <div class="bento-header">
+              <div class="bento-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <span class="bento-tag font-mono">System Tray Watchdog</span>
+            </div>
+            <h3 class="bento-title">Windows System Tray Minimization</h3>
             <p class="bento-desc">
               Keep your server running 24/7 without terminal clutter. Minimizes quietly to the Windows system tray with status icons, right-click control menus, and instant browser opening.
             </p>
@@ -296,24 +487,27 @@
               <span>Auto-Start on Boot</span>
             </div>
           </div>
-        </div></div>
+        </div>
       </div>
     </section>
 
     <!-- ==========================================================================
-         COMPARISON TABLE
+         COMPARISON BENCHMARK TABLE (CTA Gallery & Landdding)
          ========================================================================== -->
     <section class="section" id="comparison">
       <div class="container">
-        <div class="section-head">
-          <span class="section-tag">Feature Benchmark</span>
+        <div class="section-head text-center">
+          <div class="badge badge-purple shiny-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            <span>Feature Benchmark</span>
+          </div>
           <h2 class="section-title">Why Server Owners Choose FatGoats BSM+</h2>
           <p class="section-desc">
-            Compare standard Mojang BDS command line hosting against FatGoats Bedrock Server Manager+.
+            Compare standard Mojang BDS command line hosting against generic web panels and FatGoats BSM+.
           </p>
         </div>
 
-        <div class="comparison-wrap">
+        <div class="comparison-wrap spotlight-card">
           <table class="compare-table">
             <thead>
               <tr>
@@ -325,58 +519,58 @@
             </thead>
             <tbody>
               <tr>
-                <td class="compare-feature-cell">Real-Time Interactive Console & Logs</td>
-                <td>⚠️ Command Prompt Only</td>
-                <td>✓ Basic Text Log</td>
-                <td class="col-highlight">✓ Real-Time Stream + ANSI Syntax Highlighting</td>
+                <td class="compare-feature-cell">Real-Time Interactive Console &amp; ANSI Logs</td>
+                <td class="status-warn">Command Prompt Only</td>
+                <td class="status-neutral">Basic Text Log</td>
+                <td class="col-highlight status-good">✓ Real-Time Stream + ANSI Syntax Highlighting</td>
               </tr>
               <tr>
-                <td class="compare-feature-cell">Instant Player Actions (Heal, Feed, Kick, Ban)</td>
-                <td>❌ Manual Console Commands</td>
-                <td>⚠️ Kick/Ban Only</td>
-                <td class="col-highlight">✓ 1-Click Instant Heal (20 HP), Saturation, Kick & Persistent Ban</td>
+                <td class="compare-feature-cell">Instant 1-Click Player Moderation (Heal, Feed, Kick, Ban)</td>
+                <td class="status-bad">Manual Console Commands</td>
+                <td class="status-warn">Kick/Ban Only</td>
+                <td class="col-highlight status-good">✓ 1-Click Instant Heal (20 HP), Saturation, Kick &amp; Persistent Ban</td>
+              </tr>
+              <tr>
+                <td class="compare-feature-cell">1-Click Addon Auto-Installer (.mcaddon, .mcpack, .zip)</td>
+                <td class="status-bad">Manual Zip Extraction &amp; JSON Manifest Editing</td>
+                <td class="status-warn">Slow FTP Upload, No Auto-Registration</td>
+                <td class="col-highlight status-good">✓ 1-Click Instant Auto-Installer: Splits BP/RP &amp; Injects UUIDs in &lt; 1s</td>
               </tr>
               <tr>
                 <td class="compare-feature-cell">World Importer (.mcworld Zip Support)</td>
-                <td>❌ Manual Folder Renaming</td>
-                <td>❌ Unzip via FTP</td>
-                <td class="col-highlight">✓ Drag-and-Drop .mcworld Import with Auto Level Parsing</td>
+                <td class="status-bad">Manual Folder Renaming</td>
+                <td class="status-bad">Unzip via FTP</td>
+                <td class="col-highlight status-good">✓ Drag-and-Drop .mcworld Import with Auto Level Parsing</td>
               </tr>
               <tr>
-                <td class="compare-feature-cell">Built-in World Generator</td>
-                <td>❌ Manual server.properties Edit</td>
-                <td>❌ External Tools</td>
-                <td class="col-highlight">✓ Instant Custom Seeds, Gamemodes & Presets Generator</td>
+                <td class="compare-feature-cell">Built-in Custom World Generator</td>
+                <td class="status-bad">Manual server.properties Edit</td>
+                <td class="status-bad">External Tools</td>
+                <td class="col-highlight status-good">✓ Instant Custom Seeds, Gamemodes &amp; Presets Generator</td>
               </tr>
               <tr>
-                <td class="compare-feature-cell">Zero-Port CGNAT Bypass (Playit & Cloudflare)</td>
-                <td>❌ Requires Router Port Forward</td>
-                <td>❌ Requires Public IP</td>
-                <td class="col-highlight">✓ Built-in Playit Tunneling & Public Host Allocation</td>
+                <td class="compare-feature-cell">Zero-Port CGNAT Bypass (Playit Tunnel)</td>
+                <td class="status-bad">Requires Router Port Forward</td>
+                <td class="status-bad">Requires Public IP</td>
+                <td class="col-highlight status-good">✓ Built-in Playit Tunneling &amp; Public Host Allocation</td>
               </tr>
               <tr>
                 <td class="compare-feature-cell">Xbox Console Crossplay Bridging</td>
-                <td>❌ Complex DNS Tweaks</td>
-                <td>❌ Not Supported</td>
-                <td class="col-highlight">✓ Native Xbox Live Friends List Broadcaster</td>
+                <td class="status-bad">Complex DNS Tweaks</td>
+                <td class="status-bad">Not Supported</td>
+                <td class="col-highlight status-good">✓ Native Xbox Live Friends List Broadcaster</td>
               </tr>
               <tr>
                 <td class="compare-feature-cell">Safe Live Backup Protocol (Save Hold)</td>
-                <td>❌ Manual Copy (High Risk of Corruption)</td>
-                <td>⚠️ Crude Process Pause</td>
-                <td class="col-highlight">✓ Official Mojang Save Hold/Query File Freezing</td>
+                <td class="status-bad">Manual Copy (High Corruption Risk)</td>
+                <td class="status-warn">Crude Process Pause</td>
+                <td class="col-highlight status-good">✓ Official Mojang Save Hold/Query File Freezing</td>
               </tr>
               <tr>
-                <td class="compare-feature-cell">Addon & Mod Auto-Installer (.mcaddon, .mcpack, .zip)</td>
-                <td>❌ Manual Zip Unpack, UUID Extraction, Notepad JSON Editing</td>
-                <td>⚠️ Slow Manual File Uploads, No Auto-Registration</td>
-                <td class="col-highlight">✓ 1-Click Instant Auto-Installer: Splits BP/RP & Injects Active World UUIDs in &lt; 1s</td>
-              </tr>
-              <tr>
-                <td class="compare-feature-cell">Windows System Tray Minimization</td>
-                <td>❌ Clutter Desktop Window</td>
-                <td>❌ Browser Only</td>
-                <td class="col-highlight">✓ Native Windows Tray Watchdog</td>
+                <td class="compare-feature-cell">Native Windows System Tray Minimization</td>
+                <td class="status-bad">Cluttered Desktop Window</td>
+                <td class="status-bad">Browser Only</td>
+                <td class="col-highlight status-good">✓ Native Windows C# System Tray Watchdog</td>
               </tr>
             </tbody>
           </table>
@@ -385,13 +579,16 @@
     </section>
 
     <!-- ==========================================================================
-         DOWNLOADS & RELEASES SECTION
+         DOWNLOADS & RELEASES SECTION (CTA Gallery & Collect UI)
          ========================================================================== -->
     <section class="section" id="downloads">
       <div class="container">
-        <div class="section-head">
-          <span class="section-tag">Official Releases</span>
-          <h2 class="section-title">Download Pre-Built Executables</h2>
+        <div class="section-head text-center">
+          <div class="badge badge-emerald shiny-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Pre-Compiled Binaries</span>
+          </div>
+          <h2 class="section-title">Download Official Executables</h2>
           <p class="section-desc">
             Download verified native Windows executables compiled directly from the open-source GitHub repository.
           </p>
@@ -399,129 +596,124 @@
 
         <div class="download-cards-grid">
           <!-- Card 1: Setup Installer -->
-          <div class="download-card featured">
-            <div class="download-badge">RECOMMENDED FOR MOST USERS</div>
+          <div class="download-card featured spotlight-card">
+            <div class="download-badge font-mono">RECOMMENDED FOR MOST USERS</div>
             <div class="download-header">
-              <div class="download-icon">📦</div>
+              <div class="download-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
               <div>
-                <h3 class="download-name">BedrockServerManager-Setup.exe</h3>
-                <span class="download-version">Latest Release • Windows 10/11 x64</span>
+                <h3 class="download-name font-mono">BedrockServerManager-Setup.exe</h3>
+                <span class="download-version font-mono">v1.2.5 • Windows 10/11 x64</span>
               </div>
             </div>
             <p class="download-desc">
-              All-in-one automated Windows installer. Checks system prerequisites, provisions required runtimes, configures the native system tray watchdog, and sets up desktop shortcuts.
+              All-in-one automated Windows installer. Verifies system prerequisites, provisions required dependencies, configures the native system tray watchdog, and creates desktop shortcuts.
             </p>
             <ul class="download-features-list">
-              <li>✓ Interactive setup & configuration wizard</li>
-              <li>✓ Automatic desktop & start menu shortcuts</li>
-              <li>✓ Integrated background tray launcher</li>
-              <li>✓ In-place safe updater preservation</li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Interactive setup &amp; configuration wizard</span></li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Automatic desktop &amp; start menu shortcuts</span></li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Integrated background tray launcher</span></li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Zero data loss in-place updates</span></li>
             </ul>
-            <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases/latest/download/BedrockServerManager-Setup.exe" class="btn btn-primary btn-lg btn-block">
-              <span>⬇️ Download Installer (.exe)</span>
+            <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases/latest/download/BedrockServerManager-Setup.exe" class="btn btn-primary btn-lg btn-block magnetic-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Download Installer (.exe)</span>
             </a>
           </div>
 
           <!-- Card 2: Portable System Tray Launcher -->
-          <div class="download-card">
-            <div class="download-badge">PORTABLE / ADVANCED</div>
+          <div class="download-card spotlight-card">
+            <div class="download-badge font-mono">PORTABLE / ADVANCED</div>
             <div class="download-header">
-              <div class="download-icon">⚙️</div>
+              <div class="download-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </div>
               <div>
-                <h3 class="download-name">BedrockServerManager.exe</h3>
-                <span class="download-version">Standalone Binary • 25 KB</span>
+                <h3 class="download-name font-mono">BedrockServerManager.exe</h3>
+                <span class="download-version font-mono">Standalone Binary • 25 KB</span>
               </div>
             </div>
             <p class="download-desc">
               Lightweight native C# Windows system tray watchdog executable. Place directly into your server root to manage server state and open the dashboard from the Windows notification area.
             </p>
             <ul class="download-features-list">
-              <li>✓ Zero installation or registry entries required</li>
-              <li>✓ Quiet Windows notification area minimization</li>
-              <li>✓ 1-click server start, stop, and dashboard launch</li>
-              <li>✓ Fast native .NET Framework execution</li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Zero installation or registry changes</span></li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Quiet Windows notification area minimization</span></li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>1-click start, stop, and dashboard launch</span></li>
+              <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Fast native .NET execution</span></li>
             </ul>
-            <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases/latest/download/BedrockServerManager.exe" class="btn btn-secondary btn-lg btn-block">
-              <span>⬇️ Download Standalone (.exe)</span>
+            <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases/latest/download/BedrockServerManager.exe" class="btn btn-secondary btn-lg btn-block magnetic-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>Download Standalone (.exe)</span>
             </a>
           </div>
         </div>
 
-        <div class="all-releases-banner">
-          <div class="banner-left">
-            <h4>Looking for Previous Releases or Source Archives?</h4>
-            <p>Every release includes compiled executables, commit checksums, changelogs, and full source code.</p>
+        <!-- Developer Quick Start (Terminal & Git) -->
+        <div class="install-box spotlight-card">
+          <div class="install-header">
+            <h3 class="install-title">Developer Quick Start (Terminal &amp; Git)</h3>
+            <p class="install-sub">Build and run directly from source on any Windows 10/11 or Windows Server system:</p>
           </div>
-          <div class="banner-right">
-            <a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-              <span>📂 View All GitHub Releases ↗</span>
-            </a>
+
+          <div class="code-blocks-list">
+            <div class="code-block font-mono">
+              <span class="code-text">git clone https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus.git</span>
+              <button class="copy-btn font-mono" data-copy="git clone https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus.git">Copy</button>
+            </div>
+            <div class="code-block font-mono">
+              <span class="code-text">npm run setup</span>
+              <button class="copy-btn font-mono" data-copy="npm run setup">Copy</button>
+            </div>
+            <div class="code-block font-mono">
+              <span class="code-text">npm start</span>
+              <button class="copy-btn font-mono" data-copy="npm start">Copy</button>
+            </div>
           </div>
-        </div>
 
-        <!-- Developer Setup -->
-        <div class="install-box" style="margin-top: 3rem;">
-          <div>
-            <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 0.75rem;">
-              Developer Quick Start (Terminal & Git)
-            </h3>
-            <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 1.25rem;">
-              Run and build the manager directly from source on any Windows 10/11 or Windows Server system:
-            </p>
-
-            <div class="code-block" style="margin-bottom: 0.75rem;">
-              <span>git clone https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus.git</span>
-              <button class="copy-btn" data-copy="git clone https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus.git">Copy</button>
-            </div>
-
-            <div class="code-block" style="margin-bottom: 0.75rem;">
-              <span>npm run setup</span>
-              <button class="copy-btn" data-copy="npm run setup">Copy</button>
-            </div>
-
-            <div class="code-block" style="margin-bottom: 1.25rem;">
-              <span>npm start</span>
-              <button class="copy-btn" data-copy="npm start">Copy</button>
-            </div>
-
-            <span class="badge badge-cyan">✓ Node.js 18+ Supported</span>
-            <span class="badge badge-emerald" style="margin-left: 0.5rem;">✓ SQLite & WASM Built-in</span>
+          <div class="install-tags">
+            <span class="badge badge-cyan font-mono">Node.js 18+ Supported</span>
+            <span class="badge badge-emerald font-mono">SQLite &amp; WASM Built-in</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ==========================================================================
-         FAQ SECTION
+         FAQ SECTION (Land-Book & Collect UI)
          ========================================================================== -->
     <section class="section" id="faq">
       <div class="container">
-        <div class="section-head">
-          <span class="section-tag">Frequently Asked Questions</span>
-          <h2 class="section-title">Got Questions? We Have Answers.</h2>
+        <div class="section-head text-center">
+          <div class="badge badge-cyan shiny-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Documentation &amp; FAQ</span>
+          </div>
+          <h2 class="section-title">Frequently Asked Questions</h2>
           <p class="section-desc">
             Everything you need to know about system requirements, data preservation, and hosting.
           </p>
         </div>
 
         <div class="faq-grid">
-          <div class="faq-card">
+          <div class="faq-card spotlight-card open">
             <div class="faq-header">
               <span class="faq-question">How does the 1-Click Addon Auto-Installer work, and why is it so fast?</span>
-              <span class="faq-arrow">▼</span>
+              <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-body">
               <p>
                 <strong>Zero technical setup.</strong> Normally, adding mods and addons to Minecraft Bedrock Dedicated Server is painful: you have to extract zip archives, dig through nested folders, open <code>manifest.json</code> in a text editor to hunt down 36-character UUID strings and version headers, manually copy files into <code>bds/behavior_packs/</code> and <code>bds/resource_packs/</code>, and format JSON in <code>world_behavior_packs.json</code> (where a single comma error crashes your server).<br><br>
-                With FatGoats BSM+, you simply drag and drop any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code> file into the panel. In less than 1 second, the engine decompresses the archive, automatically separates Behavior and Resource packs, extracts high-res icons and localized names from <code>en_US.lang</code>, pairs companion packs into sync groups, and injects verified UUID manifests directly into your active world. It is instantaneous, 100% automated, and completely crash-proof!
+                With FatGoats BSM+, you simply drag and drop any <code>.mcaddon</code>, <code>.mcpack</code>, or <code>.zip</code> file into the panel. In less than 1 second, the engine decompresses the archive, automatically separates Behavior and Resource packs, extracts high-res icons and localized names from <code>en_US.lang</code>, pairs companion packs into sync groups, and injects verified UUID manifests directly into your active world. It is instantaneous, 100% automated, and completely crash-proof.
               </p>
             </div>
           </div>
 
-          <div class="faq-card open">
+          <div class="faq-card spotlight-card">
             <div class="faq-header">
               <span class="faq-question">Will updating the manager delete my Minecraft worlds or databases?</span>
-              <span class="faq-arrow">▼</span>
+              <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-body">
               <p>
@@ -530,10 +722,10 @@
             </div>
           </div>
 
-          <div class="faq-card">
+          <div class="faq-card spotlight-card">
             <div class="faq-header">
               <span class="faq-question">How does Instant Heal and Food Restore work?</span>
-              <span class="faq-arrow">▼</span>
+              <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-body">
               <p>
@@ -542,10 +734,10 @@
             </div>
           </div>
 
-          <div class="faq-card">
+          <div class="faq-card spotlight-card">
             <div class="faq-header">
               <span class="faq-question">Can players on Xbox, PlayStation, or Nintendo Switch join my server?</span>
-              <span class="faq-arrow">▼</span>
+              <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-body">
               <p>
@@ -554,10 +746,10 @@
             </div>
           </div>
 
-          <div class="faq-card">
+          <div class="faq-card spotlight-card">
             <div class="faq-header">
               <span class="faq-question">Do I need to forward UDP port 19132 on my home router?</span>
-              <span class="faq-arrow">▼</span>
+              <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-body">
               <p>
@@ -566,22 +758,10 @@
             </div>
           </div>
 
-          <div class="faq-card">
-            <div class="faq-header">
-              <span class="faq-question">What Windows versions are supported?</span>
-              <span class="faq-arrow">▼</span>
-            </div>
-            <div class="faq-body">
-              <p>
-                Windows 10 (64-bit), Windows 11 (64-bit), and Windows Server 2016/2019/2022. The native tray watchdog and installer are built on .NET Framework 4.5+ which is pre-installed on modern Windows editions.
-              </p>
-            </div>
-          </div>
-
-          <div class="faq-card">
+          <div class="faq-card spotlight-card">
             <div class="faq-header">
               <span class="faq-question">How are backups prevented from corrupting during gameplay?</span>
-              <span class="faq-arrow">▼</span>
+              <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="faq-body">
               <p>
@@ -593,26 +773,34 @@
       </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer (Footer Design) -->
     <footer class="footer">
       <div class="container footer-container">
         <div class="footer-brand">
-          <div class="brand-link" style="margin-bottom: 0.5rem;">
-            <div class="brand-logo-icon">🟩</div>
-            <span class="brand-name">FatGoats BSM+</span>
+          <div class="brand-link" style="margin-bottom: 0.75rem;">
+            <div class="brand-icon">
+              <svg viewBox="0 0 64 64" width="22" height="22" fill="none">
+                <polygon points="32,8 54,20 32,32 10,20" fill="#34d399" />
+                <polygon points="10,20 32,32 32,56 10,44" fill="#10b981" />
+                <polygon points="32,32 54,20 54,44 32,56" fill="#047857" />
+                <path d="M32 24v16M24 32h16" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <span class="brand-title">FatGoats BSM+</span>
           </div>
-          <p style="font-size: 0.85rem; color: #64748b; max-width: 380px;">
-            Open-source full-stack management suite for Minecraft Bedrock Dedicated Server. Engineered with Node.js, Express, React, SQLite, and native Windows C#.
+          <p class="footer-desc">
+            Next-generation full-stack administration suite for Minecraft Bedrock Dedicated Server. Engineered with Node.js, Express, React, SQLite, and native Windows C#.
           </p>
         </div>
 
         <div class="footer-links-group">
           <h4>Navigation</h4>
           <ul>
+            <li><a href="#hero">Overview</a></li>
+            <li><a href="#addon-installer">Addon Installer</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#comparison">Comparison</a></li>
             <li><a href="#downloads">Downloads</a></li>
-            <li><a href="#faq">FAQ</a></li>
           </ul>
         </div>
 
@@ -621,7 +809,7 @@
           <ul>
             <li><a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus" target="_blank" rel="noopener noreferrer">Repository</a></li>
             <li><a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/releases" target="_blank" rel="noopener noreferrer">All Releases</a></li>
-            <li><a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/issues" target="_blank" rel="noopener noreferrer">Issues & Feedback</a></li>
+            <li><a href="https://github.com/youngtoaster/FatGoats-Bedrock-Server-Manager-Plus/issues" target="_blank" rel="noopener noreferrer">Issues &amp; Feedback</a></li>
           </ul>
         </div>
 
@@ -636,7 +824,7 @@
 
       <div class="container footer-bottom">
         <div>
-          <span>© 2026 youngtoaster & FatGoats. Released under the MIT License.</span>
+          <span>&copy; 2026 youngtoaster &amp; FatGoats. Released under the MIT License.</span>
         </div>
         <div>
           <span>Minecraft is a trademark of Mojang Synergies AB. Not an official Minecraft product.</span>
@@ -647,7 +835,10 @@
 
   <!-- Interactive Floating Toast -->
   <div id="showcase-toast" class="showcase-toast">
-    <span>✓</span> <span>Action executed</span>
+    <span class="toast-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    </span>
+    <span class="toast-message">Action executed</span>
   </div>
 
   <script src="app.js"></script>

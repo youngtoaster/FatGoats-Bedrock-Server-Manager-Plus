@@ -103,6 +103,29 @@ export const Layout = () => {
     };
   }, []);
 
+  // React Bits Spotlight Card radial glare mouse tracking engine
+  useEffect(() => {
+    let ticking = false;
+    const handleMouseMove = (e) => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const card = e.target.closest(
+            '.modern-card, .telemetry-card, .hero-status-panel, .panel-card, .backup-card, .world-card, .addon-card, .gameplay-controls-card, .spotlight-card'
+          );
+          if (card) {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+            card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const handleStartAll = async () => {
     setActionLoading('start-all');
     try {
