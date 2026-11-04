@@ -14,7 +14,13 @@ import {
   ExternalLink,
   ShieldCheck,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  GitCommit,
+  Package,
+  Layers,
+  Cpu,
+  HardDrive,
+  Check
 } from 'lucide-react';
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../api';
@@ -56,7 +62,46 @@ export const Settings = () => {
     stage: 1,
     progress: 'Preparing application update environment...',
   });
+  const [updateDisplayPercent, setUpdateDisplayPercent] = useState(10);
   const updatePollRef = useRef(null);
+  const updateTickerRef = useRef(null);
+  const updateTargetPercentRef = useRef(10);
+  const updateLastChangeRef = useRef(Date.now());
+
+  // Smooth live visual interpolation ticker so Settings updates progress never freezes
+  useEffect(() => {
+    if (!updatingApp) {
+      if (updateTickerRef.current) clearInterval(updateTickerRef.current);
+      return;
+    }
+
+    updateTickerRef.current = setInterval(() => {
+      setUpdateDisplayPercent((prev) => {
+        const target = updateTargetPercentRef.current;
+        if (target >= 100) return 100;
+
+        if (prev < target) {
+          const step = Math.max(0.35, (target - prev) * 0.16);
+          return Math.min(target, prev + step);
+        }
+
+        // Gently creep forward during long compiles (Vite build, csc) so progress never feels frozen
+        const elapsed = Date.now() - updateLastChangeRef.current;
+        if (elapsed > 800 && prev < 98) {
+          const maxCreep = Math.min(target + 3.5, 96);
+          if (prev < maxCreep) {
+            return prev + 0.05;
+          }
+        }
+
+        return prev;
+      });
+    }, 50);
+
+    return () => {
+      if (updateTickerRef.current) clearInterval(updateTickerRef.current);
+    };
+  }, [updatingApp]);
 
   // Active Settings Tab ('portal' | 'automation' | 'admin' | 'updates' | 'all')
   const [activeTab, setActiveTab] = useState('portal');
@@ -286,10 +331,13 @@ export const Settings = () => {
   const handleApplyAppUpdate = async () => {
     if (!window.confirm('Apply latest updates from GitHub? All worlds, databases, player data, and configurations are 100% preserved.')) return;
     setUpdatingApp(true);
+    updateTargetPercentRef.current = 15;
+    updateLastChangeRef.current = Date.now();
+    setUpdateDisplayPercent(15);
     setUpdateProgressData({
       percent: 15,
       stage: 1,
-      progress: 'Creating safety backup of database...',
+      progress: 'Creating safety backup of database and configurations...',
     });
 
     if (updatePollRef.current) clearInterval(updatePollRef.current);
@@ -297,18 +345,25 @@ export const Settings = () => {
       try {
         const p = await api.Updates.getProgress();
         if (p) {
+          const newTarget = Math.max(updateTargetPercentRef.current, p.percent || 10);
+          if (newTarget !== updateTargetPercentRef.current) {
+            updateTargetPercentRef.current = newTarget;
+            updateLastChangeRef.current = Date.now();
+          }
           setUpdateProgressData((prev) => ({
-            percent: Math.max(prev.percent, p.percent || 10),
+            percent: newTarget,
             stage: p.stage || prev.stage || 1,
             progress: p.progress || prev.progress,
           }));
         }
       } catch (_) {}
-    }, 600);
+    }, 400);
 
     try {
       const res = await api.Updates.apply();
       if (updatePollRef.current) clearInterval(updatePollRef.current);
+      updateTargetPercentRef.current = 100;
+      setUpdateDisplayPercent(100);
       setUpdateProgressData({
         percent: 100,
         stage: 5,
@@ -1139,19 +1194,40 @@ export const Settings = () => {
               {/* Status Display */}
               <div className="mb-4">
                 {updateStatus?.updateAvailable ? (
-                  <div className="p-4 rounded-xl mb-4" style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
+                  <div
+                    className="p-4 rounded-xl mb-4"
+                    style={{
+                      background: 'rgba(217, 119, 54, 0.08)',
+                      border: '1px solid rgba(217, 119, 54, 0.3)',
+                      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.45)',
+                    }}
+                  >
                     <div className="d-flex items-center justify-between flex-wrap gap-2 mb-2">
                       <div className="d-flex items-center gap-2">
-                        <ArrowUpCircle size={20} className="text-emerald" />
-                        <strong className="text-white text-base">New Version Available on GitHub!</strong>
+                        <ArrowUpCircle size={20} style={{ color: 'var(--copper, #d97736)' }} />
+                        <strong className="text-white text-base">New Version Available on GitHub</strong>
                       </div>
-                      <span className="badge badge-warning font-bold text-xs">
+                      <span
+                        className="badge font-bold text-xs"
+                        style={{
+                          background: 'rgba(217, 119, 54, 0.15)',
+                          color: 'var(--copper, #d97736)',
+                          border: '1px solid rgba(217, 119, 54, 0.3)',
+                        }}
+                      >
                         {updateStatus.commitsBehind} New Commit{updateStatus.commitsBehind !== 1 ? 's' : ''}
                       </span>
                     </div>
 
-                    <div className="font-mono text-xs text-sub mb-3 p-2.5 rounded bg-darker">
-                      Latest Remote Commit: <strong className="text-emerald">#{updateStatus.remoteCommit}</strong>
+                    <div
+                      className="font-mono text-xs mb-3 p-2.5 rounded"
+                      style={{
+                        background: 'var(--bg-input, #0d0e11)',
+                        border: '1px solid var(--border-subtle, rgba(240, 235, 225, 0.08))',
+                        color: 'var(--text-sub, #a39e94)',
+                      }}
+                    >
+                      Latest Remote Commit: <strong style={{ color: 'var(--copper, #d97736)' }}>#{updateStatus.remoteCommit}</strong>
                       {updateStatus.remoteCommitDate && <span> ({updateStatus.remoteCommitDate})</span>}
                       <br />
                       <span className="text-white font-sans mt-1 d-block font-medium">
@@ -1161,13 +1237,21 @@ export const Settings = () => {
 
                     {updateStatus.changelog && updateStatus.changelog.length > 0 && (
                       <div className="mb-3">
-                        <span className="text-2xs text-sub uppercase font-semibold mb-1 d-block">Recent Commits:</span>
-                        <div className="max-h-36 overflow-y-auto bg-darker p-2.5 rounded text-xs space-y-1 font-mono">
+                        <span className="text-2xs uppercase font-semibold mb-1 d-block" style={{ color: 'var(--text-muted, #78746c)', letterSpacing: '0.05em' }}>
+                          Recent Commits:
+                        </span>
+                        <div
+                          className="max-h-36 overflow-y-auto p-2.5 rounded text-xs space-y-1 font-mono"
+                          style={{
+                            background: 'var(--bg-input, #0d0e11)',
+                            border: '1px solid var(--border-subtle, rgba(240, 235, 225, 0.08))',
+                          }}
+                        >
                           {updateStatus.changelog.map((c, idx) => (
                             <div key={idx} className="d-flex items-baseline gap-2">
-                              <span className="text-emerald text-2xs">#{c.hash}</span>
-                              <span className="text-white font-sans text-xs truncate flex-1">{c.subject}</span>
-                              <span className="text-sub text-2xs shrink-0 font-sans">{c.date}</span>
+                              <span style={{ color: 'var(--copper, #d97736)', fontSize: '0.7rem' }}>#{c.hash}</span>
+                              <span className="font-sans text-xs truncate flex-1" style={{ color: 'var(--text-main, #ded9cf)' }}>{c.subject}</span>
+                              <span className="text-2xs shrink-0 font-sans" style={{ color: 'var(--text-muted, #78746c)' }}>{c.date}</span>
                             </div>
                           ))}
                         </div>
@@ -1179,35 +1263,47 @@ export const Settings = () => {
                       <div className="update-progress-container mb-4">
                         <div className="update-progress-header">
                           <div>
-                            <span className="text-xs uppercase font-bold text-sub d-block">Applying Update</span>
+                            <span className="text-2xs uppercase font-bold text-sub d-block" style={{ letterSpacing: '0.08em' }}>
+                              Pipeline Execution
+                            </span>
                             <strong className="text-white text-sm">Automated Pipeline in Progress</strong>
                           </div>
-                          <span className="update-progress-percentage">{updateProgressData.percent}%</span>
+                          <div className="d-flex items-baseline gap-1">
+                            <span className="update-progress-percentage">{Math.min(100, Math.round(updateDisplayPercent))}%</span>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted, #78746c)', fontFamily: 'var(--font-mono, monospace)' }}>
+                              / 100%
+                            </span>
+                          </div>
                         </div>
 
                         <div className="update-progress-track">
                           <div
                             className="update-progress-fill"
-                            style={{ width: `${updateProgressData.percent}%` }}
+                            style={{ width: `${updateDisplayPercent}%` }}
                           />
                         </div>
 
                         <div className="update-steps-stepper">
                           {[
-                            { num: 1, label: 'Safety Backup', icon: '' },
-                            { num: 2, label: 'Pull Commits', icon: '' },
-                            { num: 3, label: 'Dependencies', icon: '' },
-                            { num: 4, label: 'Build Client', icon: '⚡' },
-                            { num: 5, label: 'Launcher Binary', icon: '' },
+                            { num: 1, label: 'Safety Backup', icon: HardDrive },
+                            { num: 2, label: 'Pull Commits', icon: GitCommit },
+                            { num: 3, label: 'Dependencies', icon: Package },
+                            { num: 4, label: 'Build Client', icon: Layers },
+                            { num: 5, label: 'Launcher Binary', icon: Cpu },
                           ].map((s) => {
-                            const isDone = updateProgressData.stage > s.num;
-                            const isActive = updateProgressData.stage === s.num;
+                            const isDone = updateProgressData.stage > s.num || Math.round(updateDisplayPercent) >= s.num * 20;
+                            const isActive = updateProgressData.stage === s.num && !isDone;
+                            const IconComp = s.icon;
                             return (
                               <div
                                 key={s.num}
                                 className={`update-step-pill ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''}`}
                               >
-                                <span>{isDone ? '✓' : s.num}</span>
+                                {isDone ? (
+                                  <Check size={13} style={{ color: 'var(--emerald, #3fa66a)', flexShrink: 0 }} />
+                                ) : (
+                                  <IconComp size={13} style={{ flexShrink: 0, opacity: isActive ? 1 : 0.6 }} />
+                                )}
                                 <span className="truncate">{s.label}</span>
                               </div>
                             );
@@ -1216,7 +1312,10 @@ export const Settings = () => {
 
                         <div className="update-status-live-line">
                           <span className="update-status-dot" />
-                          <span className="truncate flex-1">{updateProgressData.progress}</span>
+                          <span className="truncate flex-1" style={{ color: 'var(--text-main, #ded9cf)' }}>{updateProgressData.progress}</span>
+                          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted, #78746c)', marginLeft: 'auto' }}>
+                            Stage {updateProgressData.stage}/5
+                          </span>
                         </div>
                       </div>
                     )}
@@ -1243,9 +1342,15 @@ export const Settings = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-4 rounded-xl mb-4 d-flex items-center justify-between flex-wrap gap-3" style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.25)' }}>
+                  <div
+                    className="p-4 rounded-xl mb-4 d-flex items-center justify-between flex-wrap gap-3"
+                    style={{
+                      background: 'rgba(63, 166, 106, 0.08)',
+                      border: '1px solid rgba(63, 166, 106, 0.25)',
+                    }}
+                  >
                     <div className="d-flex items-center gap-3">
-                      <span className="text-2xl">✓</span>
+                      <CheckCircle2 size={24} style={{ color: 'var(--emerald, #3fa66a)' }} />
                       <div>
                         <strong className="text-white text-sm d-block">App is Up to Date</strong>
                         <span className="text-sub text-xs">
@@ -1287,12 +1392,18 @@ export const Settings = () => {
               </div>
 
               {/* Zero Data Loss Guarantee Callout */}
-              <div className="p-4 rounded-xl" style={{ background: 'rgba(16, 185, 129, 0.06)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-                <div className="d-flex items-center gap-2 text-emerald font-bold text-sm mb-1">
-                  <ShieldCheck size={14} className="text-emerald inline mr-1" />
-                  <span>Zero Data Loss Guarantee</span>
+              <div
+                className="p-3.5 rounded mb-3"
+                style={{
+                  background: 'rgba(63, 166, 106, 0.08)',
+                  border: '1px solid rgba(63, 166, 106, 0.25)',
+                }}
+              >
+                <div className="d-flex items-center gap-2 font-bold text-xs mb-1" style={{ color: 'var(--emerald, #3fa66a)' }}>
+                  <ShieldCheck size={15} />
+                  <span>Zero Data Loss Protection Guarantee</span>
                 </div>
-                <p className="text-sub text-xs m-0">
+                <p className="m-0 leading-relaxed" style={{ fontSize: '0.73rem', color: 'var(--text-sub, #a39e94)' }}>
                   App updates pull exclusively source code improvements and web assets. Your SQLite database (<code>manager.db</code>), Minecraft worlds, player stats, world backups, custom addons, and login credentials are permanently preserved and will never be overwritten or deleted.
                 </p>
               </div>

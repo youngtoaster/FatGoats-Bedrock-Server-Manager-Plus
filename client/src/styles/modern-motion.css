@@ -590,3 +590,23 @@ textarea:focus {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(240, 235, 225, 0.28);
 }
+
+/* --------------------------------------------------------------------------
+   14. Architectural Update Engine & Precision Hardware
+   -------------------------------------------------------------------------- */
+.app-update-modal {
+  background: var(--bg-card, #1a1c22) !important;
+  border: 1px solid var(--border-subtle, rgba(240, 235, 225, 0.08)) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: var(--radius-lg, 10px) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 0, 0, 0.8) !important;
+}
+
+.spinning {
+  animation: hardwareSpin 1.2s linear infinite;
+}
+
+@keyframes hardwareSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

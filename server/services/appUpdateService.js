@@ -1,10 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { execSync } = require('child_process');
+const util = require('util');
+const { exec, execSync } = require('child_process');
 const fetch = require('node-fetch');
 const unzipper = require('unzipper');
 const db = require('../database');
+
+const execPromise = util.promisify(exec);
 
 const ROOT_DIR = path.resolve(__dirname, '..', '..');
 const GITHUB_REPO = 'youngtoaster/FatGoats-Bedrock-Server-Manager-Plus';
@@ -69,6 +72,42 @@ function execGit(cmd, options = {}) {
     windowsHide: true,
     timeout: options.timeout || 30000,
   }).trim();
+}
+
+/**
+ * Asynchronously execute Git commands without blocking the Node.js event loop,
+ * allowing live progress polling from the client browser.
+ */
+async function execGitAsync(cmd, options = {}) {
+  const env = getGitEnv();
+  const { stdout } = await execPromise(cmd, {
+    cwd: ROOT_DIR,
+    env,
+    encoding: 'utf8',
+    windowsHide: true,
+    timeout: options.timeout || 45000,
+    maxBuffer: 10 * 1024 * 1024,
+  });
+  return (stdout || '').trim();
+}
+
+/**
+ * Asynchronously execute shell / compilation commands without blocking the event loop.
+ */
+async function execCmdAsync(cmd, options = {}) {
+  const execEnv = {
+    ...process.env,
+    PATH: `${path.join(ROOT_DIR, 'nodejs')};${process.env.PATH || ''}`,
+  };
+  const { stdout, stderr } = await execPromise(cmd, {
+    cwd: options.cwd || ROOT_DIR,
+    env: execEnv,
+    encoding: 'utf8',
+    windowsHide: true,
+    timeout: options.timeout || 90000,
+    maxBuffer: 10 * 1024 * 1024,
+  });
+  return { stdout: (stdout || '').trim(), stderr: (stderr || '').trim() };
 }
 
 /**
@@ -382,23 +421,23 @@ class AppUpdateService {
     if (!gitHubApiSucceeded && hasGitRepo() && hasGit()) {
       try {
         if (forceFetch) {
-          console.log('[AppUpdateService] Running git fetch origin...');
-          execGit('git fetch origin', { timeout: 25000 });
+          console.log('[AppUpdateService] Running git fetch origin (async)...');
+          await execGitAsync('git fetch origin', { timeout: 35000 });
           const nowIso = new Date().toISOString();
           setSetting('app_update_last_checked', nowIso);
           prefs.lastChecked = nowIso;
         }
 
-        remoteCommit = execGit('git rev-parse --short origin/main');
-        remoteCommitFull = execGit('git rev-parse origin/main');
-        remoteCommitDate = execGit('git log origin/main -1 --format=%cd --date=relative');
-        remoteCommitSubject = execGit('git log origin/main -1 --format=%s');
+        remoteCommit = await execGitAsync('git rev-parse --short origin/main');
+        remoteCommitFull = await execGitAsync('git rev-parse origin/main');
+        remoteCommitDate = await execGitAsync('git log origin/main -1 --format=%cd --date=relative');
+        remoteCommitSubject = await execGitAsync('git log origin/main -1 --format=%s');
 
-        const countRaw = execGit('git rev-list HEAD..origin/main --count');
+        const countRaw = await execGitAsync('git rev-list HEAD..origin/main --count');
         commitsBehind = parseInt(countRaw, 10) || 0;
 
         if (commitsBehind > 0) {
-          const rawLog = execGit('git log HEAD..origin/main --format=%h|%an|%cr|%s -n 15');
+          const rawLog = await execGitAsync('git log HEAD..origin/main --format=%h|%an|%cr|%s -n 15');
           if (rawLog) {
             rawLog.split('\n').forEach((line) => {
               const parts = line.split('|');
@@ -450,6 +489,7 @@ class AppUpdateService {
    * Mode A: Uses Git pull / reset if .git repository exists.
    * Mode B: Downloads latest repository ZIP directly from GitHub, safely extracts over ROOT_DIR,
    *         while completely preserving all user data, database, worlds, and custom configs.
+   * Completely asynchronous to ensure Node.js event loop flushes and client polling never freezes.
    */
   async applyUpdate() {
     if (this.isUpdating) {
@@ -457,9 +497,12 @@ class AppUpdateService {
     }
 
     this.isUpdating = true;
-    this.updateProgress = 'Starting update process...';
+    this.updateProgress = 'Starting update pipeline...';
     this.updatePercent = 5;
     this.updateStage = 1;
+
+    // Yield control to let Express flush pending requests
+    await new Promise((r) => setTimeout(r, 60));
 
     try {
       // ------------------------------------------------------------------------
@@ -468,6 +511,8 @@ class AppUpdateService {
       this.updatePercent = 15;
       this.updateStage = 1;
       this.updateProgress = 'Creating pre-update safety backup of database and user data...';
+      await new Promise((r) => setTimeout(r, 80));
+
       const dbPath = path.join(ROOT_DIR, 'data', 'db', 'manager.db');
       const dbBackupPath = path.join(
         ROOT_DIR,
@@ -490,9 +535,10 @@ class AppUpdateService {
       // ------------------------------------------------------------------------
       // STEP 2: Fetch and Apply Latest Code Changes
       // ------------------------------------------------------------------------
-      this.updatePercent = 35;
+      this.updatePercent = 25;
       this.updateStage = 2;
-      this.updateProgress = 'Pulling latest code changes from GitHub (main)...';
+      this.updateProgress = 'Connecting to GitHub repository and fetching origin...';
+      await new Promise((r) => setTimeout(r, 60));
 
       // Unlock running Windows binaries out of the way so Git or Zip can write new ones cleanly
       prepareLockedFileForReplacement(path.join(ROOT_DIR, 'BedrockServerManager.exe'));
@@ -500,19 +546,29 @@ class AppUpdateService {
 
       if (hasGitRepo() && hasGit()) {
         try {
-          console.log('[AppUpdateService] Attempting Git pull from origin...');
-          execGit('git fetch origin', { timeout: 35000 });
+          console.log('[AppUpdateService] Attempting Git pull from origin (async)...');
+          await execGitAsync('git fetch origin', { timeout: 45000 });
+
+          this.updatePercent = 38;
+          this.updateProgress = 'Applying code updates from origin/main...';
+          await new Promise((r) => setTimeout(r, 60));
+
           // Wipe unstaged changes in tracked files to prevent merge conflicts
           try {
-            execGit('git reset --hard origin/main', { timeout: 15000 });
+            await execGitAsync('git reset --hard origin/main', { timeout: 20000 });
           } catch (_) {
-            execGit('git pull --rebase=false origin main', { timeout: 35000 });
+            await execGitAsync('git pull --rebase=false origin main', { timeout: 45000 });
           }
           usedGit = true;
-          const shortHash = execGit('git rev-parse --short HEAD');
-          const fullHash = execGit('git rev-parse HEAD');
-          const date = execGit('git log -1 --format=%cd --date=relative');
-          const subject = execGit('git log -1 --format=%s');
+
+          this.updatePercent = 50;
+          this.updateProgress = 'Inspecting synchronized commit metadata...';
+          await new Promise((r) => setTimeout(r, 60));
+
+          const shortHash = await execGitAsync('git rev-parse --short HEAD');
+          const fullHash = await execGitAsync('git rev-parse HEAD');
+          const date = await execGitAsync('git log -1 --format=%cd --date=relative');
+          const subject = await execGitAsync('git log -1 --format=%s');
           newCommitInfo = {
             commit: shortHash,
             commitFull: fullHash,
@@ -530,6 +586,10 @@ class AppUpdateService {
 
       // If Git was not used or failed, download and extract main.zip directly
       if (!usedGit) {
+        this.updatePercent = 30;
+        this.updateProgress = 'Downloading latest repository archive from GitHub...';
+        await new Promise((r) => setTimeout(r, 60));
+
         console.log('[AppUpdateService] Downloading latest repository archive from GitHub...');
         const zipUrl = `https://github.com/${GITHUB_REPO}/archive/refs/heads/${GITHUB_BRANCH}.zip`;
         const tempZip = path.join(os.tmpdir(), `bedrock-mgr-update-${Date.now()}.zip`);
@@ -550,7 +610,10 @@ class AppUpdateService {
           destFile.on('finish', resolve);
         });
 
+        this.updatePercent = 45;
         this.updateProgress = 'Extracting updated files while safeguarding data...';
+        await new Promise((r) => setTimeout(r, 60));
+
         const zipDirectory = await unzipper.Open.file(tempZip);
 
         // Find the root folder prefix inside the zip (e.g. 'FatGoats-Bedrock-Server-Manager-Plus-main/')
@@ -614,58 +677,59 @@ class AppUpdateService {
       this.updatePercent = 60;
       this.updateStage = 3;
       this.updateProgress = 'Verifying and updating application dependencies...';
-      const execEnv = {
-        ...process.env,
-        PATH: `${path.join(ROOT_DIR, 'nodejs')};${process.env.PATH || ''}`,
-      };
+      await new Promise((r) => setTimeout(r, 60));
+
       try {
-        execSync('cmd /c "npm install --no-audit --no-fund"', {
-          cwd: ROOT_DIR,
-          env: execEnv,
-          windowsHide: true,
-          timeout: 60000,
+        await execCmdAsync('cmd /c "npm install --no-audit --no-fund"', {
+          timeout: 90000,
         });
+        console.log('[AppUpdateService] Dependencies verified successfully.');
       } catch (err) {
         console.warn('[AppUpdateService] npm install note:', err.message);
       }
+
+      this.updatePercent = 74;
+      this.updateProgress = 'Dependencies verified. Preparing client compilation...';
+      await new Promise((r) => setTimeout(r, 60));
 
       // ------------------------------------------------------------------------
       // STEP 4: Build React Frontend Assets
       // ------------------------------------------------------------------------
       this.updatePercent = 80;
       this.updateStage = 4;
-      this.updateProgress = 'Verifying production frontend build assets...';
+      this.updateProgress = 'Compiling production client assets (Vite)...';
+      await new Promise((r) => setTimeout(r, 60));
+
       try {
-        execSync('cmd /c "cd client && npm run build"', {
-          cwd: ROOT_DIR,
-          env: execEnv,
-          windowsHide: true,
-          timeout: 60000,
+        await execCmdAsync('cmd /c "cd client && npm run build"', {
+          timeout: 90000,
         });
         console.log('[AppUpdateService] Frontend build complete.');
       } catch (err) {
         console.warn('[AppUpdateService] Client build note (using repository dist):', err.message);
       }
 
+      this.updatePercent = 90;
+      this.updateProgress = 'Production web bundle verified.';
+      await new Promise((r) => setTimeout(r, 60));
+
       // ------------------------------------------------------------------------
       // STEP 5: Recompile Windows Native Executables
       // ------------------------------------------------------------------------
-      this.updatePercent = 95;
+      this.updatePercent = 94;
       this.updateStage = 5;
       this.updateProgress = 'Recompiling native Windows executables (Tray Launcher & Installer)...';
+      await new Promise((r) => setTimeout(r, 60));
+
       const cscPath = 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe';
       if (fs.existsSync(cscPath)) {
         // 5a. Recompile Tray Launcher
         if (fs.existsSync(path.join(ROOT_DIR, 'tray', 'Program.cs'))) {
           try {
             prepareLockedFileForReplacement(path.join(ROOT_DIR, 'BedrockServerManager.exe'));
-            execSync(
+            await execCmdAsync(
               `"${cscPath}" /target:winexe /out:BedrockServerManager.exe /win32icon:tray\\app.ico /r:System.dll,System.Drawing.dll,System.Windows.Forms.dll,System.Core.dll tray\\Program.cs`,
-              {
-                cwd: ROOT_DIR,
-                windowsHide: true,
-                timeout: 30000,
-              }
+              { timeout: 35000 }
             );
             console.log('[AppUpdateService] Recompiled BedrockServerManager.exe.');
           } catch (err) {
@@ -677,13 +741,9 @@ class AppUpdateService {
         if (fs.existsSync(path.join(ROOT_DIR, 'installer', 'Installer.cs'))) {
           try {
             prepareLockedFileForReplacement(path.join(ROOT_DIR, 'BedrockServerManager-Setup.exe'));
-            execSync(
+            await execCmdAsync(
               `"${cscPath}" /target:winexe /out:BedrockServerManager-Setup.exe /win32icon:tray\\app.ico /r:System.dll,System.Drawing.dll,System.Windows.Forms.dll,System.Core.dll,System.IO.Compression.dll,System.IO.Compression.FileSystem.dll installer\\Installer.cs`,
-              {
-                cwd: ROOT_DIR,
-                windowsHide: true,
-                timeout: 30000,
-              }
+              { timeout: 35000 }
             );
             console.log('[AppUpdateService] Recompiled BedrockServerManager-Setup.exe.');
           } catch (err) {
@@ -691,6 +751,10 @@ class AppUpdateService {
           }
         }
       }
+
+      this.updatePercent = 98;
+      this.updateProgress = 'Finalizing update manifest and preferences...';
+      await new Promise((r) => setTimeout(r, 60));
 
       // ------------------------------------------------------------------------
       // STEP 6: Save Version Metadata & Reset Preferences

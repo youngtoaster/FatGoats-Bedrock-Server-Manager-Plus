@@ -7879,15 +7879,16 @@ html, body, #root {
 
 /* ==========================================================================
    Modern App Update Real-time Progress Bar & Steps
+   Architectural Milled Slate & Tooling Hardware (Zero Neon)
    ========================================================================== */
 .update-progress-container {
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(10, 15, 26, 0.95) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  border-radius: var(--radius-xl, 18px);
-  padding: 1.5rem;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 25px rgba(16, 185, 129, 0.12);
-  margin-bottom: 1.5rem;
-  backdrop-filter: blur(16px);
+  background: var(--bg-card, #1a1c22);
+  border: 1px solid var(--border-subtle, rgba(240, 235, 225, 0.08));
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-lg, 10px);
+  padding: 1.35rem 1.4rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  margin-bottom: 1.25rem;
   position: relative;
   overflow: hidden;
 }
@@ -7899,127 +7900,110 @@ html, body, #root {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, #10b981, #06b6d4, #3b82f6);
+  background: linear-gradient(90deg, #d97736 0%, #5c7c99 100%);
 }
 
 .update-progress-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
 }
 
 .update-progress-percentage {
-  font-size: 1.75rem;
-  font-weight: 900;
+  font-size: 1.65rem;
+  font-weight: 700;
   font-family: var(--font-mono, monospace);
-  background: linear-gradient(135deg, #34d399 0%, #38bdf8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.4));
+  color: var(--text-white, #f5f2eb);
+  letter-spacing: -0.02em;
 }
 
 .update-progress-track {
   width: 100%;
-  height: 14px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 9999px;
+  height: 12px;
+  background: var(--bg-input, #0d0e11);
+  border-radius: var(--radius-xs, 3px);
   overflow: hidden;
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 1.25rem;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-subtle, rgba(240, 235, 225, 0.08));
+  margin-bottom: 1.1rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .update-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #10b981 0%, #06b6d4 50%, #3b82f6 100%);
-  border-radius: 9999px;
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(180deg, #e48746 0%, #c46628 100%);
+  border-radius: 2px;
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .update-progress-fill::after {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
   bottom: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.4) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  animation: shimmerUpdate 1.6s infinite linear;
-}
-
-@keyframes shimmerUpdate {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  right: 0;
+  width: 5px;
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .update-steps-stepper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 0.6rem;
-  margin-bottom: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
 }
 
 .update-step-pill {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.75rem;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 0.75rem;
-  color: var(--text-sub, #94a3b8);
-  transition: all 0.25s ease;
+  gap: 0.45rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-sm, 5px);
+  background: var(--bg-input, #0d0e11);
+  border: 1px solid var(--border-subtle, rgba(240, 235, 225, 0.08));
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-muted, #78746c);
+  transition: all 0.15s ease;
 }
 
 .update-step-pill.is-active {
-  background: rgba(16, 185, 129, 0.14);
-  border-color: rgba(16, 185, 129, 0.5);
-  color: #34d399;
-  font-weight: 700;
-  box-shadow: 0 0 14px rgba(16, 185, 129, 0.2);
+  background: rgba(217, 119, 54, 0.12);
+  border-color: var(--copper, #d97736);
+  color: var(--text-white, #f5f2eb);
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .update-step-pill.is-done {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.14);
-  color: #f1f5f9;
+  background: rgba(63, 166, 106, 0.08);
+  border-color: rgba(63, 166, 106, 0.3);
+  color: var(--text-main, #ded9cf);
 }
 
 .update-status-live-line {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.82rem;
-  color: #e2e8f0;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 0.65rem 0.85rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-main, #ded9cf);
+  background: var(--bg-input, #0d0e11);
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm, 5px);
+  border: 1px solid var(--border-subtle, rgba(240, 235, 225, 0.08));
 }
 
 .update-status-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #34d399;
-  box-shadow: 0 0 8px #34d399;
-  animation: pulseDot 1.2s infinite ease-in-out;
+  background: var(--copper, #d97736);
   flex-shrink: 0;
-}
-
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+  box-shadow: 0 0 0 2px rgba(217, 119, 54, 0.2);
 }
 
 /* --------------------------------------------------------------------------
@@ -8028,7 +8012,7 @@ html, body, #root {
 @media (max-width: 768px) {
   .update-progress-container {
     padding: 1.15rem !important;
-    border-radius: 14px !important;
+    border-radius: 8px !important;
   }
 
   .update-progress-header {
@@ -8051,7 +8035,7 @@ html, body, #root {
   }
 
   .update-status-live-line {
-    font-size: 0.78rem !important;
+    font-size: 0.75rem !important;
     padding: 0.55rem 0.75rem !important;
   }
 }
