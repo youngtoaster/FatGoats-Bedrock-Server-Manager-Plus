@@ -6,33 +6,33 @@
    ========================================================================== */
 
 :root {
-  /* Graphite Neutral Ramp */
-  --bg-sidebar: #0f0f10;
-  --bg-page: #141415;
-  --bg-card: #19191b;
-  --bg-raised: #232325;
-  --bg-subtle: #1c1d1f;
-  --bg-input: #121315;
+  /* Milled Hardware Token Ramp (Zero Neon) */
+  --bg-sidebar: #14151a;
+  --bg-page: #111215;
+  --bg-card: #1a1c22;
+  --bg-raised: #262932;
+  --bg-subtle: #17181e;
+  --bg-input: #0d0e11;
 
-  /* Hairlines (Primary text at 8% opacity) */
-  --border-subtle: rgba(237, 237, 237, 0.08);
-  --border-hover: rgba(237, 237, 237, 0.16);
-  --border-emerald: rgba(16, 185, 129, 0.3);
+  /* Warm Milled Metal Hairlines */
+  --border-subtle: rgba(240, 235, 225, 0.08);
+  --border-hover: rgba(240, 235, 225, 0.16);
+  --border-emerald: rgba(217, 119, 54, 0.35);
 
-  /* Single Accent: Bedrock Emerald */
-  --emerald: #10b981;
-  --emerald-hover: #059669;
-  --emerald-subtle: rgba(16, 185, 129, 0.12);
+  /* Matte Hardware Pigments */
+  --emerald: #d97736;
+  --emerald-hover: #c46628;
+  --emerald-subtle: rgba(217, 119, 54, 0.14);
 
   /* Toned Semantic Values */
-  --red-danger: #e5484d;
-  --amber-warn: #f59e0b;
-  --cyan-info: #38bdf8;
+  --red-danger: #c94a4a;
+  --amber-warn: #d97736;
+  --cyan-info: #5c7c99;
 
-  /* Three High-Contrast Text Roles */
-  --text-primary: #ededed;
-  --text-secondary: #a1a1a6;
-  --text-muted: #85858b;
+  /* Architectural Warm Typography */
+  --text-primary: #f5f2eb;
+  --text-secondary: #ded9cf;
+  --text-muted: #8b877e;
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
@@ -215,27 +215,32 @@ body {
 
 .btn-primary {
   background-color: var(--emerald);
-  color: #08090b;
-  border-color: var(--emerald);
+  color: #111215;
+  border-color: #c46628;
   font-weight: 600;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 0 #8c4213, 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .btn-primary:hover {
   background-color: var(--emerald-hover);
-  border-color: var(--emerald-hover);
+  border-color: #a84f18;
 }
 
 .btn-secondary {
   background-color: var(--bg-raised);
   border-color: var(--border-subtle);
   color: var(--text-primary);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 0 #0d0e11, 0 3px 6px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .btn-secondary:hover {
-  background-color: #2b2b2e;
+  background-color: #2e323d;
   border-color: var(--border-hover);
+}
+
+.btn:active {
+  transform: translateY(2px) !important;
+  box-shadow: none !important;
 }
 
 /* ==========================================================================
@@ -259,11 +264,11 @@ body {
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background-color: var(--emerald);
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 0 0 1.5px rgba(217, 119, 54, 0.3);
 }
 
 .status-label {

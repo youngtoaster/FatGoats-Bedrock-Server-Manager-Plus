@@ -5,46 +5,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  /* Graphite Neutral Ramp (Dark) */
-  --bg-sidebar: #0f0f10;
-  --bg-main: #141415;
-  --bg-card: #19191b;
-  --bg-card-hover: #212124;
-  --bg-raised: #232325;
-  --bg-input: #1a1a1d;
-  --bg-subtle: #161618;
-  --bg-glass: rgba(25, 25, 27, 0.95);
+  /* Milled Hardware Token Ramp (Zero Neon) */
+  --bg-sidebar: #14151a;
+  --bg-main: #111215;
+  --bg-card: #1a1c22;
+  --bg-card-hover: #21232b;
+  --bg-raised: #262932;
+  --bg-input: #0d0e11;
+  --bg-subtle: #17181e;
+  --bg-glass: rgba(26, 28, 34, 0.96);
 
-  /* Hairlines (Primary text at 8% opacity) */
-  --border-subtle: rgba(237, 237, 237, 0.08);
-  --border-hover: rgba(237, 237, 237, 0.16);
-  --border-focus: #10b981;
+  /* Warm Milled Metal Hairlines */
+  --border-subtle: rgba(240, 235, 225, 0.08);
+  --border-hover: rgba(240, 235, 225, 0.16);
+  --border-focus: #d97736;
 
-  /* Accent (Bedrock Emerald) */
-  --emerald: #10b981;
+  /* Matte Hardware Pigments (Zero Neon Glow) */
+  --copper: #d97736;
+  --copper-hover: #c46628;
+  --copper-subtle: rgba(217, 119, 54, 0.14);
+
+  --emerald: #3fa66a;
+  --emerald-hover: #338855;
+  --emerald-subtle: rgba(63, 166, 106, 0.14);
   --emerald-glow: transparent;
-  --emerald-subtle: rgba(16, 185, 129, 0.12);
-  --emerald-hover: #059669;
 
-  --amber: #f59e0b;
-  --amber-subtle: rgba(245, 158, 11, 0.12);
+  --amber: #d97736;
+  --amber-subtle: rgba(217, 119, 54, 0.14);
   --amber-glow: transparent;
 
-  --rose: #e5484d;
-  --rose-subtle: rgba(229, 72, 77, 0.12);
+  --rose: #c94a4a;
+  --rose-subtle: rgba(201, 74, 74, 0.14);
   --rose-glow: transparent;
 
-  --cyan: #38bdf8;
-  --cyan-subtle: rgba(56, 189, 248, 0.12);
+  --cyan: #5c7c99;
+  --cyan-subtle: rgba(92, 124, 153, 0.14);
 
-  --purple: #818cf8;
-  --purple-subtle: rgba(129, 140, 248, 0.12);
+  --purple: #7e7399;
+  --purple-subtle: rgba(126, 115, 153, 0.14);
 
   /* Three Text Roles */
-  --text-main: #ededed;
-  --text-sub: #a1a1a6;
-  --text-muted: #85858b;
-  --text-white: #ffffff;
+  --text-main: #ded9cf;
+  --text-sub: #a39e94;
+  --text-muted: #78746c;
+  --text-white: #f5f2eb;
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
