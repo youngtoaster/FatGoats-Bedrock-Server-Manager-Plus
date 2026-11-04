@@ -29,7 +29,9 @@
    1. Strip AI-Slop Ambient Glows & Background Noise
    -------------------------------------------------------------------------- */
 .ambient-app-glow,
-.ambient-app-grid {
+.ambient-app-grid,
+.auth-ambient-orb,
+.portal-ambient-glow {
   display: none !important;
 }
 

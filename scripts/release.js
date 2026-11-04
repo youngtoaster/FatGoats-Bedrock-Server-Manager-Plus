@@ -46,7 +46,8 @@ async function main() {
 
   // 1. Build Client
   console.log('\n[1/6] Building Production React Frontend...');
-  run('npm run build', path.join(ROOT_DIR, 'client'));
+  const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  run(`${npmCmd} run build`, path.join(ROOT_DIR, 'client'));
 
   // 2. Sync Website files to client/website
   console.log('\n[2/6] Syncing Showcase Website assets...');
@@ -106,26 +107,25 @@ async function main() {
   const releaseNotes = `### FatGoats Bedrock Server Manager+ ${tagName}
 
 #### Pre-built Native Windows Executables:
-- **BedrockServerManager-Setup.exe**: Interactive Windows setup installer with prerequisite verification, desktop shortcuts, and automated in-place updater.
+- **BedrockServerManager-Setup.exe**: Interactive Windows setup installer with prerequisite verification, desktop shortcuts, native tray watchdog, and in-place safe updater.
 - **BedrockServerManager.exe**: Lightweight standalone Windows system tray watchdog launcher.
 
-#### What's New in v1.2.6:
-- **Full Precision Cyber-Industrial Overhaul**: Overhauled the entire look and feel across both the Showcase Website and the App utilizing UsePlanes kinetic physics, React Bits spotlight illumination, and modern web design standards.
-- **Floating Island Glass Navbar**: Implemented floating frosted glass navbar (\`backdrop-filter: blur(24px)\`) with gliding magnetic pill indicator and Lucide SVG icons.
-- **Spotlight Cards (React Bits)**: Added dynamic 60fps radial mouse-tracking glow across all feature bento cards and dashboard panels.
-- **Interactive Addon Auto-Installer Showcase**: Real-time simulated drag-and-drop file inspection executing the full 4-step pipeline (< 1s) directly on the website.
-- **Live BDS Supervisor Simulator Deck**: Authentic telemetry HUD previewing real-time CPU/RAM/TPS gauges, 1-click moderation buttons, and ANSI terminal execution.
-- **Magnetic Buttons & Decrypted Text**: Tactile physical spring buttons with micro-lifts and hacker matrix title reveals.
-- **Pre-Built Executables**: Latest compiled native Windows tray watchdog and installer binaries uploaded directly to release.
+#### What's New in ${tagName}:
+- **9-Pass UI Audit & Unslop Redesign**: Applied the strict 9-pass Unslop UI engineering standard across the showcase landing page and administrative console.
+- **Disciplined Graphite Neutral Hierarchy**: Consolidated all palette surfaces onto a disciplined Graphite dark ramp (\`#0f0f10\`, \`#141415\`, \`#19191b\`, \`#232325\`) with subtle 8% hairlines (\`rgba(237, 237, 237, 0.08)\`) and high-contrast typography (\`#ffffff\`, \`#ededed\`).
+- **Complete Elimination of AI Slop**: Stripped all decorative ambient blur orbs, infinite pulsing keyframes, uppercase tracked badges, and marketing buzzwords. Replaced with quiet, tactile controls and 140ms ease-out transitions.
+- **100% Unified Lucide Line Icons**: Replaced all remaining raw emojis across the interface with crisp, tactile Lucide SVG icons.
+- **Authentic BDS Process Supervisor Moment**: Real-time unbuffered ANSI stdout terminal stream and live telemetry gauges (20.0 TPS, CPU jitter, memory allocation).
+- **1-Click Direct Player Moderation**: Instant 20 HP health restorations, food saturation replenishments, zero-delay administrative kicks, and persistent SQLite bans.
+- **1-Click Addon Auto-Installer Pipeline**: Drag-and-drop \`.mcaddon\`, \`.mcpack\`, and \`.zip\` archive unpacker with UUID manifest inspection, companion BP/RP routing, and active world registration in under 1 second.
+- **Pre-Compiled Native Windows Binaries**: Freshly compiled native C# executables (\`BedrockServerManager-Setup.exe\` and \`BedrockServerManager.exe\`) uploaded directly to this release.
 
 #### Core Capabilities:
-- **1-Click Instant Addon Auto-Installer**: Drag-and-drop \`.mcaddon\`, \`.mcpack\`, and \`.zip\` files. Automatically decompresses nested packs, splits BP/RP, pairs companion packs, and injects valid UUID manifests directly into your active world configs in < 1 second.
-- **Direct Real-Time BDS Process Engine**: Unbuffered standard input/output IPC piping to \`bedrock_server.exe\` with real-time ANSI terminal logging, CPU/RAM/TPS performance telemetry, and automated crash recovery.
-- **Player & Security Matrix**: 1-Click Instant Heal (20 HP), Food/Saturation restoration, zero-delay kicks, and persistent SQLite ban lists with automatic reconnection rejection.
-- **World Importer & Custom Generator**: Full \`.mcworld\` drag-and-drop import with directory unpack, levelname detection, and built-in world generator with custom seed randomization and presets.
+- **Direct Real-Time BDS Process Engine**: Spawns and supervises \`bedrock_server.exe\` with unbuffered IPC pipes, crash watchdog, and automated restarts.
+- **World Importer & Generator**: \`.mcworld\` zip importer with LevelDB detection, and seed-based world generator.
 - **Playit Zero-Port Tunneling**: Integrated Playit tunnel allocating global public Bedrock IP/port to bypass CGNAT and strict routers without opening ports.
 - **MCXboxBroadcast Friend Bridging**: Native Xbox Live friend bridging allowing console players on Xbox Series X/S, PlayStation, and Nintendo Switch to join directly from their Friends tab without DNS tricks.
-- **Safe Snapshot Engine**: Automated LevelDB snapshots using official Mojang \`save hold\` and \`save query\` chunk-freezing protocol.
+- **LevelDB Safe Snapshot Engine**: Automated LevelDB snapshots using official Mojang \`save hold\` and \`save query\` chunk-freezing protocol.
 `;
 
   try {
