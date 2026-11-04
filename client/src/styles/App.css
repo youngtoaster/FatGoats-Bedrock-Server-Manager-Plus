@@ -827,10 +827,10 @@ html, body, #root {
   transition: width 0.4s ease;
 }
 
-.fill-green { background: linear-gradient(90deg, #10b981, #34d399); }
-.fill-emerald { background: linear-gradient(90deg, #059669, #10b981); }
-.fill-cyan { background: linear-gradient(90deg, #0284c7, #38bdf8); }
-.fill-purple { background: linear-gradient(90deg, #7c3aed, #a855f7); }
+.fill-green { background-color: var(--emerald); }
+.fill-emerald { background-color: var(--emerald); }
+.fill-cyan { background-color: var(--cyan); }
+.fill-purple { background-color: var(--purple); }
 
 .telemetry-footer-text {
   font-size: 0.75rem;
