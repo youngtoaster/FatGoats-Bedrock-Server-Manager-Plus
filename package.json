@@ -1,6 +1,6 @@
 {
   "name": "bedrock-server-manager",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Minecraft Bedrock Dedicated Server Manager - Full-stack administration panel",
   "main": "server/index.js",
   "scripts": {

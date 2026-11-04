@@ -1,6 +1,6 @@
 {
-  "commit": "v1.2.4",
-  "commitFull": "v1.2.4",
+  "commit": "v1.2.5",
+  "commitFull": "v1.2.5",
   "date": "Just now",
-  "subject": "feat(ui): complete 9-pass unslop redesign across application interface"
+  "subject": "feat(ui): add physics-based spring animations, smooth transitions, and tactile micro-interactions"
 }

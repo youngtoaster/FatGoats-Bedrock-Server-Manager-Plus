@@ -1,9 +1,29 @@
 /* ==========================================================================
-   BEDROCK SERVER MANAGER+ — UNSLOPPED CRAFT & TACTILE INTERFACE ENGINE
-   Direction: Precise, Utilitarian, Industrial.
-   Graphite neutral ramp, quiet chrome, single bedrock emerald accent,
-   4px/8px rhythm, 140ms cubic-bezier(0.22, 1, 0.36, 1) transitions.
+   BEDROCK SERVER MANAGER+ — CRAFT MOTION & TACTILE INTERFACE ENGINE
+   Standards: Modern Web Guidance (physics-based linear() easing, @starting-style,
+   allow-discrete entry/exit), 9-Pass Unslop UI, & Frontend Design craft.
+   Palette: Graphite Dark Ramp (#0f0f10, #141415, #19191b, #232325), 8% hairlines.
    ========================================================================== */
+
+:root {
+  /* --------------------------------------------------------------------------
+     Modern Web Guidance Physics-Based linear() Easing Stop Sequences
+     Micro-damped spring curve providing physical weight and zero oscillation ring
+     -------------------------------------------------------------------------- */
+  --ease-spring: linear(
+    0, 0.006, 0.025 2.8%, 0.101 6.1%, 0.539 18.9%, 0.721 25.3%, 0.849 31.6%,
+    0.937 38.2%, 0.968 41.8%, 0.991 45.7%, 1.006 50.1%, 1.015 55%, 1.017 60.7%,
+    1.014 67.5%, 1.001 84.4%, 1
+  );
+  --ease-spring-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring-micro: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth-press: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --duration-tactile: 140ms;
+  --duration-fluid: 240ms;
+  --duration-physics: 320ms;
+}
 
 /* --------------------------------------------------------------------------
    1. Strip AI-Slop Ambient Glows & Background Noise
@@ -14,7 +34,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   2. Purposeful Page Entrance (Single quiet fade & rise, no staggered bounce)
+   2. Purposeful Page Entrance (Single quiet fade & micro-rise)
    -------------------------------------------------------------------------- */
 @keyframes quietEntrance {
   from {
@@ -40,11 +60,12 @@
 .audit-page,
 .xbox-page,
 .portal-page {
-  animation: quietEntrance 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: quietEntrance var(--duration-fluid) var(--ease-out-quint) both;
+  will-change: transform, opacity;
 }
 
 /* --------------------------------------------------------------------------
-   3. Quiet Graphite Surfaces (Replace glassmorphism and colored glowing borders)
+   3. Quiet Graphite Surfaces with Smooth Physical Hover Lift
    -------------------------------------------------------------------------- */
 .modern-card,
 .telemetry-card,
@@ -62,10 +83,13 @@
   border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
   border-radius: var(--radius-lg, 12px) !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-  transition: border-color 0.16s cubic-bezier(0.22, 1, 0.36, 1),
-              background-color 0.16s cubic-bezier(0.22, 1, 0.36, 1) !important;
-  transform: none !important;
+  transition: transform var(--duration-fluid) var(--ease-spring),
+              border-color var(--duration-tactile) var(--ease-out-quint),
+              box-shadow var(--duration-fluid) var(--ease-out-quint),
+              background-color var(--duration-tactile) var(--ease-out-quint) !important;
+  transform: translateY(0) !important;
   position: relative;
+  will-change: transform, box-shadow;
 }
 
 .modern-card:hover,
@@ -74,13 +98,13 @@
 .backup-card:hover,
 .world-card:hover,
 .addon-card:hover {
-  transform: none !important;
+  transform: translateY(-2px) !important;
   border-color: rgba(237, 237, 237, 0.18) !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
 
 /* --------------------------------------------------------------------------
-   4. Status Hero Panel & Quiet Process State Indicators
+   4. Status Hero Panel & Calm Industrial Beacon
    -------------------------------------------------------------------------- */
 .hero-status-panel {
   padding: 1.5rem !important;
@@ -89,7 +113,7 @@
 
 .hero-status-panel.state-running {
   border-color: rgba(16, 185, 129, 0.28) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(16, 185, 129, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(16, 185, 129, 0.2) !important;
 }
 
 .hero-status-panel.state-running::after,
@@ -105,10 +129,19 @@
   border-color: rgba(229, 72, 77, 0.2) !important;
 }
 
-/* Quiet Status Dot (No expanding radar ping loops) */
+/* Calm Industrial Beacon Breathing (No radar ping sweep) */
+@keyframes beaconBreath {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.22), 0 0 6px rgba(16, 185, 129, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.42), 0 0 14px rgba(16, 185, 129, 0.32);
+  }
+}
+
 .radar-status-dot {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -120,13 +153,14 @@
   height: 8px;
   border-radius: 50%;
   background: var(--text-muted);
+  transition: background-color 0.2s var(--ease-out-quint);
 }
 
 .state-running .radar-core,
 .status-running .pulse-indicator-dot,
 .status-online .xbox-pill-dot {
   background: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+  animation: beaconBreath 3.2s ease-in-out infinite;
 }
 
 .state-starting .radar-core,
@@ -140,6 +174,7 @@
 .status-stopped .pulse-indicator-dot,
 .status-offline .xbox-pill-dot {
   background: #e5484d;
+  box-shadow: none;
 }
 
 .radar-wave,
@@ -148,24 +183,37 @@
 }
 
 /* --------------------------------------------------------------------------
-   5. Tactile Controls & Buttons (No neon auras, no sheen sweep, 0.98 scale on press)
+   5. Tactile Controls & Buttons with Physical Spring Feedback
    -------------------------------------------------------------------------- */
 .btn,
 .btn-power,
 .btn-header-power,
 .btn-primary,
-.btn-secondary {
+.btn-secondary,
+.btn-chip-heal,
+.btn-heal,
+.btn-chip-feed,
+.btn-feed,
+.btn-chip-kick,
+.btn-kick,
+.btn-chip-ban,
+.btn-ban,
+.btn-op,
+.btn-deop {
   position: relative;
   overflow: hidden;
   font-family: var(--font-sans);
   font-weight: 500;
   border-radius: var(--radius-md, 8px) !important;
-  transition: background-color 0.14s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.14s cubic-bezier(0.22, 1, 0.36, 1),
-              color 0.14s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.1s cubic-bezier(0.22, 1, 0.36, 1) !important;
-  transform: none !important;
+  transition: background-color var(--duration-tactile) var(--ease-out-quint),
+              border-color var(--duration-tactile) var(--ease-out-quint),
+              color var(--duration-tactile) var(--ease-out-quint),
+              transform var(--duration-fluid) var(--ease-spring),
+              box-shadow var(--duration-tactile) var(--ease-out-quint) !important;
+  transform: translateY(0) scale(1) !important;
   box-shadow: none !important;
+  cursor: pointer;
+  will-change: transform;
 }
 
 .btn::after,
@@ -177,14 +225,29 @@
 
 .btn:hover:not(:disabled),
 .btn-power:hover:not(:disabled),
-.btn-header-power:hover:not(:disabled) {
-  transform: none !important;
+.btn-header-power:hover:not(:disabled),
+.btn-primary:hover:not(:disabled),
+.btn-secondary:hover:not(:disabled) {
+  transform: translateY(-1px) !important;
 }
 
 .btn:active:not(:disabled),
 .btn-power:active:not(:disabled),
-.btn-header-power:active:not(:disabled) {
-  transform: scale(0.98) !important;
+.btn-header-power:active:not(:disabled),
+.btn-primary:active:not(:disabled),
+.btn-secondary:active:not(:disabled),
+.btn-chip-heal:active,
+.btn-heal:active,
+.btn-chip-feed:active,
+.btn-feed:active,
+.btn-chip-kick:active,
+.btn-kick:active,
+.btn-chip-ban:active,
+.btn-ban:active,
+.btn-op:active,
+.btn-deop:active {
+  transform: scale(0.97) translateY(0) !important;
+  transition-duration: 0.08s !important;
 }
 
 /* High-contrast primary action */
@@ -195,7 +258,7 @@
   color: #08090e !important;
   border: 1px solid #10b981 !important;
   font-weight: 600 !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
 }
 
 .btn-primary:hover:not(:disabled),
@@ -203,6 +266,7 @@
 .btn-start-all:hover:not(:disabled) {
   background: #059669 !important;
   border-color: #059669 !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
 }
 
 /* Secondary Actions */
@@ -212,6 +276,7 @@
   background: var(--bg-raised, #232325) !important;
   color: var(--text-main, #ededed) !important;
   border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
 }
 
 .btn-secondary:hover:not(:disabled),
@@ -219,6 +284,7 @@
 .btn-restart-all:hover:not(:disabled) {
   background: #2b2b2e !important;
   border-color: rgba(237, 237, 237, 0.18) !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
 }
 
 /* Stop Actions */
@@ -233,10 +299,11 @@
 .btn-stop-all:hover:not(:disabled) {
   background: rgba(229, 72, 77, 0.22) !important;
   border-color: rgba(229, 72, 77, 0.45) !important;
+  box-shadow: 0 3px 8px rgba(229, 72, 77, 0.2) !important;
 }
 
 /* --------------------------------------------------------------------------
-   6. Clean Telemetry Bars (No moving shimmers)
+   6. Instrument-Grade Telemetry Gauges (Fluid linear() Spring Transitions)
    -------------------------------------------------------------------------- */
 .telemetry-meter-bar {
   background: rgba(255, 255, 255, 0.06) !important;
@@ -250,7 +317,8 @@
   height: 100%;
   border-radius: var(--radius-full, 9999px);
   position: relative;
-  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: width 0.75s var(--ease-spring) !important;
+  will-change: width;
 }
 
 .telemetry-meter-bar .meter-fill::after {
@@ -265,7 +333,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   7. Quiet Tactile Player Action Buttons
+   7. Quiet Tactile Player Moderation Chips
    -------------------------------------------------------------------------- */
 .btn-chip-heal,
 .btn-heal,
@@ -281,61 +349,60 @@
   padding: 4px 10px !important;
   font-size: 12px !important;
   font-weight: 500 !important;
-  transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.1s ease !important;
-  transform: none !important;
-  box-shadow: none !important;
-  animation: none !important;
+  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
 }
 
 .btn-chip-heal:hover,
-.btn-heal:hover,
+.btn-heal:hover {
+  background-color: rgba(236, 72, 153, 0.16) !important;
+  border-color: rgba(236, 72, 153, 0.4) !important;
+  color: #f472b6 !important;
+}
+
 .btn-chip-feed:hover,
-.btn-feed:hover,
+.btn-feed:hover {
+  background-color: rgba(245, 158, 11, 0.16) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  color: #fbbf24 !important;
+}
+
 .btn-chip-kick:hover,
-.btn-kick:hover,
+.btn-kick:hover {
+  background-color: rgba(249, 115, 22, 0.16) !important;
+  border-color: rgba(249, 115, 22, 0.4) !important;
+  color: #fb923c !important;
+}
+
 .btn-chip-ban:hover,
-.btn-ban:hover,
-.btn-op:hover,
-.btn-deop:hover {
-  transform: none !important;
-  box-shadow: none !important;
-  animation: none !important;
+.btn-ban:hover {
+  background-color: rgba(229, 72, 77, 0.16) !important;
+  border-color: rgba(229, 72, 77, 0.4) !important;
+  color: #f87171 !important;
 }
 
-.btn-chip-heal:active,
-.btn-heal:active,
-.btn-chip-feed:active,
-.btn-feed:active,
-.btn-chip-kick:active,
-.btn-kick:active,
-.btn-chip-ban:active,
-.btn-ban:active,
-.btn-op:active,
-.btn-deop:active {
-  transform: scale(0.97) !important;
-}
-
-/* Table Rows */
+/* Table Rows Smooth Transition */
 table tbody tr {
-  transition: background-color 0.12s ease;
+  transition: background-color var(--duration-tactile) var(--ease-out-quint);
 }
 
 table tbody tr:hover {
-  background-color: var(--bg-raised, #232325) !important;
+  background-color: rgba(255, 255, 255, 0.04) !important;
 }
 
 /* --------------------------------------------------------------------------
-   8. Authentic Command Terminal (Clean dark contrast, no fake CRT scanlines)
+   8. Authentic Command Terminal & Log Reveal Animation
    -------------------------------------------------------------------------- */
 .console-terminal-wrapper,
 .console-terminal-box,
-.terminal-window {
+.terminal-window,
+.console-logs-container {
   background: #0f0f10 !important;
   border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.08)) !important;
   border-radius: var(--radius-lg, 12px) !important;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
   position: relative;
   overflow: hidden;
+  scroll-behavior: smooth !important;
 }
 
 .console-terminal-wrapper::before,
@@ -353,7 +420,8 @@ table tbody tr:hover {
   font-size: 13px !important;
   border-radius: var(--radius-md, 8px) !important;
   padding: 8px 12px !important;
-  transition: border-color 0.14s ease !important;
+  transition: border-color var(--duration-tactile) var(--ease-out-quint),
+              box-shadow var(--duration-tactile) var(--ease-out-quint) !important;
 }
 
 .terminal-input-bar input:focus,
@@ -363,8 +431,25 @@ table tbody tr:hover {
   outline: none !important;
 }
 
+/* Smooth Terminal Log Line Reveal */
+.console-log-row,
+.terminal-line {
+  animation: terminalLineReveal 0.16s var(--ease-out-quint) both;
+}
+
+@keyframes terminalLineReveal {
+  from {
+    opacity: 0;
+    transform: translateX(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* --------------------------------------------------------------------------
-   9. Sidebar & Navigation (36px rows, quiet active indicator, no wiggles)
+   9. Sidebar & Navigation (Fluid micro-translation on hover)
    -------------------------------------------------------------------------- */
 .sidebar {
   background: var(--bg-sidebar, #0f0f10) !important;
@@ -395,13 +480,16 @@ table tbody tr:hover {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
-  transition: background-color 0.14s ease, color 0.14s ease !important;
-  transform: none !important;
+  transition: transform var(--duration-fluid) var(--ease-spring),
+              background-color var(--duration-tactile) ease,
+              color var(--duration-tactile) ease !important;
+  transform: translateX(0) !important;
   border-left: none !important;
+  will-change: transform;
 }
 
 .nav-link:hover {
-  transform: none !important;
+  transform: translateX(3px) !important;
   background-color: rgba(255, 255, 255, 0.04) !important;
   color: var(--text-main, #ededed) !important;
 }
@@ -412,11 +500,8 @@ table tbody tr:hover {
   font-weight: 500 !important;
   border-left: 2px solid #10b981 !important;
   border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0 !important;
-}
-
-.nav-link:hover .nav-icon,
-.sidebar-user-card:hover .user-settings-gear {
-  animation: none !important;
+  transform: translateX(2px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
 }
 
 .nav-badge-pill {
@@ -431,7 +516,7 @@ table tbody tr:hover {
 }
 
 /* --------------------------------------------------------------------------
-   10. Header & Clean Indicators
+   10. Header & Status Indicators
    -------------------------------------------------------------------------- */
 .top-header {
   height: 56px !important;
@@ -449,25 +534,143 @@ table tbody tr:hover {
   border-radius: var(--radius-sm, 6px) !important;
   padding: 4px 10px !important;
   font-size: 12px !important;
+  transition: border-color var(--duration-tactile) ease;
 }
 
 /* --------------------------------------------------------------------------
-   11. Quiet Toasts & Feedback
+   11. Native Modern Entry/Exit Modals (@starting-style & allow-discrete)
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.72) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1000 !important;
+  padding: 1.5rem !important;
+  opacity: 1;
+  transition: opacity var(--duration-fluid) var(--ease-out-quint),
+              backdrop-filter var(--duration-fluid) var(--ease-out-quint) !important;
+  will-change: opacity;
+}
+
+.modal,
+.modal-dialog,
+.app-update-modal-card {
+  background-color: #19191b !important;
+  border: 1px solid rgba(237, 237, 237, 0.12) !important;
+  border-radius: var(--radius-xl, 16px) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: transform var(--duration-physics) var(--ease-spring),
+              opacity var(--duration-fluid) var(--ease-out-quint) !important;
+  will-change: transform, opacity;
+}
+
+/* Baseline native entry starting state */
+@starting-style {
+  .modal-overlay {
+    opacity: 0;
+    backdrop-filter: blur(0px) !important;
+    -webkit-backdrop-filter: blur(0px) !important;
+  }
+  .modal,
+  .modal-dialog,
+  .app-update-modal-card {
+    opacity: 0;
+    transform: scale(0.96) translateY(-10px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12. Quiet Toasts & Alert Banners with Native Physics Entrance
    -------------------------------------------------------------------------- */
 .alert-toast,
 .header-action-toast {
-  animation: quietEntrance 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
-  backdrop-filter: none !important;
   background: var(--bg-raised, #232325) !important;
-  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.12)) !important;
+  border: 1px solid var(--border-subtle, rgba(237, 237, 237, 0.14)) !important;
   border-radius: var(--radius-md, 8px) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
   font-size: 13px !important;
   color: var(--text-main, #ededed) !important;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: transform var(--duration-physics) var(--ease-spring),
+              opacity var(--duration-fluid) var(--ease-out-quint),
+              box-shadow var(--duration-fluid) var(--ease-out-quint) !important;
+  will-change: transform, opacity;
+}
+
+@starting-style {
+  .alert-toast,
+  .header-action-toast {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.95);
+  }
 }
 
 /* --------------------------------------------------------------------------
-   12. Minimalist Monospace Numbers & Code
+   13. Addon Drag & Drop Zone Spring Physics
+   -------------------------------------------------------------------------- */
+.addon-drop-zone,
+.drop-zone {
+  border: 2px dashed rgba(237, 237, 237, 0.14) !important;
+  border-radius: var(--radius-lg, 12px) !important;
+  background: rgba(255, 255, 255, 0.015) !important;
+  transition: transform var(--duration-physics) var(--ease-spring),
+              border-color var(--duration-tactile) var(--ease-out-quint),
+              background-color var(--duration-tactile) var(--ease-out-quint),
+              box-shadow var(--duration-physics) var(--ease-spring) !important;
+  will-change: transform;
+}
+
+.addon-drop-zone:hover,
+.drop-zone:hover {
+  border-color: rgba(237, 237, 237, 0.28) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  transform: translateY(-1px) !important;
+}
+
+.addon-drop-zone.dragging,
+.drop-zone.drag-active {
+  transform: scale(1.015) !important;
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.06) !important;
+  box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.16) !important;
+}
+
+/* --------------------------------------------------------------------------
+   14. Form Inputs & Selects Focus Transition
+   -------------------------------------------------------------------------- */
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+select,
+textarea {
+  background-color: #19191b !important;
+  border: 1px solid rgba(237, 237, 237, 0.1) !important;
+  color: var(--text-main, #ededed) !important;
+  border-radius: var(--radius-md, 8px) !important;
+  transition: border-color var(--duration-tactile) var(--ease-out-quint),
+              box-shadow var(--duration-tactile) var(--ease-out-quint),
+              background-color var(--duration-tactile) var(--ease-out-quint) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
+  outline: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   15. Tabular Figures & Monospace Code
    -------------------------------------------------------------------------- */
 code, pre, .font-mono {
   font-family: var(--font-mono) !important;
@@ -475,7 +678,7 @@ code, pre, .font-mono {
 }
 
 /* --------------------------------------------------------------------------
-   13. Discrete Scrollbars
+   16. Discrete Scrollbars
    -------------------------------------------------------------------------- */
 ::-webkit-scrollbar {
   width: 6px;
@@ -487,7 +690,27 @@ code, pre, .font-mono {
 ::-webkit-scrollbar-thumb {
   background: rgba(237, 237, 237, 0.14);
   border-radius: 4px;
+  transition: background-color var(--duration-tactile) ease;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(237, 237, 237, 0.24);
+  background: rgba(237, 237, 237, 0.28);
+}
+
+/* --------------------------------------------------------------------------
+   17. Strict Accessibility: Respect prefers-reduced-motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+    transform: none !important;
+  }
+  .state-running .radar-core,
+  .status-running .pulse-indicator-dot,
+  .status-online .xbox-pill-dot {
+    animation: none !important;
+  }
 }

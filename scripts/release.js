@@ -109,12 +109,14 @@ async function main() {
 - **BedrockServerManager-Setup.exe**: Interactive Windows setup installer with prerequisite verification, desktop shortcuts, and automated in-place updater.
 - **BedrockServerManager.exe**: Lightweight standalone Windows system tray watchdog launcher.
 
-#### What's New in v1.2.4:
-- **Complete 9-Pass Unslop UI Redesign**: Transformed application interface into a precise, utilitarian, industrial Minecraft BDS control console.
-- **Unified Lucide Iconography**: Replaced 370+ irregular emojis across all 15 screens with unified Lucide icons for crisp visual alignment.
-- **Craft Neutral Palette**: Unified Graphite dark ramp (\`#0f0f10\`, \`#141415\`, \`#19191b\`, \`#232325\`) with 8% hairlines and single emerald accent.
-- **Optimized Performance & Battery**: Eliminated continuous 140px blur loops, radar sweeps, and bouncing hover animations.
-- **Optical Typography & Spacing**: Strict 8pt spatial grid, sentence case headings, and tabular numbers (\`font-variant-numeric: tabular-nums\`) on all telemetry gauges.
+#### What's New in v1.2.5:
+- **Physics-Based Spring Transitions**: Integrated CSS \`linear()\` physics easing curves (\`--ease-spring\`, \`--ease-spring-snappy\`) from Modern Web Guidance for tactile micro-damped movement with physical weight.
+- **Native Entry/Exit Animations**: Applied \`@starting-style\` to all modals, overlays, alert toasts, and dialogs for smooth, fluid entrances without layout thrashing.
+- **Instrument-Grade Telemetry Fluidity**: CPU, RAM, and TPS gauges glide naturally via spring-interpolated transitions during live server heartbeats.
+- **Tactile Button & Control Physics**: Physical spring feedback on hover (\`-1px\` lift) and click (\`scale(0.97)\` press) across all primary, secondary, and player action buttons.
+- **Calm Industrial Status Beacon**: Replaced abrupt status state updates with an ambient 3.2s breathing aura indicating active BDS process health.
+- **Smooth Navigation & Stream Animations**: Fluid spring micro-slide on sidebar links and animated line entrance for the live BDS terminal log stream.
+- **Accessible Motion Engine**: Full \`@media (prefers-reduced-motion: reduce)\` compliance for sensitive setups.
 
 #### Core Capabilities:
 - **1-Click Instant Addon Auto-Installer**: Drag-and-drop \`.mcaddon\`, \`.mcpack\`, and \`.zip\` files. Automatically decompresses nested packs, splits BP/RP, pairs companion packs, and injects valid UUID manifests directly into your active world configs in < 1 second.

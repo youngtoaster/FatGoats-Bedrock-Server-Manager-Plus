@@ -33,6 +33,11 @@
   --radius-xl: 28px;
   --radius-full: 9999px;
 
+  /* Modern Web Guidance Physics-Based linear() Easing */
+  --ease-spring: linear(0, 0.006, 0.025 2.8%, 0.101 6.1%, 0.539 18.9%, 0.721 25.3%, 0.849 31.6%, 0.937 38.2%, 0.968 41.8%, 0.991 45.7%, 1.006 50.1%, 1.015 55%, 1.017 60.7%, 1.014 67.5%, 1.001 84.4%, 1);
+  --ease-spring-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
   --shadow-glow: 0 0 35px -5px rgba(16, 185, 129, 0.25);
   --shadow-card: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
 }
@@ -269,12 +274,18 @@ body {
   text-decoration: none;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.24s var(--ease-spring),
+              background-color 0.15s ease,
+              border-color 0.15s ease,
+              box-shadow 0.2s ease,
+              color 0.15s ease;
   white-space: nowrap;
+  will-change: transform;
 }
 
 .btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97) !important;
+  transition-duration: 0.08s !important;
 }
 
 .btn-primary {
@@ -748,8 +759,9 @@ body {
   backdrop-filter: blur(16px);
   position: relative;
   overflow: hidden;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.32s var(--ease-spring), border-color 0.2s ease, box-shadow 0.32s var(--ease-out-quint);
   transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .bento-card:hover {
@@ -1050,14 +1062,22 @@ body {
   align-items: center;
   gap: 0.65rem;
   z-index: 999;
-  transform: translateY(100px);
+  transform: translateY(20px) scale(0.95);
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.35s var(--ease-spring), opacity 0.22s var(--ease-out-quint);
   pointer-events: none;
+  will-change: transform, opacity;
+}
+
+@starting-style {
+  .showcase-toast {
+    transform: translateY(24px) scale(0.92);
+    opacity: 0;
+  }
 }
 
 .showcase-toast.show {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   opacity: 1;
 }
 
