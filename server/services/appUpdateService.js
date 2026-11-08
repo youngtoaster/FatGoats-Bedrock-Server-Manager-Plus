@@ -6,6 +6,7 @@ const { exec, execSync } = require('child_process');
 const fetch = require('node-fetch');
 const unzipper = require('unzipper');
 const db = require('../database');
+const systemLock = require('./systemLock');
 
 const execPromise = util.promisify(exec);
 
@@ -496,6 +497,11 @@ class AppUpdateService {
       throw new Error('An update is already in progress.');
     }
 
+    const lock = systemLock.acquire('APP_UPDATE', {
+      description: 'Updating Bedrock Server Manager application from GitHub',
+      holder: 'appUpdateService',
+    });
+
     this.isUpdating = true;
     this.updateProgress = 'Starting update pipeline...';
     this.updatePercent = 5;
@@ -777,6 +783,7 @@ class AppUpdateService {
       };
     } finally {
       this.isUpdating = false;
+      lock.release();
     }
   }
 
@@ -786,6 +793,8 @@ class AppUpdateService {
       progress: this.updateProgress || '',
       percent: this.updatePercent || 0,
       stage: this.updateStage || 0,
+      isLocked: systemLock.isLocked(),
+      lockInfo: systemLock.getLockInfo(),
     };
   }
 }

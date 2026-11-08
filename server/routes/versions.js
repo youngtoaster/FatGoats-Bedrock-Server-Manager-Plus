@@ -31,6 +31,19 @@ const upload = multer({
 });
 
 /**
+ * GET /operation-status
+ * (authenticate) get current version installation state machine & lock telemetry
+ */
+router.get('/operation-status', authenticate, (req, res) => {
+  try {
+    const status = versionService.getOperationStatus();
+    return res.json(status);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to retrieve version operation status', details: err.message });
+  }
+});
+
+/**
  * GET /current
  * (authenticate) get current installed version
  */

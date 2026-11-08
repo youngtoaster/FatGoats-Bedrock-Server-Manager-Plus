@@ -8,7 +8,8 @@ import {
   AlertTriangle,
   CheckCircle2,
   FileArchive,
-  Plus
+  Plus,
+  Lock
 } from 'lucide-react';
 
 export const Backups = () => {
@@ -19,6 +20,7 @@ export const Backups = () => {
   const [worlds, setWorlds] = useState([]);
   const [selectedWorld, setSelectedWorld] = useState('');
   const [loading, setLoading] = useState(true);
+  const [opStatus, setOpStatus] = useState(null);
   const [creatingBackup, setCreatingBackup] = useState(false);
   const [restoringBackup, setRestoringBackup] = useState(false);
   const [deletingBackup, setDeletingBackup] = useState(false);
@@ -67,11 +69,16 @@ export const Backups = () => {
     setLoading(true);
     setError(null);
     try {
-      const [backupsData, worldsData, settingsData] = await Promise.allSettled([
+      const [backupsData, worldsData, settingsData, opData] = await Promise.allSettled([
         api.Backups.list(),
         api.Worlds.list(),
         api.Backups.getSettings(),
+        api.Backups.getOperationStatus(),
       ]);
+
+      if (opData.status === 'fulfilled' && opData.value) {
+        setOpStatus(opData.value);
+      }
 
       if (backupsData.status === 'fulfilled') {
         const rawList = Array.isArray(backupsData.value)
@@ -208,6 +215,10 @@ export const Backups = () => {
     }
   };
 
+  const isLocked = Boolean(opStatus?.isLocked);
+  const lockInfo = opStatus?.lockInfo;
+  const isOperationBusy = creatingBackup || restoringBackup || deletingBackup || opStatus?.state === 'CREATING' || opStatus?.state === 'RESTORING';
+
   return (
     <div className="page-container">
       {/* Header */}
@@ -221,12 +232,36 @@ export const Backups = () => {
             type="button"
             className="btn btn-secondary"
             onClick={loadData}
-            disabled={loading || creatingBackup || restoringBackup || deletingBackup}
+            disabled={loading || isOperationBusy || isLocked}
           >
             <RefreshCw size={13} className={loading ? "spinning" : ""} /><span>Refresh</span>
           </button>
         </div>
       </div>
+
+      {/* Exclusive System Maintenance Lock Notice */}
+      {isLocked && (
+        <div className="system-lock-banner mb-4">
+          <div className="lock-content-flex">
+            <div className="lock-icon-box">
+              <Lock size={18} />
+            </div>
+            <div className="lock-text-group">
+              <div className="lock-header-row">
+                <span className="lock-heading">System Maintenance Lock Active</span>
+                <span className="lock-badge-tag">{lockInfo?.type || 'EXCLUSIVE_OPERATION'}</span>
+              </div>
+              <p className="lock-subtext">
+                {lockInfo?.description || 'A critical background operation is currently running.'} Backup restoration and file modifications are paused to safeguard server data.
+              </p>
+            </div>
+          </div>
+          <div className="lock-status-badge">
+            <span className="lock-pulse-dot" />
+            <span>Busy ({Math.round((lockInfo?.durationMs || 0) / 1000)}s)</span>
+          </div>
+        </div>
+      )}
 
       {/* Notifications */}
       {error && (
@@ -362,8 +397,8 @@ export const Backups = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                disabled={creatingBackup || restoringBackup || !selectedWorld || !isAdmin}
-                title={!isAdmin ? 'Admin permission required' : 'Create zip snapshot of selected world'}
+                disabled={isLocked || isOperationBusy || !selectedWorld || !isAdmin}
+                title={isLocked ? `Locked by ${lockInfo?.type}` : (!isAdmin ? 'Admin permission required' : 'Create zip snapshot of selected world')}
               >
                 {creatingBackup ? (
                   <>
@@ -432,8 +467,8 @@ export const Backups = () => {
                               type="button"
                               className="btn btn-warning btn-sm"
                               onClick={() => setRestoreModalFile(b)}
-                              disabled={restoringBackup || creatingBackup || deletingBackup || !isAdmin}
-                              title={!isAdmin ? 'Admin permission required' : 'Restore this backup'}
+                              disabled={isLocked || isOperationBusy || !isAdmin}
+                              title={isLocked ? `Locked by ${lockInfo?.type}` : (!isAdmin ? 'Admin permission required' : 'Restore this backup')}
                             >
                               Restore
                             </button>
@@ -441,8 +476,8 @@ export const Backups = () => {
                               type="button"
                               className="btn btn-danger btn-sm"
                               onClick={() => setDeleteModalFile(b)}
-                              disabled={restoringBackup || creatingBackup || deletingBackup || !isAdmin}
-                              title={!isAdmin ? 'Admin permission required' : 'Delete this archive'}
+                              disabled={isLocked || isOperationBusy || !isAdmin}
+                              title={isLocked ? `Locked by ${lockInfo?.type}` : (!isAdmin ? 'Admin permission required' : 'Delete this archive')}
                             >
                               Delete
                             </button>

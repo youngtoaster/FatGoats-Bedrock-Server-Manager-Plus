@@ -21,6 +21,18 @@ router.get('/', authenticate, async (req, res) => {
 });
 
 /**
+ * GET /operation-status
+ * (authenticate) get current backup/restore FSM status and locks
+ */
+router.get('/operation-status', authenticate, (req, res) => {
+  try {
+    return res.json(backupService.getOperationStatus());
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+/**
  * POST /
  * (authenticate, requireAdmin) create backup, logAudit
  */

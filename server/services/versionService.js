@@ -3,8 +3,59 @@ const path = require('path');
 const fetch = require('node-fetch');
 const unzipper = require('unzipper');
 const config = require('../config');
+const FiniteStateMachine = require('../utils/fsm');
+const systemLock = require('./systemLock');
 
 const MOJANG_DOWNLOADS_API = 'https://net-secondary.web.minecraft-services.net/api/v1.0/download/links';
+
+/**
+ * Version Pipeline Finite State Machine (FSM)
+ * Elevates UX/DX/AX by preventing concurrent binary collisions or corruptions.
+ */
+const versionFsm = new FiniteStateMachine({
+  initial: 'IDLE',
+  states: {
+    IDLE: {
+      on: {
+        START_DOWNLOAD: 'DOWNLOADING',
+        START_EXTRACT: 'EXTRACTING',
+      },
+      allowedActions: ['installVersion', 'installLatest', 'installFromUpload'],
+    },
+    DOWNLOADING: {
+      on: {
+        START_EXTRACT: 'EXTRACTING',
+        ERROR: 'IDLE',
+      },
+      allowedActions: [],
+    },
+    EXTRACTING: {
+      on: {
+        FINALIZE: 'INSTALLING',
+        SUCCESS: 'IDLE',
+        ERROR: 'IDLE',
+      },
+      allowedActions: [],
+    },
+    INSTALLING: {
+      on: {
+        SUCCESS: 'IDLE',
+        ERROR: 'IDLE',
+      },
+      allowedActions: [],
+    },
+  },
+});
+
+function getOperationStatus() {
+  return {
+    state: versionFsm.getState(),
+    allowedActions: versionFsm.getAllowedActions(),
+    context: versionFsm.getContext(),
+    isLocked: systemLock.isLocked(),
+    lockInfo: systemLock.getLockInfo(),
+  };
+}
 
 /**
  * Ensure directory exists
@@ -177,6 +228,18 @@ async function fetchAvailableVersions() {
  * Backs up configuration files & worlds, extracts new server, and restores user data.
  */
 async function _extractAndInstallZip(zipFilePath, expectedVersion = null) {
+  if (versionFsm.getState() !== 'EXTRACTING') {
+    if (!versionFsm.can('START_EXTRACT')) {
+      throw new Error(`Cannot install BDS package: Version pipeline is currently in state "${versionFsm.getState()}".`);
+    }
+    versionFsm.transition('START_EXTRACT', { expectedVersion });
+  }
+
+  const lock = systemLock.acquire('VERSION_INSTALL', {
+    description: `Installing Bedrock Dedicated Server binaries ${expectedVersion || ''}`.trim(),
+    holder: 'versionService',
+  });
+
   ensureDir(config.BDS_DIR);
   ensureDir(config.UPLOAD_DIR);
 
@@ -269,12 +332,20 @@ async function _extractAndInstallZip(zipFilePath, expectedVersion = null) {
 
     console.log(`[VersionService] Bedrock Dedicated Server v${versionRecorded} installed successfully with 100% data preservation!`);
 
+    versionFsm.transition('SUCCESS');
+
     return {
       success: true,
       message: `Bedrock Dedicated Server updated to ${versionRecorded}. User configurations, worlds, and packs preserved.`,
       installedVersion: versionRecorded
     };
+  } catch (err) {
+    if (versionFsm.can('ERROR')) {
+      versionFsm.transition('ERROR', { error: err.message });
+    }
+    throw err;
   } finally {
+    lock.release();
     if (fs.existsSync(backupTempDir)) {
       try { fs.rmSync(backupTempDir, { recursive: true, force: true }); } catch (_) {}
     }
@@ -286,6 +357,12 @@ async function _extractAndInstallZip(zipFilePath, expectedVersion = null) {
  * Download zip from URL to temp, extract to BDS_DIR with data preservation.
  */
 async function installVersion(url) {
+  if (!versionFsm.can('START_DOWNLOAD')) {
+    throw new Error(`Cannot start BDS download: Version pipeline is currently in state "${versionFsm.getState()}".`);
+  }
+
+  versionFsm.transition('START_DOWNLOAD', { url });
+
   ensureDir(config.UPLOAD_DIR);
   const tempZipPath = path.join(config.UPLOAD_DIR, `bds-download-${Date.now()}.zip`);
 
@@ -312,8 +389,14 @@ async function installVersion(url) {
     console.log('[VersionService] Download completed. Extracting package...');
     const verMatch = url.match(/bedrock-server-([\d]+(?:\.[\d]+)+)/i);
     const expectedVersion = verMatch ? verMatch[1].replace(/\.+$/, '') : null;
+    versionFsm.transition('START_EXTRACT', { expectedVersion });
     const result = await _extractAndInstallZip(tempZipPath, expectedVersion);
     return result;
+  } catch (err) {
+    if (versionFsm.can('ERROR')) {
+      versionFsm.transition('ERROR', { error: err.message });
+    }
+    throw err;
   } finally {
     if (fs.existsSync(tempZipPath)) {
       try { fs.unlinkSync(tempZipPath); } catch (_) {}
@@ -363,5 +446,6 @@ module.exports = {
   fetchAvailableVersions,
   installVersion,
   installLatest,
-  installFromUpload
+  installFromUpload,
+  getOperationStatus
 };

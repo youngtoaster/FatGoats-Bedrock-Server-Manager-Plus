@@ -4,6 +4,41 @@ const archiver = require('archiver');
 const unzipper = require('unzipper');
 const config = require('../config');
 const { parseProperties } = require('../utils/propertyParser');
+const { FiniteStateMachine } = require('../utils/fsm');
+const systemLock = require('./systemLock');
+
+/**
+ * Operational State Machine for Backup & Restore tasks
+ * Ensures single-threaded execution, concurrency guards, and agent transparency.
+ */
+const operationFsm = new FiniteStateMachine({
+  id: 'backup-operations',
+  initial: 'IDLE',
+  states: {
+    IDLE: {
+      on: { CREATE: 'CREATING', RESTORE: 'RESTORING' },
+      allowedActions: ['CREATE', 'RESTORE'],
+    },
+    CREATING: {
+      on: { SUCCESS: 'IDLE', ERROR: 'IDLE' },
+      allowedActions: [],
+    },
+    RESTORING: {
+      on: { SUCCESS: 'IDLE', ERROR: 'IDLE' },
+      allowedActions: [],
+    },
+  },
+});
+
+function getOperationStatus() {
+  return {
+    state: operationFsm.getState(),
+    allowedActions: operationFsm.getAllowedActions(),
+    context: operationFsm.getContext(),
+    isLocked: systemLock.isLocked(),
+    lockInfo: systemLock.getLockInfo(),
+  };
+}
 
 /**
  * Ensure directory exists
@@ -28,63 +63,78 @@ function getWorldsDirectory() {
  * Save to BACKUPS_DIR with timestamp filename. Return backup info.
  */
 async function createBackup(worldName) {
-  ensureDir(config.BACKUPS_DIR);
-
-  let targetWorldName = worldName;
-  const propsPath = path.join(config.BDS_DIR, 'server.properties');
-
-  if (!targetWorldName) {
-    const props = parseProperties(propsPath);
-    targetWorldName = props['level-name'] || 'Bedrock level';
+  if (!operationFsm.can('CREATE')) {
+    throw new Error(`Cannot create backup: operation is currently "${operationFsm.getState()}".`);
   }
+  operationFsm.transition('CREATE', { targetWorld: worldName });
 
-  const worldsDir = getWorldsDirectory();
-  const worldPath = path.join(worldsDir, targetWorldName);
+  try {
+    ensureDir(config.BACKUPS_DIR);
 
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const safeWorldName = targetWorldName.replace(/[^a-zA-Z0-9_-]/g, '_');
-  const filename = `backup-${safeWorldName}-${timestamp}.zip`;
-  const destZipPath = path.join(config.BACKUPS_DIR, filename);
+    let targetWorldName = worldName;
+    const propsPath = path.join(config.BDS_DIR, 'server.properties');
 
-  return new Promise((resolve, reject) => {
-    const output = fs.createWriteStream(destZipPath);
-    const archive = archiver('zip', {
-      zlib: { level: 9 }
-    });
+    if (!targetWorldName) {
+      const props = parseProperties(propsPath);
+      targetWorldName = props['level-name'] || 'Bedrock level';
+    }
 
-    output.on('close', () => {
-      resolve({
-        success: true,
-        filename,
-        path: destZipPath,
-        worldName: targetWorldName,
-        size: archive.pointer(),
-        createdAt: new Date().toISOString()
+    const worldsDir = getWorldsDirectory();
+    const worldPath = path.join(worldsDir, targetWorldName);
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const safeWorldName = targetWorldName.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filename = `backup-${safeWorldName}-${timestamp}.zip`;
+    const destZipPath = path.join(config.BACKUPS_DIR, filename);
+
+    const result = await new Promise((resolve, reject) => {
+      const output = fs.createWriteStream(destZipPath);
+      const archive = archiver('zip', {
+        zlib: { level: 9 }
       });
-    });
 
-    archive.on('error', (err) => {
-      reject(new Error(`Archiving backup failed: ${err.message}`));
-    });
+      output.on('close', () => {
+        resolve({
+          success: true,
+          filename,
+          path: destZipPath,
+          worldName: targetWorldName,
+          size: archive.pointer(),
+          createdAt: new Date().toISOString()
+        });
+      });
 
-    archive.pipe(output);
+      archive.on('error', (err) => {
+        reject(new Error(`Archiving backup failed: ${err.message}`));
+      });
 
-    // Archive world folder if exists
-    if (fs.existsSync(worldPath)) {
-      archive.directory(worldPath, path.join('worlds', targetWorldName));
-    }
+      archive.pipe(output);
 
-    // Archive config files if they exist in BDS_DIR
-    const configFiles = ['server.properties', 'allowlist.json', 'permissions.json', 'whitelist.json'];
-    for (const cf of configFiles) {
-      const fullPath = path.join(config.BDS_DIR, cf);
-      if (fs.existsSync(fullPath)) {
-        archive.file(fullPath, { name: cf });
+      // Archive world folder if exists
+      if (fs.existsSync(worldPath)) {
+        archive.directory(worldPath, path.join('worlds', targetWorldName));
       }
-    }
 
-    archive.finalize();
-  });
+      // Archive config files if they exist in BDS_DIR
+      const configFiles = ['server.properties', 'allowlist.json', 'permissions.json', 'whitelist.json'];
+      for (const cf of configFiles) {
+        const fullPath = path.join(config.BDS_DIR, cf);
+        if (fs.existsSync(fullPath)) {
+          archive.file(fullPath, { name: cf });
+        }
+      }
+
+      archive.finalize();
+    });
+
+    operationFsm.transition('SUCCESS');
+    return result;
+  } catch (err) {
+    if (operationFsm.can('ERROR')) {
+      operationFsm.transition('ERROR');
+    }
+    throw err;
+  }
 }
 
 /**
@@ -125,67 +175,90 @@ async function listBackups() {
  * Return success.
  */
 async function restoreBackup(filename) {
-  ensureDir(config.BACKUPS_DIR);
-  const backupPath = path.join(config.BACKUPS_DIR, filename);
-
-  if (!fs.existsSync(backupPath)) {
-    throw new Error(`Backup file not found: ${filename}`);
+  if (!operationFsm.can('RESTORE')) {
+    throw new Error(`Cannot restore backup: operation is currently "${operationFsm.getState()}".`);
   }
 
-  const worldsDir = getWorldsDirectory();
-  ensureDir(worldsDir);
-  ensureDir(config.BDS_DIR);
-
-  return new Promise((resolve, reject) => {
-    fs.createReadStream(backupPath)
-      .pipe(unzipper.Parse())
-      .on('entry', async (entry) => {
-        const entryPath = entry.path;
-        const type = entry.type; // 'Directory' or 'File'
-
-        try {
-          if (entryPath.startsWith('worlds/')) {
-            // Restore world content to worlds directory
-            // e.g., worlds/MyWorld/level.dat -> getWorldsDirectory()/MyWorld/level.dat
-            const relativeToWorlds = entryPath.slice('worlds/'.length);
-            if (!relativeToWorlds) {
-              entry.autodrain();
-              return;
-            }
-            const targetFullPath = path.join(worldsDir, relativeToWorlds);
-            if (type === 'Directory') {
-              ensureDir(targetFullPath);
-              entry.autodrain();
-            } else {
-              ensureDir(path.dirname(targetFullPath));
-              entry.pipe(fs.createWriteStream(targetFullPath));
-            }
-          } else {
-            // Top-level config files (server.properties, allowlist.json, etc.)
-            const targetFullPath = path.join(config.BDS_DIR, entryPath);
-            if (type === 'Directory') {
-              ensureDir(targetFullPath);
-              entry.autodrain();
-            } else {
-              ensureDir(path.dirname(targetFullPath));
-              entry.pipe(fs.createWriteStream(targetFullPath));
-            }
-          }
-        } catch (err) {
-          entry.autodrain();
-          reject(err);
-        }
-      })
-      .on('close', () => {
-        resolve({
-          success: true,
-          message: `Backup ${filename} restored successfully.`
-        });
-      })
-      .on('error', (err) => {
-        reject(new Error(`Failed extracting backup zip: ${err.message}`));
-      });
+  // Acquire exclusive system lock during restore so server cannot be started
+  const lock = systemLock.acquire('BACKUP_RESTORE', {
+    description: `Restoring world backup "${filename}"`,
+    holder: 'backupService',
   });
+
+  operationFsm.transition('RESTORE', { filename });
+
+  try {
+    ensureDir(config.BACKUPS_DIR);
+    const backupPath = path.join(config.BACKUPS_DIR, filename);
+
+    if (!fs.existsSync(backupPath)) {
+      throw new Error(`Backup file not found: ${filename}`);
+    }
+
+    const worldsDir = getWorldsDirectory();
+    ensureDir(worldsDir);
+    ensureDir(config.BDS_DIR);
+
+    const result = await new Promise((resolve, reject) => {
+      fs.createReadStream(backupPath)
+        .pipe(unzipper.Parse())
+        .on('entry', async (entry) => {
+          const entryPath = entry.path;
+          const type = entry.type; // 'Directory' or 'File'
+
+          try {
+            if (entryPath.startsWith('worlds/')) {
+              // Restore world content to worlds directory
+              const relativeToWorlds = entryPath.slice('worlds/'.length);
+              if (!relativeToWorlds) {
+                entry.autodrain();
+                return;
+              }
+              const targetFullPath = path.join(worldsDir, relativeToWorlds);
+              if (type === 'Directory') {
+                ensureDir(targetFullPath);
+                entry.autodrain();
+              } else {
+                ensureDir(path.dirname(targetFullPath));
+                entry.pipe(fs.createWriteStream(targetFullPath));
+              }
+            } else {
+              // Top-level config files (server.properties, allowlist.json, etc.)
+              const targetFullPath = path.join(config.BDS_DIR, entryPath);
+              if (type === 'Directory') {
+                ensureDir(targetFullPath);
+                entry.autodrain();
+              } else {
+                ensureDir(path.dirname(targetFullPath));
+                entry.pipe(fs.createWriteStream(targetFullPath));
+              }
+            }
+          } catch (err) {
+            entry.autodrain();
+            reject(err);
+          }
+        })
+        .on('close', () => {
+          resolve({
+            success: true,
+            message: `Backup ${filename} restored successfully.`
+          });
+        })
+        .on('error', (err) => {
+          reject(new Error(`Failed extracting backup zip: ${err.message}`));
+        });
+    });
+
+    operationFsm.transition('SUCCESS');
+    return result;
+  } catch (err) {
+    if (operationFsm.can('ERROR')) {
+      operationFsm.transition('ERROR');
+    }
+    throw err;
+  } finally {
+    lock.release();
+  }
 }
 
 /**
@@ -315,5 +388,6 @@ module.exports = {
   deleteBackup,
   getBackupSettings,
   updateBackupSettings,
-  initAutoBackupScheduler
+  initAutoBackupScheduler,
+  getOperationStatus
 };

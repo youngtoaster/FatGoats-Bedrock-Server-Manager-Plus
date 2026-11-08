@@ -94,6 +94,7 @@ export const Server = {
   stop: () => request('POST', '/api/server/stop'),
   kill: () => request('POST', '/api/server/kill'),
   restart: () => request('POST', '/api/server/restart'),
+  acknowledgeCrash: () => request('POST', '/api/server/acknowledge-crash'),
   startAll: () => request('POST', '/api/server/start-all'),
   restartAll: () => request('POST', '/api/server/restart-all'),
   stopAll: () => request('POST', '/api/server/stop-all'),
@@ -185,6 +186,7 @@ export const Worlds = {
 };
 
 export const Backups = {
+  getOperationStatus: () => request('GET', '/api/backups/operation-status'),
   list: () => request('GET', '/api/backups'),
   create: (worldName) => request('POST', '/api/backups', { worldName }),
   restore: (filename) => request('POST', `/api/backups/${encodeURIComponent(filename)}/restore`),
@@ -238,6 +240,7 @@ export const Users = {
 };
 
 export const Versions = {
+  getOperationStatus: () => request('GET', '/api/versions/operation-status'),
   getCurrent: () => request('GET', '/api/versions/current'),
   getAvailable: () => request('GET', '/api/versions/available'),
   install: (url) => request('POST', '/api/versions/install', { url }),
@@ -330,6 +333,7 @@ const api = {
   stop: Server.stop,
   kill: Server.kill,
   restart: Server.restart,
+  acknowledgeCrash: Server.acknowledgeCrash,
   startAll: Server.startAll,
   restartAll: Server.restartAll,
   stopAll: Server.stopAll,

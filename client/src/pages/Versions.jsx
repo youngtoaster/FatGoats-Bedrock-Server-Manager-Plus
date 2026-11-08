@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import { Lock } from 'lucide-react';
 
 export const Versions = () => {
   const { user } = useAuth();
@@ -10,6 +11,7 @@ export const Versions = () => {
   const [currentVersion, setCurrentVersion] = useState(null);
   const [availableVersions, setAvailableVersions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [opStatus, setOpStatus] = useState(null);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [installingUrl, setInstallingUrl] = useState(null);
 
@@ -47,10 +49,22 @@ export const Versions = () => {
     setCheckingUpdates(true);
     setError(null);
     try {
-      const data = await api.Versions.getAvailable();
-      const list = Array.isArray(data) ? data : data?.versions || [];
-      setAvailableVersions(list);
-      setSuccessMsg(`Found ${list.length} available Bedrock Dedicated Server builds.`);
+      const [availData, statusData] = await Promise.allSettled([
+        api.Versions.getAvailable(),
+        api.Versions.getOperationStatus(),
+      ]);
+
+      if (statusData.status === 'fulfilled' && statusData.value) {
+        setOpStatus(statusData.value);
+      }
+
+      if (availData.status === 'fulfilled') {
+        const list = Array.isArray(availData.value) ? availData.value : availData.value?.versions || [];
+        setAvailableVersions(list);
+        setSuccessMsg(`Found ${list.length} available Bedrock Dedicated Server builds.`);
+      } else {
+        throw availData.reason;
+      }
     } catch (err) {
       console.error('Failed to fetch available versions:', err);
       setError(err.message || 'Failed to check official Mojang Bedrock download channels.');
@@ -64,9 +78,19 @@ export const Versions = () => {
       setLoading(true);
       await loadCurrentVersion();
       try {
-        const data = await api.Versions.getAvailable();
-        const list = Array.isArray(data) ? data : data?.versions || [];
-        setAvailableVersions(list);
+        const [availData, statusData] = await Promise.allSettled([
+          api.Versions.getAvailable(),
+          api.Versions.getOperationStatus(),
+        ]);
+
+        if (statusData.status === 'fulfilled' && statusData.value) {
+          setOpStatus(statusData.value);
+        }
+
+        if (availData.status === 'fulfilled') {
+          const list = Array.isArray(availData.value) ? availData.value : availData.value?.versions || [];
+          setAvailableVersions(list);
+        }
       } catch (err) {
         console.warn('Initial available versions check failed:', err);
       } finally {
@@ -140,6 +164,10 @@ export const Versions = () => {
     }
   };
 
+  const isLocked = Boolean(opStatus?.isLocked);
+  const lockInfo = opStatus?.lockInfo;
+  const isOperationBusy = isUploading || !!installingUrl || opStatus?.state === 'DOWNLOADING' || opStatus?.state === 'EXTRACTING' || opStatus?.state === 'INSTALLING';
+
   return (
     <div className="page-container">
       {/* Header */}
@@ -153,12 +181,36 @@ export const Versions = () => {
             type="button"
             className="btn btn-secondary"
             onClick={checkForUpdates}
-            disabled={checkingUpdates || !!installingUrl || isUploading}
+            disabled={checkingUpdates || isOperationBusy || isLocked}
           >
             <span className={`refresh-icon ${checkingUpdates ? 'rotating' : ''}`}>↻</span> Check for Updates
           </button>
         </div>
       </div>
+
+      {/* Exclusive System Maintenance Lock Notice */}
+      {isLocked && (
+        <div className="system-lock-banner mb-6">
+          <div className="lock-content-flex">
+            <div className="lock-icon-box">
+              <Lock size={18} />
+            </div>
+            <div className="lock-text-group">
+              <div className="lock-header-row">
+                <span className="lock-heading">System Maintenance Lock Active</span>
+                <span className="lock-badge-tag">{lockInfo?.type || 'EXCLUSIVE_OPERATION'}</span>
+              </div>
+              <p className="lock-subtext">
+                {lockInfo?.description || 'A critical background operation is currently running.'} Version upgrades and binary extraction are temporarily paused.
+              </p>
+            </div>
+          </div>
+          <div className="lock-status-badge">
+            <span className="lock-pulse-dot" />
+            <span>Busy ({Math.round((lockInfo?.durationMs || 0) / 1000)}s)</span>
+          </div>
+        </div>
+      )}
 
       {/* Notifications */}
       {error && (
@@ -272,10 +324,12 @@ export const Versions = () => {
                           <button
                             type="button"
                             className="btn btn-primary btn-sm"
-                            disabled={isCurrent || !!installingUrl || isUploading || !isAdmin}
+                            disabled={isCurrent || isOperationBusy || isLocked || !isAdmin}
                             onClick={() => setConfirmInstallTarget(v)}
                             title={
-                              isCurrent
+                              isLocked
+                                ? `Locked by ${lockInfo?.type}`
+                                : isCurrent
                                 ? 'Already on this version'
                                 : !isAdmin
                                 ? 'Admin permission required'
@@ -308,12 +362,12 @@ export const Versions = () => {
         </div>
         <div className="card-body">
           <div
-            className={`upload-zone ${isDraggingZip ? 'dragging' : ''} ${isUploading ? 'uploading' : ''}`}
-            onDragEnter={(e) => { e.preventDefault(); setIsDraggingZip(true); }}
+            className={`upload-zone ${isDraggingZip ? 'dragging' : ''} ${isUploading ? 'uploading' : ''} ${isLocked ? 'locked' : ''}`}
+            onDragEnter={(e) => { e.preventDefault(); if (!isLocked) setIsDraggingZip(true); }}
             onDragLeave={(e) => { e.preventDefault(); setIsDraggingZip(false); }}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={handleZipDrop}
-            onClick={() => !isUploading && zipInputRef.current?.click()}
+            onDrop={(e) => { if (!isLocked) handleZipDrop(e); }}
+            onClick={() => !isUploading && !isLocked && zipInputRef.current?.click()}
           >
             <input
               type="file"
@@ -321,7 +375,7 @@ export const Versions = () => {
               className="d-none"
               accept=".zip"
               onChange={(e) => e.target.files?.[0] && handleZipFileSelected(e.target.files[0])}
-              disabled={isUploading || !isAdmin}
+              disabled={isUploading || isLocked || !isAdmin}
             />
 
             <div className="upload-zone-content text-center py-6">
@@ -336,10 +390,10 @@ export const Versions = () => {
               <button
                 type="button"
                 className="btn btn-secondary"
-                disabled={isUploading || !isAdmin}
+                disabled={isUploading || isLocked || !isAdmin}
                 onClick={(e) => {
                   e.stopPropagation();
-                  zipInputRef.current?.click();
+                  if (!isLocked) zipInputRef.current?.click();
                 }}
               >
                 Choose Local ZIP

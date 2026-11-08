@@ -559,6 +559,22 @@ html, body, #root {
   background: linear-gradient(90deg, transparent, var(--rose), transparent);
 }
 
+.hero-status-panel.state-crashed {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.08) 0%, rgba(18, 22, 33, 0.95) 100%);
+}
+.hero-status-panel.state-crashed::before {
+  background: linear-gradient(90deg, transparent, var(--rose), transparent);
+}
+
+.hero-status-panel.state-restarting {
+  border-color: rgba(92, 124, 153, 0.35);
+  background: linear-gradient(180deg, rgba(92, 124, 153, 0.06) 0%, rgba(18, 22, 33, 0.9) 100%);
+}
+.hero-status-panel.state-restarting::before {
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
 .hero-top-bar {
   display: flex;
   align-items: center;
@@ -8277,3 +8293,186 @@ html, body, #root {
   border-color: #ef4444;
   color: #fff;
 }
+
+/* ==========================================================================
+   FINITE STATE MACHINE & SYSTEM LOCK BANNER STYLES
+   ========================================================================== */
+.system-lock-banner {
+  background: linear-gradient(135deg, rgba(217, 119, 54, 0.12) 0%, rgba(38, 41, 50, 0.95) 100%);
+  border: 1px solid rgba(217, 119, 54, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  flex-wrap: wrap;
+  animation: slideInDown var(--duration-entrance) var(--ease-spring-snappy);
+}
+
+.lock-content-flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 260px;
+}
+
+.lock-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: rgba(217, 119, 54, 0.15);
+  border: 1px solid rgba(217, 119, 54, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--copper);
+  flex-shrink: 0;
+}
+
+.lock-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.lock-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.lock-heading {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-white);
+  letter-spacing: -0.01em;
+}
+
+.lock-badge-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-xs);
+  background: rgba(217, 119, 54, 0.2);
+  color: #f6ad55;
+  border: 1px solid rgba(217, 119, 54, 0.35);
+}
+
+.lock-subtext {
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.lock-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background: var(--bg-card);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+.lock-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--copper);
+}
+
+/* Crash Diagnostic Alert Banner */
+.crash-alert-banner {
+  background: linear-gradient(135deg, rgba(201, 74, 74, 0.14) 0%, rgba(38, 41, 50, 0.98) 100%);
+  border: 1px solid rgba(201, 74, 74, 0.45);
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  flex-wrap: wrap;
+  animation: slideInDown var(--duration-entrance) var(--ease-spring-snappy);
+}
+
+.crash-content-flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 280px;
+}
+
+.crash-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: rgba(201, 74, 74, 0.16);
+  border: 1px solid rgba(201, 74, 74, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rose);
+  flex-shrink: 0;
+}
+
+.crash-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.crash-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.crash-heading {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-white);
+  letter-spacing: -0.01em;
+}
+
+.crash-badge-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-xs);
+  background: rgba(201, 74, 74, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(201, 74, 74, 0.4);
+}
+
+.crash-subtext {
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.crash-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+

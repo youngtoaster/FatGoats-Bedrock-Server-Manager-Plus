@@ -208,7 +208,17 @@ export const Dashboard = () => {
   };
 
   const isInstalled = status?.installed !== false;
-  const serverState = status?.state || (status?.running ? 'running' : 'stopped');
+  const fsmInfo = status?.fsm || null;
+  const isLocked = Boolean(fsmInfo?.isLocked);
+  const lockInfo = fsmInfo?.lockInfo || null;
+  const isCrashed = fsmInfo?.currentState === 'CRASHED' || status?.state === 'crashed';
+  const isRestarting = fsmInfo?.currentState === 'RESTARTING' || status?.state === 'restarting';
+  const lastCrash = fsmInfo?.lastCrash || null;
+  const serverState = isCrashed
+    ? 'crashed'
+    : isRestarting
+    ? 'restarting'
+    : status?.state || (status?.running ? 'running' : 'stopped');
   const playersCount = status?.players?.length ?? status?.playerCount ?? 0;
   const maxPlayers = status?.maxPlayers || 10;
   const playerPercent = Math.min(100, Math.round((playersCount / maxPlayers) * 100));
@@ -284,6 +294,80 @@ export const Dashboard = () => {
         </div>
       )}
 
+      {/* Exclusive System Maintenance Lock Notice */}
+      {isLocked && (
+        <div className="system-lock-banner">
+          <div className="lock-content-flex">
+            <div className="lock-icon-box">
+              <Lock size={18} />
+            </div>
+            <div className="lock-text-group">
+              <div className="lock-header-row">
+                <span className="lock-heading">System Maintenance Lock Active</span>
+                <span className="lock-badge-tag">{lockInfo?.type || 'EXCLUSIVE_OPERATION'}</span>
+              </div>
+              <p className="lock-subtext">
+                {lockInfo?.description || 'A critical background operation is currently executing.'} Conflicting server operations are paused to protect worlds and files.
+              </p>
+            </div>
+          </div>
+          <div className="lock-status-badge">
+            <span className="lock-pulse-dot" />
+            <span>Busy ({Math.round((lockInfo?.durationMs || 0) / 1000)}s)</span>
+          </div>
+        </div>
+      )}
+
+      {/* BDS Process Crash Diagnostic Alert */}
+      {isCrashed && (
+        <div className="crash-alert-banner">
+          <div className="crash-content-flex">
+            <div className="crash-icon-box">
+              <AlertTriangle size={20} />
+            </div>
+            <div className="crash-text-group">
+              <div className="crash-header-row">
+                <span className="crash-heading">Bedrock Dedicated Server Process Crashed</span>
+                <span className="crash-badge-tag">Exit code: {lastCrash?.exitCode ?? 'Abnormal'}</span>
+              </div>
+              <p className="crash-subtext">
+                The Minecraft BDS executable exited unexpectedly {lastCrash?.timestamp ? `at ${new Date(lastCrash.timestamp).toLocaleTimeString()}` : ''}. Review console logs for fatal assert errors before restarting.
+              </p>
+            </div>
+          </div>
+          <div className="crash-actions-group">
+            <Link to="/console" className="btn btn-secondary btn-sm d-flex items-center gap-1.5">
+              <Terminal size={13} />
+              <span>Inspect console logs</span>
+            </Link>
+            {canControlServer && (
+              <button
+                className="btn btn-primary btn-sm d-flex items-center gap-1.5"
+                onClick={() => handleAction('acknowledge crash & restart', async () => {
+                  await api.acknowledgeCrash();
+                  return api.start();
+                })}
+                disabled={actionLoading || isLocked}
+              >
+                <RotateCcw size={13} />
+                <span>Restart process</span>
+              </button>
+            )}
+            {canControlServer && (
+              <button
+                className="btn btn-secondary btn-sm d-flex items-center gap-1.5"
+                onClick={() => handleAction('clear crash state', api.acknowledgeCrash)}
+                disabled={actionLoading || isLocked}
+                title="Acknowledge crash and reset state to Stopped"
+              >
+                <CheckCircle2 size={13} />
+                <span>Dismiss</span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Installation Prompt Banner if BDS is not installed */}
       {!isInstalled && (
         <div className="install-prompt-banner">
@@ -329,7 +413,13 @@ export const Dashboard = () => {
               <div className="hero-state-title">
                 Status:{' '}
                 <span className="state-badge-text">
-                  {!isInstalled ? 'Not installed' : serverState.charAt(0).toUpperCase() + serverState.slice(1)}
+                  {isRestarting
+                    ? 'Restarting...'
+                    : isCrashed
+                    ? 'Crashed'
+                    : !isInstalled
+                    ? 'Not installed'
+                    : serverState.charAt(0).toUpperCase() + serverState.slice(1)}
                 </span>
               </div>
               <div className="hero-engine-desc">
@@ -348,8 +438,8 @@ export const Dashboard = () => {
               <button
                 className="btn-power btn-power-start d-flex items-center gap-1.5"
                 onClick={() => handleAction('start', api.start)}
-                disabled={actionLoading || isInstallingBds || serverState === 'running' || serverState === 'starting'}
-                title="Start Bedrock server process"
+                disabled={actionLoading || isInstallingBds || isLocked || serverState === 'running' || serverState === 'starting' || isRestarting}
+                title={isLocked ? `Locked by ${lockInfo?.type}` : "Start Bedrock server process"}
               >
                 <Play size={13} fill="currentColor" />
                 <span>Start</span>
@@ -358,8 +448,8 @@ export const Dashboard = () => {
               <button
                 className="btn-power btn-power-restart d-flex items-center gap-1.5"
                 onClick={() => handleAction('restart', api.restart)}
-                disabled={actionLoading || isInstallingBds || serverState === 'stopped' || !isInstalled}
-                title="Restart Bedrock server process"
+                disabled={actionLoading || isInstallingBds || isLocked || serverState === 'stopped' || !isInstalled || isRestarting}
+                title={isLocked ? `Locked by ${lockInfo?.type}` : "Restart Bedrock server process"}
               >
                 <RotateCcw size={13} />
                 <span>Restart</span>
@@ -368,8 +458,8 @@ export const Dashboard = () => {
               <button
                 className="btn-power btn-power-stop d-flex items-center gap-1.5"
                 onClick={() => handleAction('stop', api.stop)}
-                disabled={actionLoading || isInstallingBds || serverState === 'stopped' || serverState === 'stopping'}
-                title="Stop Bedrock server process"
+                disabled={actionLoading || isInstallingBds || isLocked || serverState === 'stopped' || serverState === 'stopping'}
+                title={isLocked ? `Locked by ${lockInfo?.type}` : "Stop Bedrock server process"}
               >
                 <Square size={13} fill="currentColor" />
                 <span>Stop</span>
@@ -379,8 +469,8 @@ export const Dashboard = () => {
               <button
                 className="btn-power btn-secondary d-flex items-center gap-1.5"
                 onClick={() => handleAction('start all services', api.Server.startAll)}
-                disabled={actionLoading || isInstallingBds}
-                title="Start server, public tunnel, and Xbox relay"
+                disabled={actionLoading || isInstallingBds || isLocked}
+                title={isLocked ? `Locked by ${lockInfo?.type}` : "Start server, public tunnel, and Xbox relay"}
               >
                 <Play size={13} fill="currentColor" />
                 <span>Start all</span>
@@ -389,8 +479,8 @@ export const Dashboard = () => {
               <button
                 className="btn-power btn-secondary d-flex items-center gap-1.5"
                 onClick={() => handleAction('restart all services', api.Server.restartAll)}
-                disabled={actionLoading || isInstallingBds}
-                title="Restart server, public tunnel, and Xbox relay"
+                disabled={actionLoading || isInstallingBds || isLocked}
+                title={isLocked ? `Locked by ${lockInfo?.type}` : "Restart server, public tunnel, and Xbox relay"}
               >
                 <RotateCcw size={13} />
                 <span>Restart all</span>
@@ -400,8 +490,8 @@ export const Dashboard = () => {
                 <button
                   className="btn-power btn-secondary d-flex items-center gap-1.5"
                   onClick={handleInstallLatest}
-                  disabled={actionLoading || isInstallingBds}
-                  title="Check and install newest BDS release"
+                  disabled={actionLoading || isInstallingBds || isLocked}
+                  title={isLocked ? `Locked by ${lockInfo?.type}` : "Check and install newest BDS release"}
                 >
                   <Download size={13} />
                   <span>{isInstallingBds ? 'Updating...' : 'Update build'}</span>

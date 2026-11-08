@@ -89,6 +89,19 @@ router.post('/restart', requireOperatorOrAdmin, async (req, res) => {
 });
 
 /**
+ * POST /acknowledge-crash
+ * Clear crash indicator and return to clean stopped state
+ */
+router.post('/acknowledge-crash', requireOperatorOrAdmin, (req, res) => {
+  try {
+    const result = serverProcess.acknowledgeCrash();
+    return res.json(result);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+/**
  * POST /start-all
  * Start Bedrock Server, Playit Tunnel, and Xbox Bot Relay together
  */

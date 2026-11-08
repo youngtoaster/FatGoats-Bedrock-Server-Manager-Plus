@@ -4,11 +4,61 @@ const os = require('os');
 const { spawn, exec } = require('child_process');
 const { EventEmitter } = require('events');
 const config = require('../config');
+const { FiniteStateMachine } = require('../utils/fsm');
+const systemLock = require('./systemLock');
 
 class ServerProcess extends EventEmitter {
   constructor() {
     super();
-    this.state = 'stopped'; // 'stopped' | 'starting' | 'running' | 'stopping'
+    this.lastCrashInfo = null;
+
+    // Explicit Lifecycle State Machine
+    this.fsm = new FiniteStateMachine({
+      id: 'server-process-lifecycle',
+      initial: 'STOPPED',
+      states: {
+        STOPPED: {
+          on: { START: 'STARTING', RESTART: 'RESTARTING', LOCK: 'LOCKED' },
+          allowedActions: ['START', 'RESTART'],
+        },
+        STARTING: {
+          on: { STARTED: 'RUNNING', STOP: 'STOPPING', KILL: 'STOPPED', CRASH: 'CRASHED', ERROR: 'STOPPED' },
+          allowedActions: ['KILL', 'STOP'],
+        },
+        RUNNING: {
+          on: { STOP: 'STOPPING', RESTART: 'RESTARTING', KILL: 'STOPPED', CRASH: 'CRASHED' },
+          allowedActions: ['STOP', 'RESTART', 'KILL', 'COMMAND', 'TIME', 'WEATHER'],
+        },
+        STOPPING: {
+          on: { STOPPED: 'STOPPED', KILL: 'STOPPED', CRASH: 'STOPPED' },
+          allowedActions: ['KILL'],
+        },
+        RESTARTING: {
+          on: { STOPPED: 'STARTING', STARTED: 'RUNNING', KILL: 'STOPPED', CRASH: 'CRASHED', ERROR: 'STOPPED' },
+          allowedActions: ['KILL'],
+        },
+        CRASHED: {
+          on: { START: 'STARTING', RESTART: 'RESTARTING', ACKNOWLEDGE: 'STOPPED' },
+          allowedActions: ['START', 'RESTART', 'ACKNOWLEDGE'],
+        },
+        LOCKED: {
+          on: { UNLOCK: 'STOPPED' },
+          allowedActions: ['UNLOCK'],
+        },
+      },
+    });
+
+    // Synchronize legacy this.state for 100% backward compatibility across all modules
+    this.state = 'stopped';
+    this.fsm.subscribe((snapshot) => {
+      this.state = snapshot.state.toLowerCase();
+      this.emit('state_change', {
+        state: this.state,
+        fsmState: snapshot.state,
+        allowedActions: snapshot.allowedActions,
+      });
+    });
+
     this.startTime = null;
     this.consoleLogs = [];
     this.playerCount = 0;
@@ -46,8 +96,8 @@ class ServerProcess extends EventEmitter {
   _parseLine(line) {
     // Check for server started
     if (line.includes('Server started') || line.includes('IPv4 supported')) {
-      if (this.state === 'starting') {
-        this.state = 'running';
+      if (this.fsm.can('STARTED')) {
+        this.fsm.transition('STARTED');
         this.startTime = Date.now();
         this.emit('started');
       }
@@ -208,8 +258,16 @@ class ServerProcess extends EventEmitter {
   }
 
   async start() {
-    if (this.state === 'running' || this.state === 'starting') {
+    // 1. Assert no exclusive system maintenance locks are active (backups, updates)
+    systemLock.assertNotLocked('start Bedrock Dedicated Server');
+
+    if (this.fsm.getState() === 'RUNNING' || this.fsm.getState() === 'STARTING') {
       throw new Error(`Server is already ${this.state}`);
+    }
+
+    if (!this.fsm.can('START')) {
+      const allowed = this.fsm.getAllowedActions();
+      throw new Error(`Cannot start server: current state is "${this.state}". Allowed actions: [${allowed.join(', ')}]`);
     }
 
     const exeName = process.platform === 'win32' ? 'bedrock_server.exe' : 'bedrock_server';
@@ -247,8 +305,10 @@ class ServerProcess extends EventEmitter {
     this._readMaxPlayersFromProperties();
     this.connectedPlayers.clear();
     this.playerCount = 0;
-    this.state = 'starting';
     this.startTime = null;
+    this.lastCrashInfo = null;
+
+    this.fsm.transition('START');
 
     try {
       this.childProcess = spawn(exePath, [], {
@@ -261,7 +321,9 @@ class ServerProcess extends EventEmitter {
         }
       });
     } catch (err) {
-      this.state = 'stopped';
+      if (this.fsm.can('ERROR')) {
+        this.fsm.transition('ERROR');
+      }
       throw new Error(`Failed to spawn server process: ${err.message}`);
     }
 
@@ -301,7 +363,9 @@ class ServerProcess extends EventEmitter {
       console.error('[ServerProcess] Child process error:', err);
       this._appendLog(`[ServerManager] Process error: ${err.message}`);
       this._stopResourceMonitoring();
-      this.state = 'stopped';
+      if (this.fsm.can('ERROR')) {
+        this.fsm.transition('ERROR');
+      }
       this.startTime = null;
       this.childProcess = null;
       this.emit('error', err);
@@ -314,9 +378,10 @@ class ServerProcess extends EventEmitter {
         this.stopTimeout = null;
       }
 
-      const prevRunning = this.state === 'running' || this.state === 'starting';
+      const prevActive = this.fsm.getState() === 'RUNNING' || this.fsm.getState() === 'STARTING' || this.fsm.getState() === 'RESTARTING';
+      const isCrash = prevActive && code !== 0 && code !== null;
+
       this._appendLog(`[ServerManager] Server stopped (code: ${code}, signal: ${signal})`);
-      this.state = 'stopped';
       this.startTime = null;
       this.playerCount = 0;
       this.connectedPlayers.clear();
@@ -327,10 +392,23 @@ class ServerProcess extends EventEmitter {
         playerService.handleServerStopped();
       } catch (_) {}
 
-      // Handle unexpected crash recovery notification
-      if (prevRunning && code !== 0 && code !== null) {
+      // Handle unexpected crash recovery notification with state capture
+      if (isCrash) {
+        this.lastCrashInfo = {
+          code,
+          signal,
+          timestamp: new Date().toISOString(),
+          message: `Server process crashed with exit code ${code} (${signal || 'NONE'})`,
+        };
         console.warn(`[ServerProcess] Server process crashed with exit code ${code}`);
-        this.emit('crash', { code, signal });
+        if (this.fsm.can('CRASH')) {
+          this.fsm.transition('CRASH', { code, signal });
+        }
+        this.emit('crash', { code, signal, lastCrash: this.lastCrashInfo });
+      } else {
+        if (this.fsm.can('STOPPED')) {
+          this.fsm.transition('STOPPED', { code, signal });
+        }
       }
 
       this.emit('stopped', { code, signal });
@@ -347,19 +425,22 @@ class ServerProcess extends EventEmitter {
       }
     } catch (_) {}
 
-    return { success: true, message: 'Server is starting', pid: this.childProcess.pid };
+    return { success: true, message: 'Server is starting', pid: this.childProcess.pid, fsmState: this.fsm.getState() };
   }
 
   async stop() {
-    if (this.state === 'stopped') {
+    if (this.fsm.getState() === 'STOPPED') {
       return { success: true, message: 'Server is already stopped' };
     }
 
-    if (this.state === 'stopping') {
+    if (this.fsm.getState() === 'STOPPING') {
       return { success: true, message: 'Server is already in stopping state' };
     }
 
-    this.state = 'stopping';
+    if (this.fsm.can('STOP')) {
+      this.fsm.transition('STOP');
+    }
+
     this._appendLog('[ServerManager] Stopping server gracefully...');
 
     return new Promise((resolve) => {
@@ -368,11 +449,13 @@ class ServerProcess extends EventEmitter {
           clearTimeout(this.stopTimeout);
           this.stopTimeout = null;
         }
-        resolve({ success: true, message: 'Server stopped successfully' });
+        resolve({ success: true, message: 'Server stopped successfully', fsmState: this.fsm.getState() });
       };
 
       if (!this.childProcess) {
-        this.state = 'stopped';
+        if (this.fsm.can('STOPPED')) {
+          this.fsm.transition('STOPPED');
+        }
         this.startTime = null;
         return cleanupAndResolve();
       }
@@ -393,9 +476,11 @@ class ServerProcess extends EventEmitter {
           }
           // Fallback if close event didn't trigger
           setTimeout(() => {
-            if (this.state !== 'stopped') {
+            if (this.fsm.getState() !== 'STOPPED') {
               this._stopResourceMonitoring();
-              this.state = 'stopped';
+              if (this.fsm.can('STOPPED')) {
+                this.fsm.transition('STOPPED');
+              }
               this.startTime = null;
               this.playerCount = 0;
               this.connectedPlayers.clear();
@@ -428,7 +513,7 @@ class ServerProcess extends EventEmitter {
   }
 
   async kill() {
-    if (this.state === 'stopped' && !this.childProcess) {
+    if (this.fsm.getState() === 'STOPPED' && !this.childProcess) {
       return { success: true, message: 'Server is already stopped' };
     }
 
@@ -450,22 +535,49 @@ class ServerProcess extends EventEmitter {
       } catch (_) {}
     }
 
-    this.state = 'stopped';
+    if (this.fsm.can('KILL')) {
+      this.fsm.transition('KILL');
+    } else if (this.fsm.can('STOPPED')) {
+      this.fsm.transition('STOPPED');
+    }
+
     this.startTime = null;
     this.playerCount = 0;
     this.connectedPlayers.clear();
     this.childProcess = null;
     this.emit('stopped', { code: -1, signal: 'SIGKILL' });
-    return { success: true, message: 'Server process forcefully terminated' };
+    return { success: true, message: 'Server process forcefully terminated', fsmState: this.fsm.getState() };
   }
 
   async restart() {
-    if (this.state !== 'stopped') {
+    systemLock.assertNotLocked('restart Bedrock Dedicated Server');
+
+    if (this.fsm.getState() === 'RESTARTING') {
+      throw new Error('Server restart is already in progress.');
+    }
+
+    if (this.fsm.can('RESTART')) {
+      this.fsm.transition('RESTART');
+    }
+
+    if (this.childProcess) {
+      this._appendLog('[ServerManager] Restart cycle: Stopping active server process...');
       await this.stop();
     }
-    // Small delay to ensure resources/ports release cleanly
+
+    this._appendLog('[ServerManager] Restart cycle: Waiting 1500ms for UDP port release...');
     await new Promise((resolve) => setTimeout(resolve, 1500));
+
     return await this.start();
+  }
+
+  acknowledgeCrash() {
+    if (this.fsm.getState() === 'CRASHED') {
+      this.fsm.transition('ACKNOWLEDGE');
+      this.lastCrashInfo = null;
+      return { success: true, message: 'Crash acknowledged and state reset to stopped.' };
+    }
+    return { success: false, message: 'Server is not in a crashed state.' };
   }
 
   sendCommand(cmd) {
@@ -541,6 +653,13 @@ class ServerProcess extends EventEmitter {
 
     return {
       state: this.state,
+      fsm: {
+        currentState: this.fsm.getState(),
+        allowedActions: this.fsm.getAllowedActions(),
+        isLocked: systemLock.isLocked(),
+        lockInfo: systemLock.getLockInfo(),
+        lastCrash: this.lastCrashInfo,
+      },
       uptime,
       pid: this.childProcess ? this.childProcess.pid : null,
       port: this.port || 19132,
