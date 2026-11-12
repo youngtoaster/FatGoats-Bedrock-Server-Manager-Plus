@@ -25,6 +25,9 @@ export const Users = () => {
   const [isDeletingUser, setIsDeletingUser] = useState(false);
   const [updatingUserId, setUpdatingUserId] = useState(null);
 
+  const [statusModal, setStatusModal] = useState(null);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
   const [deleteInviteModal, setDeleteInviteModal] = useState(null);
   const [isDeletingInvite, setIsDeletingInvite] = useState(false);
 
@@ -76,6 +79,23 @@ export const Users = () => {
       setError(err.message || 'Failed to update user role.');
     } finally {
       setUpdatingUserId(null);
+    }
+  };
+
+  const handleUpdateStatus = async (userId, disabled) => {
+    setIsUpdatingStatus(true);
+    setError(null);
+    setSuccessMsg(null);
+    try {
+      const res = await api.Users.updateStatus(userId, disabled);
+      setSuccessMsg(res?.message || `User account successfully ${disabled ? 'disabled' : 'enabled'}.`);
+      setStatusModal(null);
+      await loadData();
+    } catch (err) {
+      console.error('Failed to update user status:', err);
+      setError(err.message || 'Failed to update user status.');
+    } finally {
+      setIsUpdatingStatus(false);
     }
   };
 
@@ -232,6 +252,7 @@ export const Users = () => {
                 <thead>
                   <tr>
                     <th>Username</th>
+                    <th>Status</th>
                     <th>Current Role</th>
                     <th>Change Role</th>
                     <th>Created Date</th>
@@ -242,13 +263,26 @@ export const Users = () => {
                   {users.map((u) => {
                     const isSelf = String(u.id) === String(currentUser?.id) || u.username === currentUser?.username;
                     const isUpdating = updatingUserId === u.id;
+                    const isDisabled = Boolean(u.is_disabled);
 
                     return (
-                      <tr key={u.id || u.username}>
+                      <tr key={u.id || u.username} className={isDisabled ? 'user-row-disabled' : ''}>
                         <td className="font-semibold text-primary">
-                          
                           {u.username}
                           {isSelf && <span className="badge badge-secondary ml-2">You</span>}
+                        </td>
+                        <td>
+                          {isDisabled ? (
+                            <span className="badge badge-disabled">
+                              <span className="status-dot-disabled" />
+                              Disabled
+                            </span>
+                          ) : (
+                            <span className="badge badge-active">
+                              <span className="status-dot-active" />
+                              Active
+                            </span>
+                          )}
                         </td>
                         <td>
                           {u.role === 'admin' ? (
@@ -276,21 +310,50 @@ export const Users = () => {
                           {formatDate(u.created_at || u.createdAt || u.created)}
                         </td>
                         <td className="text-right">
-                          <button
-                            type="button"
-                            className="btn btn-danger btn-sm"
-                            onClick={() => setDeleteUserModal(u)}
-                            disabled={isSelf || !isAdmin}
-                            title={
-                              isSelf
-                                ? 'Cannot delete your own account'
-                                : !isAdmin
-                                ? 'Admin permission required'
-                                : 'Delete account'
-                            }
-                          >
-                            Delete
-                          </button>
+                          <div className="d-flex justify-end items-center gap-2">
+                            {isDisabled ? (
+                              <button
+                                type="button"
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => setStatusModal({ user: u, action: 'enable' })}
+                                disabled={isSelf || !isAdmin}
+                                title={!isAdmin ? 'Admin permission required' : 'Re-enable account'}
+                              >
+                                Enable
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => setStatusModal({ user: u, action: 'disable' })}
+                                disabled={isSelf || !isAdmin}
+                                title={
+                                  isSelf
+                                    ? 'Cannot disable your own account'
+                                    : !isAdmin
+                                    ? 'Admin permission required'
+                                    : 'Disable account access'
+                                }
+                              >
+                                Disable
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              className="btn btn-danger btn-sm"
+                              onClick={() => setDeleteUserModal(u)}
+                              disabled={isSelf || !isAdmin}
+                              title={
+                                isSelf
+                                  ? 'Cannot delete your own account'
+                                  : !isAdmin
+                                  ? 'Admin permission required'
+                                  : 'Permanently delete account'
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -429,12 +492,72 @@ export const Users = () => {
         </div>
       </div>
 
+      {/* Enable / Disable User Modal */}
+      {statusModal && (
+        <div className="modal-overlay" onClick={() => !isUpdatingStatus && setStatusModal(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+            <div className="modal-header">
+              <h3 className="modal-title">
+                {statusModal.action === 'disable' ? 'Disable User Account' : 'Enable User Account'}
+              </h3>
+              <button
+                type="button"
+                className="modal-close-btn"
+                onClick={() => !isUpdatingStatus && setStatusModal(null)}
+                disabled={isUpdatingStatus}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>
+                Are you sure you want to {statusModal.action === 'disable' ? 'disable' : 're-enable'} user account{' '}
+                <strong>"{statusModal.user.username}"</strong>?
+              </p>
+              {statusModal.action === 'disable' ? (
+                <div className="alert alert-warning mt-3">
+                  🔒 <strong>Access Revocation:</strong> This user will be immediately logged out and blocked from logging in or using any server management APIs until re-enabled by an administrator.
+                </div>
+              ) : (
+                <div className="alert alert-success mt-3">
+                  ✓ <strong>Access Restored:</strong> This user will be permitted to log in and manage the server with their assigned role ({statusModal.user.role}).
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setStatusModal(null)}
+                disabled={isUpdatingStatus}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className={`btn ${statusModal.action === 'disable' ? 'btn-danger' : 'btn-primary'}`}
+                onClick={() => handleUpdateStatus(statusModal.user.id, statusModal.action === 'disable')}
+                disabled={isUpdatingStatus}
+              >
+                {isUpdatingStatus
+                  ? statusModal.action === 'disable'
+                    ? 'Disabling...'
+                    : 'Enabling...'
+                  : statusModal.action === 'disable'
+                  ? 'Disable Account'
+                  : 'Enable Account'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Delete User Modal */}
       {deleteUserModal && (
         <div className="modal-overlay" onClick={() => !isDeletingUser && setDeleteUserModal(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <div className="modal-header">
-              <h3 className="modal-title">Delete User Account</h3>
+              <h3 className="modal-title">Permanently Delete User Account</h3>
               <button
                 type="button"
                 className="modal-close-btn"
@@ -446,11 +569,14 @@ export const Users = () => {
             </div>
             <div className="modal-body">
               <p>
-                Are you sure you want to delete user account <strong>"{deleteUserModal.username}"</strong>?
+                Are you sure you want to permanently delete user account <strong>"{deleteUserModal.username}"</strong>?
               </p>
               <div className="alert alert-danger mt-3">
-                ⚠️ This user will immediately lose all access to the Bedrock Dedicated Server Manager.
+                ⚠️ <strong>Permanent Removal:</strong> This account will be permanently deleted from the database and will <strong>stay removed</strong>. It will never automatically re-create or reappear, even after server restarts or updates.
               </div>
+              <p className="text-secondary text-sm mt-3">
+                💡 <strong>Need temporary revocation instead?</strong> You can cancel this and click <em>Disable</em> to prevent login while keeping account history intact.
+              </p>
             </div>
             <div className="modal-footer">
               <button
@@ -467,7 +593,7 @@ export const Users = () => {
                 onClick={() => handleDeleteUser(deleteUserModal.id)}
                 disabled={isDeletingUser}
               >
-                {isDeletingUser ? 'Deleting...' : 'Delete User'}
+                {isDeletingUser ? 'Deleting...' : 'Permanently Delete'}
               </button>
             </div>
           </div>

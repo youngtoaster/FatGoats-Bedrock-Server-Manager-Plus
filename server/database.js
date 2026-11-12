@@ -147,9 +147,13 @@ const db = {
         username TEXT UNIQUE NOT NULL,
         password_hash TEXT NOT NULL,
         role TEXT NOT NULL DEFAULT 'viewer',
+        is_disabled INTEGER DEFAULT 0,
         created_at TEXT DEFAULT (datetime('now'))
       )
     `);
+
+    // Safe column migrations for users table
+    try { _sqlDb.exec('ALTER TABLE users ADD COLUMN is_disabled INTEGER DEFAULT 0'); } catch (_) {}
 
     _sqlDb.exec(`
       CREATE TABLE IF NOT EXISTS invites (
@@ -231,14 +235,23 @@ const db = {
     try { _sqlDb.exec("ALTER TABLE players ADD COLUMN banned_at TEXT DEFAULT NULL"); } catch (_) {}
     try { _sqlDb.exec("ALTER TABLE players ADD COLUMN banned_by TEXT DEFAULT ''"); } catch (_) {}
 
-    // ----- Seed default admin account -----
-    const adminCheck = this.prepare('SELECT id FROM users WHERE username = ?').get('admin');
-    if (!adminCheck) {
+    // ----- Seed default admin account (only on first-time initial installation) -----
+    const seededSetting = this.getSetting('default_admin_seeded');
+    const removedSetting = this.getSetting('default_admin_removed');
+    const userCountRow = this.prepare('SELECT COUNT(*) AS count FROM users').get();
+    const userCount = userCountRow ? userCountRow.count : 0;
+
+    if (userCount === 0 && seededSetting !== 'true' && removedSetting !== 'true') {
       const hash = bcrypt.hashSync('admin', 10);
       this.prepare(
-        'INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)'
+        'INSERT INTO users (username, password_hash, role, is_disabled) VALUES (?, ?, ?, 0)'
       ).run('admin', hash, 'admin');
-      console.log('[Database] Default admin created  (user: admin / pass: admin)');
+      this.setSetting('default_admin_seeded', 'true');
+      console.log('[Database] First-time setup: Default admin created (user: admin / pass: admin)');
+    } else if (userCount > 0 && seededSetting !== 'true') {
+      // Existing installation with active accounts: flag as seeded so removed or renamed
+      // admin accounts are never resurrected on future server restarts.
+      this.setSetting('default_admin_seeded', 'true');
     }
 
     _save();

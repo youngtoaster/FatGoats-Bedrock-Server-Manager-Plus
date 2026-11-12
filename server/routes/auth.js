@@ -20,9 +20,13 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Username and password are required.' });
     }
 
-    const user = db.prepare('SELECT id, username, password_hash, role FROM users WHERE username = ?').get(username);
+    const user = db.prepare('SELECT id, username, password_hash, role, is_disabled FROM users WHERE username = ?').get(username);
     if (!user) {
       return res.status(401).json({ error: 'Invalid username or password.' });
+    }
+
+    if (user.is_disabled) {
+      return res.status(403).json({ error: 'This account has been disabled by an administrator. Please contact your server admin.' });
     }
 
     const passwordValid = await bcrypt.compare(password, user.password_hash);
@@ -147,6 +151,7 @@ router.get('/me', authenticate, (req, res) => {
       id: req.user.id,
       username: req.user.username,
       role: req.user.role,
+      is_disabled: req.user.is_disabled || 0,
       created_at: req.user.created_at
     }
   });
@@ -216,6 +221,12 @@ router.put('/credentials', authenticate, async (req, res) => {
 
     // Update in database
     db.prepare('UPDATE users SET username = ?, password_hash = ? WHERE id = ?').run(finalUsername, finalHash, user.id);
+
+    // If default admin was renamed, record that it was removed/renamed so it never gets auto-seeded on restart
+    if (user.username.toLowerCase() === 'admin' && usernameChanged && finalUsername.toLowerCase() !== 'admin') {
+      db.setSetting('default_admin_seeded', 'true');
+      db.setSetting('default_admin_removed', 'true');
+    }
 
     // Sign fresh token with updated username
     const payload = {

@@ -16,7 +16,7 @@ router.use(authenticate, requireAdmin);
 router.get('/', (req, res) => {
   try {
     const users = db.prepare(`
-      SELECT id, username, role, created_at
+      SELECT id, username, role, is_disabled, created_at
       FROM users
       ORDER BY id ASC
     `).all();
@@ -45,9 +45,19 @@ router.put('/:id/role', (req, res) => {
       return res.status(400).json({ error: 'You cannot demote yourself from the admin role.' });
     }
 
-    const user = db.prepare('SELECT id, username, role FROM users WHERE id = ?').get(targetUserId);
+    const user = db.prepare('SELECT id, username, role, is_disabled FROM users WHERE id = ?').get(targetUserId);
     if (!user) {
       return res.status(404).json({ error: 'User not found.' });
+    }
+
+    // If demoting an admin, ensure there is at least one other active admin
+    if (user.role === 'admin' && role !== 'admin') {
+      const activeAdmins = db.prepare(
+        "SELECT COUNT(*) AS count FROM users WHERE role = 'admin' AND (is_disabled = 0 OR is_disabled IS NULL) AND id != ?"
+      ).get(targetUserId);
+      if (!activeAdmins || activeAdmins.count < 1) {
+        return res.status(400).json({ error: 'Cannot demote the only remaining active admin account.' });
+      }
     }
 
     const updateStmt = db.prepare('UPDATE users SET role = ? WHERE id = ?');
@@ -66,7 +76,8 @@ router.put('/:id/role', (req, res) => {
       user: {
         id: user.id,
         username: user.username,
-        role
+        role,
+        is_disabled: user.is_disabled || 0
       }
     });
   } catch (err) {
@@ -76,8 +87,72 @@ router.put('/:id/role', (req, res) => {
 });
 
 /**
+ * PUT /:id/status
+ * Enable or disable user account, prevent self-disabling, ensure at least one active admin remains, logAudit
+ */
+router.put('/:id/status', (req, res) => {
+  try {
+    const targetUserId = parseInt(req.params.id, 10);
+    const { disabled } = req.body;
+
+    if (typeof disabled !== 'boolean') {
+      return res.status(400).json({ error: 'A boolean "disabled" property is required.' });
+    }
+
+    if (req.user.id === targetUserId && disabled) {
+      return res.status(400).json({ error: 'You cannot disable your own account.' });
+    }
+
+    const user = db.prepare('SELECT id, username, role, is_disabled FROM users WHERE id = ?').get(targetUserId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    // If disabling an admin, ensure there is at least one other active admin
+    if (disabled && user.role === 'admin') {
+      const activeAdmins = db.prepare(
+        "SELECT COUNT(*) AS count FROM users WHERE role = 'admin' AND (is_disabled = 0 OR is_disabled IS NULL) AND id != ?"
+      ).get(targetUserId);
+      if (!activeAdmins || activeAdmins.count < 1) {
+        return res.status(400).json({ error: 'Cannot disable the only remaining active administrator account.' });
+      }
+    }
+
+    const newDisabledValue = disabled ? 1 : 0;
+    db.prepare('UPDATE users SET is_disabled = ? WHERE id = ?').run(newDisabledValue, targetUserId);
+
+    // If default admin is disabled, record that it was decommissioned so it's never re-seeded
+    if (disabled && user.username.toLowerCase() === 'admin') {
+      db.setSetting('default_admin_seeded', 'true');
+      db.setSetting('default_admin_removed', 'true');
+    }
+
+    logAudit(req.user.id, req.user.username, disabled ? 'USER_DISABLE' : 'USER_ENABLE', {
+      targetUserId,
+      targetUsername: user.username,
+      previousStatus: user.is_disabled ? 'disabled' : 'active',
+      newStatus: disabled ? 'disabled' : 'active'
+    });
+
+    return res.json({
+      success: true,
+      message: `User ${user.username} account has been ${disabled ? 'disabled' : 'enabled'}.`,
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        is_disabled: newDisabledValue
+      }
+    });
+  } catch (err) {
+    console.error('[UsersRoute] Error updating user status:', err);
+    return res.status(500).json({ error: 'Failed to update user status', details: err.message });
+  }
+});
+
+/**
  * DELETE /:id
- * Delete user, prevent self-deletion, logAudit
+ * Permanently delete user, prevent self-deletion, unlink invites, flag default admin removed, logAudit
  */
 router.delete('/:id', (req, res) => {
   try {
@@ -92,13 +167,27 @@ router.delete('/:id', (req, res) => {
       return res.status(404).json({ error: 'User not found.' });
     }
 
-    // Check if user is the last admin
+    // Check if user is the last active admin
     if (user.role === 'admin') {
-      const adminCount = db.prepare("SELECT COUNT(*) AS count FROM users WHERE role = 'admin'").get().count;
-      if (adminCount <= 1) {
-        return res.status(400).json({ error: 'Cannot delete the only remaining admin account.' });
+      const activeAdmins = db.prepare(
+        "SELECT COUNT(*) AS count FROM users WHERE role = 'admin' AND (is_disabled = 0 OR is_disabled IS NULL) AND id != ?"
+      ).get(targetUserId);
+      if (!activeAdmins || activeAdmins.count < 1) {
+        return res.status(400).json({ error: 'Cannot delete the only remaining active admin account.' });
       }
     }
+
+    // If removing default admin account, permanently record that it was removed
+    // so it will NEVER auto re-add itself on server reboot or database reload
+    if (user.username.toLowerCase() === 'admin') {
+      db.setSetting('default_admin_seeded', 'true');
+      db.setSetting('default_admin_removed', 'true');
+    }
+
+    // Unlink any invite tokens created by this user to maintain database integrity
+    try {
+      db.prepare('UPDATE invites SET created_by = NULL WHERE created_by = ?').run(targetUserId);
+    } catch (_) {}
 
     const deleteStmt = db.prepare('DELETE FROM users WHERE id = ?');
     deleteStmt.run(targetUserId);
@@ -110,7 +199,7 @@ router.delete('/:id', (req, res) => {
 
     return res.json({
       success: true,
-      message: `User ${user.username} deleted successfully.`
+      message: `User ${user.username} deleted successfully and will not be re-created.`
     });
   } catch (err) {
     console.error('[UsersRoute] Error deleting user:', err);

@@ -18,9 +18,13 @@ function authenticate(req, res, next) {
       return res.status(401).json({ error: 'Invalid authentication token.' });
     }
 
-    const user = db.prepare('SELECT id, username, role, created_at FROM users WHERE id = ?').get(decoded.id);
+    const user = db.prepare('SELECT id, username, role, is_disabled, created_at FROM users WHERE id = ?').get(decoded.id);
     if (!user) {
       return res.status(401).json({ error: 'User not found or revoked.' });
+    }
+
+    if (user.is_disabled) {
+      return res.status(401).json({ error: 'This account has been disabled by an administrator.' });
     }
 
     req.user = user;

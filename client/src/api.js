@@ -233,6 +233,7 @@ export const Addons = {
 export const Users = {
   list: () => request('GET', '/api/users'),
   updateRole: (id, role) => request('PUT', `/api/users/${encodeURIComponent(id)}/role`, { role }),
+  updateStatus: (id, disabled) => request('PUT', `/api/users/${encodeURIComponent(id)}/status`, { disabled }),
   delete: (id) => request('DELETE', `/api/users/${encodeURIComponent(id)}`),
   createInvite: (role) => request('POST', '/api/users/invites', { role }),
   getInvites: () => request('GET', '/api/users/invites'),
