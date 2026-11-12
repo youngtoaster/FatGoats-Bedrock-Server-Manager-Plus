@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 1.5rem 1rem 1.25rem;
+  padding: 1.25rem 1rem 1.15rem;
   background: linear-gradient(180deg, #d8cebe 0%, #cbbfad 100%);
   border-radius: var(--radius-xl, 16px);
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -36,9 +36,9 @@
   justify-content: space-between;
   width: 100%;
   max-width: 650px;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.75rem;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #5a5246;
   padding: 0 0.5rem;
@@ -139,44 +139,125 @@
 
 /* Dynamic Caption Below Pill */
 .noclipepe-caption-area {
-  margin-top: 1.15rem;
+  margin-top: 0.85rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
+  width: 100%;
 }
 
 .noclipepe-main-phrase {
   font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #383127;
   letter-spacing: -0.01em;
   transition: opacity 0.2s ease;
 }
 
+/* Condensed 5-Stage Pipeline Status Rail Directly Below Viewport */
+.noclipepe-pipeline-rail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  max-width: 540px;
+  margin: 0.4rem 0 0.25rem;
+  padding: 0.3rem 0.5rem;
+  background: rgba(56, 49, 39, 0.08);
+  border: 1px solid rgba(56, 49, 39, 0.12);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.noclipepe-rail-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 5px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
+  color: #726859;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.noclipepe-rail-step.is-done {
+  color: #1e5c36;
+  font-weight: 600;
+}
+
+.noclipepe-rail-step.is-done .noclipepe-rail-dot {
+  background: #2b704b;
+  color: #ffffff;
+}
+
+.noclipepe-rail-step.is-active {
+  color: #a84e1b;
+  font-weight: 700;
+  background: rgba(217, 119, 54, 0.14);
+  border: 1px solid rgba(217, 119, 54, 0.32);
+}
+
+.noclipepe-rail-step.is-active .noclipepe-rail-dot {
+  background: #d97736;
+  color: #ffffff;
+  box-shadow: 0 0 6px rgba(217, 119, 54, 0.5);
+  animation: railDotPulse 1.2s infinite ease-in-out;
+}
+
+.noclipepe-rail-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(114, 104, 89, 0.2);
+  color: #726859;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
 .noclipepe-sub-telemetry {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.5rem;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   color: #635a4d;
   flex-wrap: wrap;
   justify-content: center;
+  max-width: 600px;
 }
 
 .noclipepe-stage-badge {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 0.15rem 0.45rem;
+  padding: 0.12rem 0.4rem;
   background: rgba(74, 66, 55, 0.12);
   border: 1px solid rgba(74, 66, 55, 0.2);
   border-radius: 4px;
   color: #383127;
+  flex-shrink: 0;
+}
+
+.noclipepe-progress-detail {
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noclipepe-commit-tag {
+  opacity: 0.7;
 }
 
 .noclipepe-safe-badge {
@@ -184,7 +265,194 @@
   font-weight: 600;
 }
 
-/* Animations */
+/* ==========================================================================
+   WORKER ANIMATIONS (LAYING BRICKS, TROWEL, MALLET, RUNNER)
+   ========================================================================== */
+
+/* Mason 1: Trowel Smoothing Stroke */
+.noclipepe-trowel-arm {
+  transform-origin: 12px 14px;
+  animation: trowelMortarSweep 0.65s infinite ease-in-out;
+}
+
+@keyframes trowelMortarSweep {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-24deg);
+  }
+}
+
+/* Active Placed Brick snapping down */
+.noclipepe-placing-brick {
+  animation: brickPlaceSnap 1.1s infinite ease-in-out;
+}
+
+@keyframes brickPlaceSnap {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+/* Ghost brick outline pulse */
+.noclipepe-ghost-brick {
+  animation: ghostPulse 1s infinite ease-in-out;
+}
+
+@keyframes ghostPulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+/* Mortar Sparks popping */
+.noclipepe-mortar-sparks {
+  animation: sparksPop 1.1s infinite;
+}
+
+@keyframes sparksPop {
+  0%, 25% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  32% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  55% {
+    opacity: 0;
+    transform: translate(2px, -4px) scale(0.6);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Mason 2: Mallet Tapping vertical joint */
+.noclipepe-mallet-arm {
+  transform-origin: 10px 13px;
+  animation: malletTap 0.7s infinite ease-in-out;
+}
+
+@keyframes malletTap {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  35% {
+    transform: rotate(26deg);
+  }
+  65% {
+    transform: rotate(-8deg);
+  }
+}
+
+/* Ground Worker 1: Brick Runner Walking back and forth */
+.noclipepe-brick-runner {
+  animation: runnerRunCycle 5s infinite linear;
+  transform-origin: 8px 16px;
+}
+
+@keyframes runnerRunCycle {
+  /* 1. Walk right towards supply shack (empty hands) */
+  0% {
+    transform: translate(var(--runner-start, 80px), 77px) scaleX(1);
+  }
+  42% {
+    transform: translate(var(--runner-end, 460px), 77px) scaleX(1);
+  }
+  /* 2. Pause at pallet to pick up bricks */
+  46% {
+    transform: translate(var(--runner-end, 460px), 77px) scaleX(1);
+  }
+  /* 3. Turn around (scaleX -1) with stack of bricks */
+  48% {
+    transform: translate(var(--runner-end, 460px), 77px) scaleX(-1);
+  }
+  /* 4. Walk left towards scaffolding */
+  90% {
+    transform: translate(var(--runner-start, 80px), 77px) scaleX(-1);
+  }
+  /* 5. Pause at scaffolding to deliver bricks */
+  96% {
+    transform: translate(var(--runner-start, 80px), 77px) scaleX(-1);
+  }
+  100% {
+    transform: translate(var(--runner-start, 80px), 77px) scaleX(1);
+  }
+}
+
+/* Carried bricks visible only when walking back to wall */
+.noclipepe-carried-bricks {
+  animation: carriedBricksVisibility 5s infinite;
+}
+
+@keyframes carriedBricksVisibility {
+  0%, 46% {
+    opacity: 0;
+  }
+  48%, 96% {
+    opacity: 1;
+  }
+  98%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Runner Leg Stride */
+.noclipepe-leg-left {
+  animation: legStrideLeft 0.35s infinite ease-in-out;
+  transform-origin: 3px 16px;
+}
+
+.noclipepe-leg-right {
+  animation: legStrideRight 0.35s infinite ease-in-out;
+  transform-origin: 8px 16px;
+}
+
+@keyframes legStrideLeft {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-22deg); }
+}
+
+@keyframes legStrideRight {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(22deg); }
+}
+
+/* Mixer & Operator Animations */
+.noclipepe-mixer-vibrate {
+  animation: mixerVibrate 0.25s infinite;
+}
+
+.noclipepe-shovel-swing {
+  transform-origin: 4px 14px;
+  animation: shovelSwing 1.8s infinite ease-in-out;
+}
+
+@keyframes shovelSwing {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-18deg) translateY(-2px); }
+  60% { transform: rotate(14deg) translateY(1px); }
+}
+
+/* General Environment Animations */
 @keyframes batteryPulse {
   0%, 100% { width: 75%; }
   50% { width: 95%; }
@@ -230,24 +498,14 @@
   75% { transform: rotate(-12deg); }
 }
 
+@keyframes heartFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.9; }
+  50% { transform: translateY(-4px) scale(1.15); opacity: 1; }
+}
+
 @keyframes mixerVibrate {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-1px); }
-}
-
-@keyframes mixerDrumSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes trowelSwing {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(-25deg); }
-}
-
-@keyframes workerWalkCycle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
 }
 
 @keyframes yellowArrowBlink {
@@ -255,7 +513,63 @@
   50% { opacity: 0.2; transform: translateY(3px); }
 }
 
+@keyframes railDotPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.85; }
+}
+
 @keyframes cheerWave {
   0%, 100% { transform: translateY(0) scaleY(1); }
   50% { transform: translateY(-4px) scaleY(1.08); }
+}
+
+.noclipepe-cheer-worker {
+  animation: cheerWave 0.7s infinite ease-in-out;
+}
+
+.noclipepe-confetti-1 {
+  animation: confettiFall 1.5s infinite ease-in;
+}
+
+.noclipepe-confetti-2 {
+  animation: confettiFall 1.8s infinite 0.4s ease-in;
+}
+
+.noclipepe-confetti-3 {
+  animation: confettiFall 2.1s infinite 0.8s ease-in;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(60px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Mobile Screen Adaptation */
+@media (max-width: 520px) {
+  .noclipepe-container {
+    padding: 1rem 0.65rem 0.9rem;
+  }
+  .noclipepe-capsule-bezel {
+    height: 124px;
+  }
+  .noclipepe-main-phrase {
+    font-size: 1.05rem;
+  }
+  .noclipepe-pipeline-rail {
+    gap: 0.2rem;
+    padding: 0.25rem 0.35rem;
+  }
+  .noclipepe-rail-step {
+    font-size: 0.68rem;
+    padding: 0.15rem 0.35rem;
+  }
+  .noclipepe-progress-detail {
+    max-width: 220px;
+  }
 }

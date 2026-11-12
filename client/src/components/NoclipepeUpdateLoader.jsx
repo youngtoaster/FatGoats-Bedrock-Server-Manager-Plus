@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './NoclipepeUpdateLoader.css';
 
 /**
- * NoclipepeUpdateLoader: Recreates noclipepe's iconic animated pixel construction loading bar
+ * NoclipepeUpdateLoader: Authentic recreation of noclipepe's iconic animated pixel construction loading bar
  * ("I made a loading bar you can't stop watching")
+ * Features the active worker crew laying bricks, carrying supplies, mortaring, tapping mallets,
+ * and a condensed single-line stage pipeline directly below the building UI.
+ *
  * Reference: https://designeer.xyz/finds/noclipepe-2119881447687569842
  *
  * @param {Object} props
@@ -40,25 +43,44 @@ export const NoclipepeUpdateLoader = ({
   const roundedPercent = Math.min(100, Math.max(0, Math.round(percent)));
 
   // Maximum wall advancement before reaching the right site office shack
-  const MAX_WALL_X = 504;
+  const MAX_WALL_X = 496;
   const wallWidth = Math.max(0, Math.min(MAX_WALL_X, (roundedPercent / 100) * MAX_WALL_X));
   const frontX = wallWidth;
 
   // Clamped percentage box X position so it stays within capsule view
-  const signX = Math.max(38, Math.min(504, frontX));
+  const signX = Math.max(40, Math.min(488, frontX));
 
   // Dynamic phrase matching original video
-  let mainPhrase = 'Installing update...';
-  if (roundedPercent >= 30 && roundedPercent < 86) {
+  let mainPhrase = 'Laying the foundation...';
+  if (roundedPercent >= 20 && roundedPercent < 55) {
+    mainPhrase = 'Assembling code updates...';
+  } else if (roundedPercent >= 55 && roundedPercent < 86) {
     mainPhrase = 'Almost there...';
   } else if (roundedPercent >= 86 && roundedPercent < 99) {
     mainPhrase = '99%. Any minute now.';
   } else if (roundedPercent >= 99) {
-    mainPhrase = 'Almost done! Finalizing...';
+    mainPhrase = 'Wall complete! Finalizing...';
   }
 
   const isNearingEnd = roundedPercent >= 86;
   const isComplete = roundedPercent >= 99;
+
+  // Stages configuration for condensed pipeline status rail
+  const pipelineStages = [
+    { num: 1, label: 'Backup' },
+    { num: 2, label: 'Sync Git' },
+    { num: 3, label: 'Packages' },
+    { num: 4, label: 'Client' },
+    { num: 5, label: 'Binaries' },
+  ];
+
+  // Runner path limits
+  const runnerMinX = Math.max(16, frontX + 22);
+  const runnerMaxX = 472;
+  const showRunner = !isComplete && (runnerMaxX - runnerMinX > 32);
+
+  // Cement mixer placement
+  const mixerX = frontX < 330 ? Math.max(frontX + 68, 240) : 440;
 
   return (
     <div className="noclipepe-container">
@@ -132,7 +154,6 @@ export const NoclipepeUpdateLoader = ({
 
             {/* LAYER 1: Distant City Skyline Silhouettes */}
             <g opacity="0.6">
-              {/* Distant building blocks */}
               <rect x="30" y="72" width="28" height="34" fill="#7888aa" />
               <rect x="58" y="65" width="22" height="41" fill="#6c7a9c" />
               <rect x="80" y="78" width="35" height="28" fill="#7888aa" />
@@ -146,7 +167,7 @@ export const NoclipepeUpdateLoader = ({
               <rect x="440" y="71" width="30" height="35" fill="#7888aa" />
               <rect x="590" y="68" width="40" height="38" fill="#6c7a9c" />
 
-              {/* Scattered yellow glowing windows in buildings */}
+              {/* Scattered yellow glowing windows */}
               <rect x="64" y="72" width="3" height="3" fill="#ffea8a" />
               <rect x="70" y="78" width="3" height="3" fill="#ffea8a" />
               <rect x="142" y="76" width="3" height="3" fill="#ffea8a" />
@@ -158,29 +179,25 @@ export const NoclipepeUpdateLoader = ({
 
             {/* LAYER 2: Sun & Radiating Rays */}
             <g transform="translate(450, 34)">
-              {/* Radiating 8-ray pixel sunbeams */}
               <g
                 style={{
                   transformOrigin: '0 0',
                   animation: 'sunPulse 3s infinite ease-in-out',
                 }}
               >
-                {/* Cardinal rays */}
                 <rect x="-2" y="-22" width="4" height="6" fill="#fed844" />
                 <rect x="-2" y="16" width="4" height="6" fill="#fed844" />
                 <rect x="-22" y="-2" width="6" height="4" fill="#fed844" />
                 <rect x="16" y="-2" width="6" height="4" fill="#fed844" />
-                {/* Diagonal rays */}
                 <rect x="11" y="11" width="4" height="4" fill="#fed844" />
                 <rect x="-15" y="11" width="4" height="4" fill="#fed844" />
                 <rect x="11" y="-15" width="4" height="4" fill="#fed844" />
                 <rect x="-15" y="-15" width="4" height="4" fill="#fed844" />
               </g>
-              {/* Sun Body */}
               <circle cx="0" cy="0" r="11" fill="#fffbe2" stroke="#fed844" strokeWidth="3" />
             </g>
 
-            {/* LAYER 3: Animated Pixel Clouds */}
+            {/* LAYER 3: Animated Pixel Clouds & Flying Birds */}
             <g style={{ animation: 'cloudDrift1 34s linear infinite' }}>
               <rect x="-100" y="18" width="42" height="7" fill="#ffffff" rx="1" />
               <rect x="-92" y="14" width="26" height="6" fill="#ffffff" rx="1" />
@@ -191,8 +208,6 @@ export const NoclipepeUpdateLoader = ({
               <rect x="-130" y="33" width="32" height="7" fill="#ffffff" rx="1" />
               <rect x="-120" y="46" width="45" height="3" fill="#e2f0fb" />
             </g>
-
-            {/* Flying Birds */}
             <g style={{ animation: 'birdFly 18s linear infinite' }}>
               <path d="M70,44 Q73,41 76,44 Q79,41 82,44" stroke="#3e4a5e" strokeWidth="1.6" fill="none" />
               <path d="M88,48 Q91,45 94,48 Q97,45 100,48" stroke="#3e4a5e" strokeWidth="1.6" fill="none" />
@@ -202,32 +217,25 @@ export const NoclipepeUpdateLoader = ({
             {/* LAYER 4: Top Industrial Track Girder */}
             <rect x="0" y="12" width="640" height="11" fill="#2c3540" />
             <rect x="0" y="14" width="640" height="2" fill="#3f4b59" />
-            {/* Rivets along the girder */}
             {Array.from({ length: 32 }).map((_, i) => (
               <rect key={i} x={i * 20 + 8} y="18" width="3" height="3" fill="#181e26" />
             ))}
-            {/* Bottom track lip */}
             <rect x="0" y="23" width="640" height="3" fill="#1b2128" />
 
             {/* LAYER 5: Ground & Walkway Platform */}
             <rect x="0" y="104" width="640" height="3" fill="#ece4d4" />
             <rect x="0" y="107" width="640" height="15" fill="#c8beaa" />
-            {/* Walkway plank seam dividers */}
             {Array.from({ length: 26 }).map((_, i) => (
               <rect key={i} x={i * 25 + 12} y="107" width="1.5" height="15" fill="#a49884" />
             ))}
-            {/* Foundation beam below */}
             <rect x="0" y="122" width="640" height="18" fill="#3a3228" />
-            {/* Support pilings */}
             {Array.from({ length: 13 }).map((_, i) => (
               <rect key={i} x={i * 50 + 20} y="122" width="8" height="18" fill="#262018" />
             ))}
 
             {/* LAYER 6: Destination Site Office Shack (At right side) */}
             <g id="siteOfficeShack">
-              {/* Shack Main Teal Body */}
               <rect x="496" y="68" width="76" height="36" fill="#235c53" />
-              {/* Horizontal wooden siding texture */}
               <line x1="496" y1="74" x2="572" y2="74" stroke="#1d4d46" strokeWidth="1" />
               <line x1="496" y1="80" x2="572" y2="80" stroke="#1d4d46" strokeWidth="1" />
               <line x1="496" y1="86" x2="572" y2="86" stroke="#1d4d46" strokeWidth="1" />
@@ -241,7 +249,7 @@ export const NoclipepeUpdateLoader = ({
               <rect x="506" y="48" width="10" height="16" fill="#171d24" />
               <rect x="504" y="46" width="14" height="3" fill="#242c38" />
 
-              {/* Animated Chimney Smoke Puffs */}
+              {/* Chimney Smoke */}
               <circle
                 cx="511"
                 cy="42"
@@ -257,18 +265,14 @@ export const NoclipepeUpdateLoader = ({
                 style={{ animation: 'smokePuff2 2.4s infinite 1.2s ease-out' }}
               />
 
-              {/* Cute Black Cat Perched on Roof */}
+              {/* Cat on Roof */}
               <g transform="translate(548, 55)">
-                {/* Body */}
                 <rect x="0" y="3" width="11" height="6" fill="#121418" rx="1.5" />
-                {/* Head & Ears */}
                 <rect x="7" y="1" width="6" height="6" fill="#121418" rx="1" />
                 <polygon points="7,1 9,-3 10,1" fill="#121418" />
                 <polygon points="11,1 12,-3 13,1" fill="#121418" />
-                {/* Glowing Green Cat Eyes */}
                 <circle cx="9" cy="3" r="0.8" fill="#52e488" />
                 <circle cx="12" cy="3" r="0.8" fill="#52e488" />
-                {/* Animated Wagging Cat Tail */}
                 <path
                   d="M0,7 Q-4,5 -4,1"
                   stroke="#121418"
@@ -279,18 +283,25 @@ export const NoclipepeUpdateLoader = ({
                     transformOrigin: '0 7px',
                   }}
                 />
+                {/* Cat Heart on complete */}
+                {isComplete && (
+                  <path
+                    d="M6,-8 A2,2 0 0,0 2,-8 A2,2 0 0,0 0,-6 Q0,-4 4,-1 Q8,-4 8,-6 A2,2 0 0,0 6,-8 Z"
+                    fill="#ff4060"
+                    style={{ animation: 'heartFloat 1.2s infinite ease-in-out' }}
+                  />
+                )}
               </g>
 
-              {/* Glowing Window */}
+              {/* Window & Door */}
               <rect x="508" y="76" width="18" height="18" fill="#ffd952" stroke="#ffffff" strokeWidth="2" />
               <line x1="517" y1="76" x2="517" y2="94" stroke="#ffffff" strokeWidth="1.5" />
               <line x1="508" y1="85" x2="526" y2="85" stroke="#ffffff" strokeWidth="1.5" />
 
-              {/* Doorway */}
               <rect x="542" y="76" width="20" height="28" fill="#3e2316" stroke="#22120a" strokeWidth="1.5" />
               <circle cx="546" cy="90" r="1.5" fill="#f4c430" />
 
-              {/* Safety Traffic Cones */}
+              {/* Traffic Cones */}
               <g transform="translate(482, 92)">
                 <polygon points="5,0 0,12 10,12" fill="#f45624" />
                 <polygon points="4,4 2,8 8,8 6,4" fill="#ffffff" />
@@ -321,168 +332,280 @@ export const NoclipepeUpdateLoader = ({
             {/* LAYER 7: Advancing Red Brick Wall (Progress Bar Fill) */}
             <g clipPath="url(#brickWallClip)">
               <rect x="0" y="26" width="640" height="78" fill="url(#pixelBricks)" />
-              {/* Dark Coping Timber Cap along Top */}
               <rect x="0" y="24" width="640" height="4" fill="#3c2214" stroke="#22120a" strokeWidth="0.8" />
-              {/* Bottom Mortar Footing */}
               <rect x="0" y="102" width="640" height="2.5" fill="#582414" />
             </g>
 
-            {/* LAYER 8: Construction Workers on Wall (At 99-100% Celebration) */}
-            {isComplete && (
-              <g style={{ animation: 'cheerWave 0.7s infinite ease-in-out' }}>
-                {/* Cheering Worker 1 on wall top */}
-                <g transform="translate(260, 5)">
-                  <circle cx="8" cy="6" r="4" fill="#f4c430" />
-                  <rect x="5" y="10" width="6" height="8" fill="#e85c24" />
-                  <line x1="2" y1="5" x2="6" y2="10" stroke="#f4c430" strokeWidth="2" />
-                  <line x1="14" y1="5" x2="10" y2="10" stroke="#f4c430" strokeWidth="2" />
-                </g>
-                {/* Cheering Worker 2 on wall top */}
-                <g transform="translate(420, 5)">
-                  <circle cx="8" cy="6" r="4" fill="#f4c430" />
-                  <rect x="5" y="10" width="6" height="8" fill="#2e4c7e" />
-                  <line x1="2" y1="5" x2="6" y2="10" stroke="#f4c430" strokeWidth="2" />
-                  <line x1="14" y1="5" x2="10" y2="10" stroke="#f4c430" strokeWidth="2" />
-                </g>
+            {/* STAGGERED BRICK EDGE & ACTIVE MORTAR BED (Laying Bricks Visual) */}
+            {frontX > 4 && frontX < MAX_WALL_X && (
+              <g>
+                {/* Wet mortar seam */}
+                <rect x={frontX - 2} y="26" width="3" height="78" fill="#e2d8c6" opacity="0.9" />
+                {/* Alternating brick tooth protrusions (Authentic masonry bond) */}
+                <rect x={frontX - 6} y="26" width="10" height="11" fill="#c04828" stroke="#7a2a16" strokeWidth="0.8" />
+                <rect x={frontX - 2} y="38" width="8" height="11" fill="#a43a1e" stroke="#7a2a16" strokeWidth="0.8" />
+                <rect x={frontX - 6} y="50" width="10" height="11" fill="#d05432" stroke="#7a2a16" strokeWidth="0.8" />
+                <rect x={frontX - 2} y="62" width="8" height="11" fill="#c04828" stroke="#7a2a16" strokeWidth="0.8" />
+                <rect x={frontX - 6} y="74" width="10" height="11" fill="#9e361c" stroke="#7a2a16" strokeWidth="0.8" />
+                <rect x={frontX - 2} y="86" width="8" height="14" fill="#b84224" stroke="#7a2a16" strokeWidth="0.8" />
+
+                {/* Ghost brick where Mason 1 is dropping next brick */}
+                <rect
+                  x={frontX + 4}
+                  y="26"
+                  width="14"
+                  height="11"
+                  fill="rgba(192, 72, 40, 0.35)"
+                  stroke="#fed844"
+                  strokeWidth="1.2"
+                  strokeDasharray="2,2"
+                  className="noclipepe-ghost-brick"
+                />
               </g>
             )}
 
-            {/* LAYER 9: Active Construction Front Scaffolding & Worker */}
-            {frontX > 6 && frontX < MAX_WALL_X && (
-              <g transform={`translate(${frontX - 16}, 0)`}>
-                {/* Scaffolding Platform Lattice */}
-                <rect x="0" y="44" width="3" height="60" fill="#a86e2c" />
-                <rect x="22" y="44" width="3" height="60" fill="#a86e2c" />
-                {/* Crossbars */}
-                <line x1="2" y1="50" x2="23" y2="50" stroke="#8c5820" strokeWidth="2" />
-                <line x1="2" y1="74" x2="23" y2="74" stroke="#8c5820" strokeWidth="2" />
-                <line x1="2" y1="52" x2="23" y2="72" stroke="#8c5820" strokeWidth="1.5" />
-                <line x1="2" y1="72" x2="23" y2="52" stroke="#8c5820" strokeWidth="1.5" />
-                {/* Upper Platform Plank */}
-                <rect x="-3" y="42" width="30" height="3" fill="#d29648" />
+            {/* LAYER 8: Active Construction Scaffolding & Masons (Moving with frontX) */}
+            {frontX > 4 && frontX < MAX_WALL_X + 10 && (
+              <g transform={`translate(${Math.max(6, Math.min(476, frontX - 6))}, 0)`}>
+                {/* Wooden Scaffolding Framework */}
+                <rect x="0" y="32" width="3.5" height="72" fill="#8c5820" />
+                <rect x="28" y="32" width="3.5" height="72" fill="#8c5820" />
+                <line x1="2" y1="38" x2="29" y2="38" stroke="#724416" strokeWidth="2" />
+                <line x1="2" y1="70" x2="29" y2="70" stroke="#724416" strokeWidth="2" />
+                {/* Cross Bracing */}
+                <line x1="2" y1="40" x2="28" y2="68" stroke="#724416" strokeWidth="1.5" />
+                <line x1="2" y1="68" x2="28" y2="40" stroke="#724416" strokeWidth="1.5" />
+                <line x1="2" y1="72" x2="28" y2="100" stroke="#724416" strokeWidth="1.5" />
+                <line x1="2" y1="100" x2="28" y2="72" stroke="#724416" strokeWidth="1.5" />
+                {/* Platform Planks */}
+                <rect x="-4" y="36" width="38" height="4" fill="#cb9448" stroke="#5a3610" strokeWidth="0.5" />
+                <rect x="-4" y="68" width="38" height="4" fill="#cb9448" stroke="#5a3610" strokeWidth="0.5" />
+                {/* Ready-mix Mortar Bucket & Spare Bricks on Deck */}
+                <rect x="20" y="30" width="7" height="6" fill="#3a404c" rx="1" />
+                <rect x="21" y="28" width="5" height="2" fill="#d8ccb8" />
+                <rect x="-2" y="32" width="6" height="4" fill="#c04828" stroke="#5a1808" strokeWidth="0.5" />
 
-                {/* Hardhat Construction Worker on Top Platform */}
-                <g transform="translate(4, 21)">
-                  {/* Yellow Hardhat */}
+                {/* MASON 1: Top Bricklayer Laying Bricks on the Wall */}
+                <g transform="translate(2, 12)">
+                  {/* Hardhat */}
+                  <rect x="4" y="0" width="10" height="5" fill="#f4c430" rx="1" />
+                  <rect x="3" y="4" width="12" height="2" fill="#d8a818" />
+                  {/* Face with safety glasses */}
+                  <rect x="5" y="6" width="7" height="5" fill="#ffcf9e" />
+                  <rect x="9" y="8" width="3" height="2" fill="#1c222c" />
+                  {/* Safety Vest */}
+                  <rect x="3" y="11" width="11" height="8" fill="#e85c24" />
+                  <rect x="6" y="11" width="4" height="8" fill="#f8e830" />
+                  {/* Pants */}
+                  <rect x="4" y="19" width="4" height="6" fill="#243c66" />
+                  <rect x="9" y="19" width="4" height="6" fill="#243c66" />
+                  {/* Left hand holding ready brick */}
+                  <rect x="-2" y="14" width="6" height="3" fill="#c04828" stroke="#5a1808" strokeWidth="0.5" />
+                  {/* Animated Trowel Arm Smoothing Mortar */}
+                  <g className="noclipepe-trowel-arm">
+                    <line x1="12" y1="14" x2="19" y2="12" stroke="#ffcf9e" strokeWidth="2.4" />
+                    <polygon points="19,10 25,12 21,15" fill="#d8e2ec" stroke="#333d48" strokeWidth="0.8" />
+                  </g>
+                  {/* Active Placed Brick lowering into wall */}
+                  <rect
+                    x="20"
+                    y="13"
+                    width="11"
+                    height="4"
+                    fill="#c04828"
+                    stroke="#7a2a16"
+                    strokeWidth="0.6"
+                    className="noclipepe-placing-brick"
+                  />
+                  {/* Mortar Sparks popping */}
+                  <g className="noclipepe-mortar-sparks">
+                    <rect x="22" y="9" width="2" height="2" fill="#ffffff" />
+                    <rect x="27" y="12" width="2" height="2" fill="#fed844" />
+                    <rect x="24" y="15" width="2" height="2" fill="#ffffff" />
+                  </g>
+                </g>
+
+                {/* MASON 2: Mid-Level Assistant Tapping with Rubber Mallet */}
+                <g transform="translate(6, 44)">
+                  {/* Hardhat */}
                   <rect x="4" y="0" width="9" height="5" fill="#f4c430" rx="1" />
                   <rect x="3" y="4" width="11" height="2" fill="#d8a818" />
                   {/* Face */}
                   <rect x="5" y="6" width="6" height="5" fill="#ffcf9e" />
-                  {/* Orange Safety Vest */}
-                  <rect x="3" y="11" width="10" height="7" fill="#e85c24" />
-                  <rect x="6" y="11" width="4" height="7" fill="#f8e830" />
-                  {/* Blue Pants */}
-                  <rect x="4" y="18" width="4" height="5" fill="#2a4574" />
-                  <rect x="9" y="18" width="4" height="5" fill="#2a4574" />
-                  {/* Swinging Trowel Hand */}
-                  <g
-                    style={{
-                      transformOrigin: '12px 13px',
-                      animation: 'trowelSwing 0.75s infinite ease-in-out',
-                    }}
-                  >
-                    <line x1="10" y1="13" x2="16" y2="10" stroke="#ffcf9e" strokeWidth="2" />
-                    <polygon points="16,8 20,10 18,13" fill="#d2d8e0" stroke="#48505a" strokeWidth="0.8" />
+                  {/* Work Shirt */}
+                  <rect x="3" y="11" width="10" height="8" fill="#2d4a68" />
+                  {/* Pants */}
+                  <rect x="4" y="19" width="4" height="6" fill="#5c442a" />
+                  <rect x="8" y="19" width="4" height="6" fill="#5c442a" />
+                  {/* Mallet arm tapping vertical joint */}
+                  <g className="noclipepe-mallet-arm">
+                    <line x1="10" y1="13" x2="17" y2="11" stroke="#ffcf9e" strokeWidth="2.2" />
+                    <rect x="16" y="8" width="5" height="7" fill="#181818" rx="1" />
                   </g>
                 </g>
               </g>
             )}
 
+            {/* LAYER 9: Ground Construction Zone & Active Workers */}
+            <g id="groundCrew">
+              {/* Supply Depot Pallet of Red Bricks near Shack */}
+              <g transform="translate(470, 96)">
+                {/* Wooden Pallet */}
+                <rect x="0" y="7" width="22" height="3" fill="#8c5820" />
+                <rect x="2" y="10" width="3" height="2" fill="#5a3610" />
+                <rect x="10" y="10" width="3" height="2" fill="#5a3610" />
+                <rect x="18" y="10" width="3" height="2" fill="#5a3610" />
+                {/* Brick Stacks */}
+                <rect x="2" y="3" width="9" height="4" fill="#c04828" stroke="#5a1808" strokeWidth="0.5" />
+                <rect x="11" y="3" width="9" height="4" fill="#c04828" stroke="#5a1808" strokeWidth="0.5" />
+                <rect x="5" y="-1" width="9" height="4" fill="#d05432" stroke="#5a1808" strokeWidth="0.5" />
+                {/* Portland Cement Bag */}
+                <rect x="-10" y="3" width="8" height="7" fill="#e2d8c6" stroke="#9a8c78" strokeWidth="0.6" rx="1" />
+                <rect x="-8" y="5" width="4" height="3" fill="#f4c430" />
+              </g>
+
+              {/* Cement Mixer & Operator */}
+              <g transform={`translate(${mixerX}, 77)`}>
+                {/* Tripod Stand */}
+                <line x1="6" y1="20" x2="0" y2="28" stroke="#2a2e38" strokeWidth="2.5" />
+                <line x1="16" y1="20" x2="22" y2="28" stroke="#2a2e38" strokeWidth="2.5" />
+                <line x1="11" y1="20" x2="11" y2="28" stroke="#1c2026" strokeWidth="2" />
+                <rect x="-2" y="14" width="8" height="9" fill="#3a404c" rx="1" />
+                {/* Vibrating Mixer Drum */}
+                <g className="noclipepe-mixer-vibrate">
+                  <ellipse cx="12" cy="12" rx="11" ry="9" fill="#e85c24" stroke="#c04414" strokeWidth="1.5" />
+                  <ellipse cx="12" cy="12" rx="7" ry="5" fill="#f4743e" />
+                  <line x1="5" y1="12" x2="19" y2="12" stroke="#ffffff" strokeWidth="1" opacity="0.6" />
+                </g>
+                {/* Mixer Operator with Shovel */}
+                <g transform="translate(24, 0)">
+                  <rect x="3" y="0" width="8" height="4" fill="#f4c430" rx="1" />
+                  <rect x="4" y="4" width="5" height="4" fill="#ffcf9e" />
+                  <rect x="2" y="8" width="8" height="8" fill="#3a5a80" />
+                  <rect x="3" y="16" width="3" height="11" fill="#243448" />
+                  <rect x="7" y="16" width="3" height="11" fill="#243448" />
+                  {/* Shovel in hand */}
+                  <g className="noclipepe-shovel-swing">
+                    <line x1="-3" y1="12" x2="5" y2="14" stroke="#8c5820" strokeWidth="1.8" />
+                    <polygon points="-7,11 -3,10 -3,14 -7,13" fill="#6a7888" stroke="#333d48" strokeWidth="0.8" />
+                  </g>
+                </g>
+              </g>
+
+              {/* GROUND WORKER 1: The Brick Carrier Running Back & Forth */}
+              {showRunner && (
+                <g
+                  className="noclipepe-brick-runner"
+                  style={{
+                    '--runner-start': `${runnerMinX}px`,
+                    '--runner-end': `${runnerMaxX}px`,
+                  }}
+                >
+                  <rect x="4" y="0" width="8" height="4" fill="#f4c430" rx="1" />
+                  <rect x="5" y="4" width="5" height="4" fill="#ffcf9e" />
+                  <rect x="3" y="8" width="8" height="8" fill="#e85c24" />
+                  <rect x="5" y="8" width="3" height="8" fill="#f8e830" />
+                  {/* Legs */}
+                  <rect x="3" y="16" width="3" height="11" fill="#223654" className="noclipepe-leg-left" />
+                  <rect x="8" y="16" width="3" height="11" fill="#223654" className="noclipepe-leg-right" />
+                  {/* Stack of Red Bricks carried in hands */}
+                  <g className="noclipepe-carried-bricks">
+                    <rect x="9" y="8" width="8" height="3" fill="#c04828" stroke="#682412" strokeWidth="0.5" />
+                    <rect x="9" y="5" width="8" height="3" fill="#c04828" stroke="#682412" strokeWidth="0.5" />
+                    <rect x="9" y="2" width="8" height="3" fill="#c04828" stroke="#682412" strokeWidth="0.5" />
+                  </g>
+                </g>
+              )}
+            </g>
+
             {/* LAYER 10: Overhead Hanging Percentage Sign */}
             <g transform={`translate(${signX}, 0)`}>
-              {/* Dual steel struts from track rail */}
               <line x1="-16" y1="18" x2="-16" y2="28" stroke="#1c222c" strokeWidth="2" />
               <line x1="16" y1="18" x2="16" y2="28" stroke="#1c222c" strokeWidth="2" />
-              {/* Trolley wheel brackets on the top girder */}
               <rect x="-18" y="15" width="4" height="4" fill="#10141a" />
               <rect x="14" y="15" width="4" height="4" fill="#10141a" />
 
               {/* Crisp White Sign Board with Bold Border */}
               <rect
-                x="-30"
+                x="-32"
                 y="28"
-                width="60"
+                width="64"
                 height="26"
                 rx="2"
-                fill="#ffffff"
-                stroke="#1c222c"
+                fill={isComplete ? '#ecfdf5' : '#ffffff'}
+                stroke={isComplete ? '#10b981' : '#1c222c'}
                 strokeWidth="2.5"
               />
-              {/* Retro Pixel Percentage Text */}
               <text
                 x="0"
                 y="46"
                 textAnchor="middle"
-                fill="#1c222c"
+                fill={isComplete ? '#047857' : '#1c222c'}
                 fontSize="14"
                 fontWeight="800"
                 fontFamily="var(--font-mono, 'JetBrains Mono', monospace)"
                 letterSpacing="-0.02em"
               >
-                {roundedPercent}%
+                {isComplete ? '100% ✓' : `${roundedPercent}%`}
               </text>
             </g>
 
-            {/* LAYER 11: Ground Workers & Animated Equipment */}
-            <g id="groundActivity">
-              {/* Cement Mixer Machine at x = 240 */}
-              <g transform="translate(235, 78)">
-                {/* Tripod Stand */}
-                <line x1="6" y1="20" x2="0" y2="28" stroke="#2a2e38" strokeWidth="2.5" />
-                <line x1="16" y1="20" x2="22" y2="28" stroke="#2a2e38" strokeWidth="2.5" />
-                <line x1="11" y1="20" x2="11" y2="28" stroke="#1c2026" strokeWidth="2" />
-                {/* Motor housing */}
-                <rect x="-2" y="14" width="8" height="9" fill="#3a404c" rx="1" />
-                {/* Vibrating Rotating Mixer Drum */}
-                <g style={{ animation: 'mixerVibrate 0.25s infinite' }}>
-                  <ellipse cx="12" cy="12" rx="11" ry="9" fill="#e85c24" stroke="#c04414" strokeWidth="1.5" />
-                  <ellipse cx="12" cy="12" rx="7" ry="5" fill="#f4743e" />
-                  <line x1="5" y1="12" x2="19" y2="12" stroke="#ffffff" strokeWidth="1" opacity="0.6" />
+            {/* LAYER 11: 100% Complete Celebration Fireworks & Cheering Crew */}
+            {isComplete && (
+              <g className="noclipepe-celebration">
+                {/* Cheering Worker on Wall Top */}
+                <g transform="translate(240, 5)" className="noclipepe-cheer-worker">
+                  <circle cx="8" cy="6" r="4" fill="#f4c430" />
+                  <rect x="5" y="10" width="6" height="8" fill="#e85c24" />
+                  <line x1="2" y1="4" x2="6" y2="10" stroke="#f4c430" strokeWidth="2" />
+                  <line x1="14" y1="4" x2="10" y2="10" stroke="#f4c430" strokeWidth="2" />
                 </g>
+                {/* Cheering Worker on Scaffold */}
+                <g transform="translate(420, 5)" className="noclipepe-cheer-worker">
+                  <circle cx="8" cy="6" r="4" fill="#f4c430" />
+                  <rect x="5" y="10" width="6" height="8" fill="#2e4c7e" />
+                  <line x1="2" y1="4" x2="6" y2="10" stroke="#f4c430" strokeWidth="2" />
+                  <line x1="14" y1="4" x2="10" y2="10" stroke="#f4c430" strokeWidth="2" />
+                </g>
+                {/* Colorful Confetti */}
+                <rect x="180" y="15" width="3" height="3" fill="#f43f5e" className="noclipepe-confetti-1" />
+                <rect x="220" y="25" width="3" height="3" fill="#10b981" className="noclipepe-confetti-2" />
+                <rect x="290" y="18" width="3" height="3" fill="#38bdf8" className="noclipepe-confetti-3" />
+                <rect x="360" y="22" width="3" height="3" fill="#facc15" className="noclipepe-confetti-1" />
+                <rect x="440" y="14" width="3" height="3" fill="#a855f7" className="noclipepe-confetti-2" />
               </g>
-
-              {/* Walking Ground Worker with Bricks at x = 160 */}
-              <g
-                transform="translate(170, 77)"
-                style={{ animation: 'workerWalkCycle 0.6s infinite ease-in-out' }}
-              >
-                {/* Helmet */}
-                <rect x="4" y="0" width="8" height="4" fill="#f4c430" rx="1" />
-                {/* Face */}
-                <rect x="5" y="4" width="5" height="4" fill="#ffcf9e" />
-                {/* Shirt */}
-                <rect x="3" y="8" width="8" height="8" fill="#3a72b8" />
-                {/* Legs */}
-                <rect x="3" y="16" width="3" height="10" fill="#223654" />
-                <rect x="8" y="16" width="3" height="10" fill="#223654" />
-                {/* Stack of Red Bricks in hands */}
-                <rect x="11" y="9" width="8" height="3" fill="#c04828" stroke="#682412" strokeWidth="0.5" />
-                <rect x="11" y="6" width="8" height="3" fill="#c04828" stroke="#682412" strokeWidth="0.5" />
-                <rect x="11" y="3" width="8" height="3" fill="#c04828" stroke="#682412" strokeWidth="0.5" />
-              </g>
-
-              {/* Second Ground Worker standing near mixer */}
-              <g transform="translate(265, 78)">
-                <rect x="3" y="0" width="8" height="4" fill="#f4c430" rx="1" />
-                <rect x="4" y="4" width="5" height="4" fill="#ffcf9e" />
-                <rect x="2" y="8" width="8" height="8" fill="#e85c24" />
-                <rect x="3" y="16" width="3" height="9" fill="#263852" />
-                <rect x="7" y="16" width="3" height="9" fill="#263852" />
-                {/* Arm pointing / holding wrench */}
-                <line x1="8" y1="12" x2="14" y2="10" stroke="#ffcf9e" strokeWidth="2" />
-                <rect x="13" y="8" width="2" height="5" fill="#a4b0c0" />
-              </g>
-            </g>
+            )}
           </svg>
         </div>
       </div>
 
-      {/* Dynamic Phrase & Step Telemetry Below Pill */}
+      {/* Dynamic Phrase & Condensed 5-Stage Pipeline Status Rail Directly Below Viewport */}
       <div className="noclipepe-caption-area">
         <div className="noclipepe-main-phrase">{mainPhrase}</div>
+
+        {/* Condensed Pipeline Rail (Single unified sleek row replacing separate bulky bars) */}
+        <div className="noclipepe-pipeline-rail">
+          {pipelineStages.map((stg) => {
+            const isDone = stage > stg.num || roundedPercent >= stg.num * 20;
+            const isActive = stage === stg.num && !isDone;
+            return (
+              <div
+                key={stg.num}
+                className={`noclipepe-rail-step ${isDone ? 'is-done' : ''} ${isActive ? 'is-active' : ''}`}
+              >
+                <span className="noclipepe-rail-dot">
+                  {isDone ? '✓' : stg.num}
+                </span>
+                <span className="noclipepe-rail-label">{stg.label}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Live Sub-Telemetry */}
         <div className="noclipepe-sub-telemetry">
           <span className="noclipepe-stage-badge">Stage {stage}/5</span>
-          <span className="truncate" style={{ maxWidth: 360 }}>
+          <span className="noclipepe-progress-detail" title={progressText}>
             {progressText}
           </span>
           {targetCommit && (

@@ -53,17 +53,14 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
         if (target >= 100) return 100;
 
         if (prev < target) {
-          const step = Math.max(0.35, (target - prev) * 0.16);
+          const step = Math.max(0.4, (target - prev) * 0.18);
           return Math.min(target, prev + step);
         }
 
-        // Gently creep forward during long compiles (Vite, csc) so progress never feels frozen
+        // Smoothly glide forward while operation proceeds so visuals never freeze
         const elapsed = Date.now() - lastTargetChangeRef.current;
-        if (elapsed > 800 && prev < 98) {
-          const maxCreep = Math.min(target + 3.5, 96);
-          if (prev < maxCreep) {
-            return prev + 0.05;
-          }
+        if (elapsed > 350 && prev < 98) {
+          return Math.min(98, prev + 0.08);
         }
 
         return prev;
@@ -328,7 +325,7 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                 </div>
               )}
 
-              {/* Real-time Update Progress Bar & Steps when updating */}
+              {/* Real-time Update Progress Bar with Condensed Pipeline Status */}
               {updating ? (
                 <div className="mb-2">
                   <NoclipepeUpdateLoader
@@ -337,28 +334,6 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                     progressText={progressData.progress}
                     targetCommit={updateInfo.remoteCommit}
                   />
-
-                  {/* Step Pills */}
-                  <div className="update-steps-stepper mt-4">
-                    {updateSteps.map((s) => {
-                      const isDone = progressData.stage > s.num || roundedDisplay >= s.num * 20;
-                      const isActive = progressData.stage === s.num && !isDone;
-                      const IconComp = s.icon;
-                      return (
-                        <div
-                          key={s.num}
-                          className={`update-step-pill ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''}`}
-                        >
-                          {isDone ? (
-                            <Check size={13} style={{ color: 'var(--emerald, #3fa66a)', flexShrink: 0 }} />
-                          ) : (
-                            <IconComp size={13} style={{ flexShrink: 0, opacity: isActive ? 1 : 0.6 }} />
-                          )}
-                          <span className="truncate">{s.label}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
                 </div>
               ) : (
                 <>

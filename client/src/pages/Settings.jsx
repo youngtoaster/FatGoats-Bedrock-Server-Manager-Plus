@@ -82,17 +82,14 @@ export const Settings = () => {
         if (target >= 100) return 100;
 
         if (prev < target) {
-          const step = Math.max(0.35, (target - prev) * 0.16);
+          const step = Math.max(0.4, (target - prev) * 0.18);
           return Math.min(target, prev + step);
         }
 
-        // Gently creep forward during long compiles (Vite build, csc) so progress never feels frozen
+        // Smoothly glide forward while operation proceeds so visuals never freeze
         const elapsed = Date.now() - updateLastChangeRef.current;
-        if (elapsed > 800 && prev < 98) {
-          const maxCreep = Math.min(target + 3.5, 96);
-          if (prev < maxCreep) {
-            return prev + 0.05;
-          }
+        if (elapsed > 350 && prev < 98) {
+          return Math.min(98, prev + 0.08);
         }
 
         return prev;
@@ -1259,7 +1256,7 @@ export const Settings = () => {
                       </div>
                     )}
 
-                    {/* Real-time Update Progress Bar */}
+                    {/* Real-time Update Progress Bar with Condensed Pipeline Status */}
                     {updatingApp && (
                       <div className="mb-4">
                         <NoclipepeUpdateLoader
@@ -1268,33 +1265,6 @@ export const Settings = () => {
                           progressText={updateProgressData.progress}
                           targetCommit={updateStatus?.remoteCommit}
                         />
-
-                        <div className="update-steps-stepper mt-4">
-                          {[
-                            { num: 1, label: 'Safety Backup', icon: HardDrive },
-                            { num: 2, label: 'Pull Commits', icon: GitCommit },
-                            { num: 3, label: 'Dependencies', icon: Package },
-                            { num: 4, label: 'Build Client', icon: Layers },
-                            { num: 5, label: 'Launcher Binary', icon: Cpu },
-                          ].map((s) => {
-                            const isDone = updateProgressData.stage > s.num || Math.round(updateDisplayPercent) >= s.num * 20;
-                            const isActive = updateProgressData.stage === s.num && !isDone;
-                            const IconComp = s.icon;
-                            return (
-                              <div
-                                key={s.num}
-                                className={`update-step-pill ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''}`}
-                              >
-                                {isDone ? (
-                                  <Check size={13} style={{ color: 'var(--emerald, #3fa66a)', flexShrink: 0 }} />
-                                ) : (
-                                  <IconComp size={13} style={{ flexShrink: 0, opacity: isActive ? 1 : 0.6 }} />
-                                )}
-                                <span className="truncate">{s.label}</span>
-                              </div>
-                            );
-                          })}
-                        </div>
                       </div>
                     )}
 

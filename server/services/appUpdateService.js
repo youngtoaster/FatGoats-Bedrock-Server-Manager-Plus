@@ -211,6 +211,56 @@ class AppUpdateService {
     this.updateProgress = null;
     this.updatePercent = 0;
     this.updateStage = 0;
+    this._progressInterval = null;
+  }
+
+  /**
+   * Start a continuous micro-ticker that smoothly steps the percentage upward
+   * towards targetPercent over durationMs, ensuring that telemetry never freezes
+   * or stops at any single percentage number during asynchronous operations.
+   */
+  startSmoothProgress(targetPercent, durationMs = 10000) {
+    if (this._progressInterval) {
+      clearInterval(this._progressInterval);
+      this._progressInterval = null;
+    }
+
+    const startPercent = Number(this.updatePercent) || 0;
+    const diff = targetPercent - startPercent;
+    if (diff <= 0) {
+      this.updatePercent = targetPercent;
+      return;
+    }
+
+    const steps = Math.max(8, Math.floor(durationMs / 140));
+    const stepIncrement = diff / steps;
+    const stepInterval = Math.max(80, Math.floor(durationMs / steps));
+
+    let currentStep = 0;
+    this._progressInterval = setInterval(() => {
+      currentStep++;
+      if (currentStep >= steps) {
+        this.updatePercent = targetPercent;
+        clearInterval(this._progressInterval);
+        this._progressInterval = null;
+      } else {
+        const nextVal = startPercent + currentStep * stepIncrement;
+        this.updatePercent = Math.min(targetPercent - 0.5, Math.round(nextVal * 10) / 10);
+      }
+    }, stepInterval);
+  }
+
+  /**
+   * Immediately stops the micro-ticker and pins the percentage to targetPercent.
+   */
+  stopSmoothProgress(targetPercent) {
+    if (this._progressInterval) {
+      clearInterval(this._progressInterval);
+      this._progressInterval = null;
+    }
+    if (typeof targetPercent === 'number') {
+      this.updatePercent = targetPercent;
+    }
   }
 
   getPreferences() {
@@ -514,10 +564,9 @@ class AppUpdateService {
       // ------------------------------------------------------------------------
       // STEP 1: Safeguard User Data & Database
       // ------------------------------------------------------------------------
-      this.updatePercent = 15;
       this.updateStage = 1;
       this.updateProgress = 'Creating pre-update safety backup of database and user data...';
-      await new Promise((r) => setTimeout(r, 80));
+      this.startSmoothProgress(18, 1500);
 
       const dbPath = path.join(ROOT_DIR, 'data', 'db', 'manager.db');
       const dbBackupPath = path.join(
@@ -534,6 +583,7 @@ class AppUpdateService {
           console.warn('[AppUpdateService] Failed to create db backup:', err.message);
         }
       }
+      this.stopSmoothProgress(18);
 
       let newCommitInfo = null;
       let usedGit = false;
@@ -541,10 +591,9 @@ class AppUpdateService {
       // ------------------------------------------------------------------------
       // STEP 2: Fetch and Apply Latest Code Changes
       // ------------------------------------------------------------------------
-      this.updatePercent = 25;
       this.updateStage = 2;
-      this.updateProgress = 'Connecting to GitHub repository and fetching origin...';
-      await new Promise((r) => setTimeout(r, 60));
+      this.updateProgress = 'Connecting to GitHub repository and fetching origin/main...';
+      this.startSmoothProgress(48, 12000);
 
       // Unlock running Windows binaries out of the way so Git or Zip can write new ones cleanly
       prepareLockedFileForReplacement(path.join(ROOT_DIR, 'BedrockServerManager.exe'));
@@ -555,9 +604,7 @@ class AppUpdateService {
           console.log('[AppUpdateService] Attempting Git pull from origin (async)...');
           await execGitAsync('git fetch origin', { timeout: 45000 });
 
-          this.updatePercent = 38;
           this.updateProgress = 'Applying code updates from origin/main...';
-          await new Promise((r) => setTimeout(r, 60));
 
           // Wipe unstaged changes in tracked files to prevent merge conflicts
           try {
@@ -566,10 +613,6 @@ class AppUpdateService {
             await execGitAsync('git pull --rebase=false origin main', { timeout: 45000 });
           }
           usedGit = true;
-
-          this.updatePercent = 50;
-          this.updateProgress = 'Inspecting synchronized commit metadata...';
-          await new Promise((r) => setTimeout(r, 60));
 
           const shortHash = await execGitAsync('git rev-parse --short HEAD');
           const fullHash = await execGitAsync('git rev-parse HEAD');
@@ -592,9 +635,7 @@ class AppUpdateService {
 
       // If Git was not used or failed, download and extract main.zip directly
       if (!usedGit) {
-        this.updatePercent = 30;
         this.updateProgress = 'Downloading latest repository archive from GitHub...';
-        await new Promise((r) => setTimeout(r, 60));
 
         console.log('[AppUpdateService] Downloading latest repository archive from GitHub...');
         const zipUrl = `https://github.com/${GITHUB_REPO}/archive/refs/heads/${GITHUB_BRANCH}.zip`;
@@ -616,9 +657,7 @@ class AppUpdateService {
           destFile.on('finish', resolve);
         });
 
-        this.updatePercent = 45;
         this.updateProgress = 'Extracting updated files while safeguarding data...';
-        await new Promise((r) => setTimeout(r, 60));
 
         const zipDirectory = await unzipper.Open.file(tempZip);
 
@@ -676,14 +715,14 @@ class AppUpdateService {
           }
         } catch (_) {}
       }
+      this.stopSmoothProgress(48);
 
       // ------------------------------------------------------------------------
       // STEP 3: Dependencies Verification
       // ------------------------------------------------------------------------
-      this.updatePercent = 60;
       this.updateStage = 3;
       this.updateProgress = 'Verifying and updating application dependencies...';
-      await new Promise((r) => setTimeout(r, 60));
+      this.startSmoothProgress(72, 8000);
 
       try {
         await execCmdAsync('cmd /c "npm install --no-audit --no-fund"', {
@@ -693,18 +732,14 @@ class AppUpdateService {
       } catch (err) {
         console.warn('[AppUpdateService] npm install note:', err.message);
       }
-
-      this.updatePercent = 74;
-      this.updateProgress = 'Dependencies verified. Preparing client compilation...';
-      await new Promise((r) => setTimeout(r, 60));
+      this.stopSmoothProgress(72);
 
       // ------------------------------------------------------------------------
       // STEP 4: Build React Frontend Assets
       // ------------------------------------------------------------------------
-      this.updatePercent = 80;
       this.updateStage = 4;
       this.updateProgress = 'Compiling production client assets (Vite)...';
-      await new Promise((r) => setTimeout(r, 60));
+      this.startSmoothProgress(90, 8000);
 
       try {
         await execCmdAsync('cmd /c "cd client && npm run build"', {
@@ -714,18 +749,14 @@ class AppUpdateService {
       } catch (err) {
         console.warn('[AppUpdateService] Client build note (using repository dist):', err.message);
       }
-
-      this.updatePercent = 90;
-      this.updateProgress = 'Production web bundle verified.';
-      await new Promise((r) => setTimeout(r, 60));
+      this.stopSmoothProgress(90);
 
       // ------------------------------------------------------------------------
       // STEP 5: Recompile Windows Native Executables
       // ------------------------------------------------------------------------
-      this.updatePercent = 94;
       this.updateStage = 5;
       this.updateProgress = 'Recompiling native Windows executables (Tray Launcher & Installer)...';
-      await new Promise((r) => setTimeout(r, 60));
+      this.startSmoothProgress(98, 5000);
 
       const cscPath = 'C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe';
       if (fs.existsSync(cscPath)) {
@@ -758,7 +789,7 @@ class AppUpdateService {
         }
       }
 
-      this.updatePercent = 98;
+      this.stopSmoothProgress(98);
       this.updateProgress = 'Finalizing update manifest and preferences...';
       await new Promise((r) => setTimeout(r, 60));
 
@@ -772,7 +803,7 @@ class AppUpdateService {
       setSetting('app_update_ignored_commit', '');
       setSetting('app_update_ask_later_until', '0');
 
-      this.updatePercent = 100;
+      this.stopSmoothProgress(100);
       this.updateProgress = 'Update successfully applied!';
       const finalCommit = newCommitInfo?.commit || this.getCurrentVersion().commit;
 
@@ -782,6 +813,7 @@ class AppUpdateService {
         message: `App successfully updated to commit #${finalCommit}. All worlds, player databases, and configurations were safely preserved.`,
       };
     } finally {
+      this.stopSmoothProgress();
       this.isUpdating = false;
       lock.release();
     }
