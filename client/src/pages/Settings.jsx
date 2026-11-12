@@ -1202,15 +1202,15 @@ export const Settings = () => {
                   >
                     <div className="d-flex items-center justify-between flex-wrap gap-2 mb-2">
                       <div className="d-flex items-center gap-2">
-                        <ArrowUpCircle size={20} style={{ color: 'var(--copper, #d97736)' }} />
+                        <ArrowUpCircle size={20} style={{ color: 'var(--ice, #38bdf8)' }} />
                         <strong className="text-white text-base">New Version Available on GitHub</strong>
                       </div>
                       <span
                         className="badge font-bold text-xs"
                         style={{
-                          background: 'rgba(217, 119, 54, 0.15)',
-                          color: 'var(--copper, #d97736)',
-                          border: '1px solid rgba(217, 119, 54, 0.3)',
+                          background: 'rgba(37, 99, 235, 0.15)',
+                          color: 'var(--ice, #38bdf8)',
+                          border: '1px solid rgba(56, 189, 248, 0.3)',
                         }}
                       >
                         {updateStatus.commitsBehind} New Commit{updateStatus.commitsBehind !== 1 ? 's' : ''}
@@ -1220,12 +1220,12 @@ export const Settings = () => {
                     <div
                       className="font-mono text-xs mb-3 p-2.5 rounded"
                       style={{
-                        background: 'var(--bg-input, #0d0e11)',
-                        border: '1px solid var(--border-subtle, rgba(240, 235, 225, 0.08))',
-                        color: 'var(--text-sub, #a39e94)',
+                        background: 'var(--bg-input, #090b10)',
+                        border: '1px solid var(--border-subtle, rgba(226, 238, 255, 0.08))',
+                        color: 'var(--text-sub, #94a3b8)',
                       }}
                     >
-                      Latest Remote Commit: <strong style={{ color: 'var(--copper, #d97736)' }}>#{updateStatus.remoteCommit}</strong>
+                      Latest Remote Commit: <strong style={{ color: 'var(--ice, #38bdf8)' }}>#{updateStatus.remoteCommit}</strong>
                       {updateStatus.remoteCommitDate && <span> ({updateStatus.remoteCommitDate})</span>}
                       <br />
                       <span className="text-white font-sans mt-1 d-block font-medium">
@@ -1235,21 +1235,21 @@ export const Settings = () => {
 
                     {updateStatus.changelog && updateStatus.changelog.length > 0 && (
                       <div className="mb-3">
-                        <span className="text-2xs uppercase font-semibold mb-1 d-block" style={{ color: 'var(--text-muted, #78746c)', letterSpacing: '0.05em' }}>
+                        <span className="text-2xs uppercase font-semibold mb-1 d-block" style={{ color: 'var(--text-muted, #64748b)', letterSpacing: '0.05em' }}>
                           Recent Commits:
                         </span>
                         <div
                           className="max-h-36 overflow-y-auto p-2.5 rounded text-xs space-y-1 font-mono"
                           style={{
-                            background: 'var(--bg-input, #0d0e11)',
-                            border: '1px solid var(--border-subtle, rgba(240, 235, 225, 0.08))',
+                            background: 'var(--bg-input, #090b10)',
+                            border: '1px solid var(--border-subtle, rgba(226, 238, 255, 0.08))',
                           }}
                         >
                           {updateStatus.changelog.map((c, idx) => (
                             <div key={idx} className="d-flex items-baseline gap-2">
-                              <span style={{ color: 'var(--copper, #d97736)', fontSize: '0.7rem' }}>#{c.hash}</span>
-                              <span className="font-sans text-xs truncate flex-1" style={{ color: 'var(--text-main, #ded9cf)' }}>{c.subject}</span>
-                              <span className="text-2xs shrink-0 font-sans" style={{ color: 'var(--text-muted, #78746c)' }}>{c.date}</span>
+                              <span style={{ color: 'var(--ice, #38bdf8)', fontSize: '0.7rem' }}>#{c.hash}</span>
+                              <span className="font-sans text-xs truncate flex-1" style={{ color: 'var(--text-main, #e2e8f0)' }}>{c.subject}</span>
+                              <span className="text-2xs shrink-0 font-sans" style={{ color: 'var(--text-muted, #64748b)' }}>{c.date}</span>
                             </div>
                           ))}
                         </div>

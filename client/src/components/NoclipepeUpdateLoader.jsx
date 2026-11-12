@@ -115,32 +115,32 @@ export const NoclipepeUpdateLoader = ({
             shapeRendering="crispEdges"
           >
             <defs>
-              {/* Sky Gradient */}
+              {/* Nordic Twilight Sky Gradient */}
               <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#5fa5e6" />
-                <stop offset="65%" stopColor="#8ec4f4" />
-                <stop offset="100%" stopColor="#bde0fa" />
+                <stop offset="0%" stopColor="#0c1424" />
+                <stop offset="55%" stopColor="#152136" />
+                <stop offset="100%" stopColor="#1e2c44" />
               </linearGradient>
 
-              {/* Pixel Brick Texture Pattern */}
+              {/* Nordic Slate & Granite Pixel Brick Texture */}
               <pattern
                 id="pixelBricks"
                 width="16"
                 height="12"
                 patternUnits="userSpaceOnUse"
               >
-                {/* Mortar Background */}
-                <rect width="16" height="12" fill="#d8ccb8" />
-                {/* Row 1 Bricks */}
-                <rect x="0" y="1" width="7" height="4" fill="#c04828" />
-                <rect x="0" y="2" width="7" height="2" fill="#d25834" />
-                <rect x="8" y="1" width="7" height="4" fill="#9e361c" />
-                <rect x="8" y="2" width="7" height="2" fill="#bc4626" />
-                {/* Row 2 Bricks (Staggered by 4px) */}
-                <rect x="4" y="7" width="7" height="4" fill="#d05432" />
-                <rect x="4" y="8" width="7" height="2" fill="#de6644" />
-                <rect x="12" y="7" width="4" height="4" fill="#a43a1e" />
-                <rect x="0" y="7" width="3" height="4" fill="#a43a1e" />
+                {/* Ice/Stainless Mortar Background */}
+                <rect width="16" height="12" fill="#3b4860" />
+                {/* Row 1 Slate Bricks */}
+                <rect x="0" y="1" width="7" height="4" fill="#2a3448" />
+                <rect x="0" y="2" width="7" height="2" fill="#3b4862" />
+                <rect x="8" y="1" width="7" height="4" fill="#1f2736" />
+                <rect x="8" y="2" width="7" height="2" fill="#2d374a" />
+                {/* Row 2 Slate Bricks (Staggered by 4px) */}
+                <rect x="4" y="7" width="7" height="4" fill="#323e54" />
+                <rect x="4" y="8" width="7" height="2" fill="#435270" />
+                <rect x="12" y="7" width="4" height="4" fill="#18202d" />
+                <rect x="0" y="7" width="3" height="4" fill="#18202d" />
               </pattern>
 
               {/* Brick Wall Clip Path (Dynamic Width) */}
@@ -152,32 +152,44 @@ export const NoclipepeUpdateLoader = ({
             {/* LAYER 0: Sky Background */}
             <rect x="0" y="0" width="640" height="140" fill="url(#skyGrad)" />
 
-            {/* LAYER 1: Distant City Skyline Silhouettes */}
-            <g opacity="0.6">
-              <rect x="30" y="72" width="28" height="34" fill="#7888aa" />
-              <rect x="58" y="65" width="22" height="41" fill="#6c7a9c" />
-              <rect x="80" y="78" width="35" height="28" fill="#7888aa" />
-              <rect x="135" y="68" width="30" height="38" fill="#6c7a9c" />
-              <rect x="165" y="74" width="24" height="32" fill="#7888aa" />
-              <rect x="210" y="62" width="36" height="44" fill="#667494" />
-              <rect x="246" y="70" width="28" height="36" fill="#7888aa" />
-              <rect x="310" y="66" width="32" height="40" fill="#6c7a9c" />
-              <rect x="342" y="75" width="26" height="31" fill="#7888aa" />
-              <rect x="390" y="63" width="34" height="43" fill="#667494" />
-              <rect x="440" y="71" width="30" height="35" fill="#7888aa" />
-              <rect x="590" y="68" width="40" height="38" fill="#6c7a9c" />
-
-              {/* Scattered yellow glowing windows */}
-              <rect x="64" y="72" width="3" height="3" fill="#ffea8a" />
-              <rect x="70" y="78" width="3" height="3" fill="#ffea8a" />
-              <rect x="142" y="76" width="3" height="3" fill="#ffea8a" />
-              <rect x="220" y="70" width="3" height="3" fill="#ffea8a" />
-              <rect x="228" y="80" width="3" height="3" fill="#ffea8a" />
-              <rect x="320" y="74" width="3" height="3" fill="#ffea8a" />
-              <rect x="402" y="72" width="3" height="3" fill="#ffea8a" />
+            {/* LAYER 0.5: Nordic Twilight Stars */}
+            <g opacity="0.85">
+              <rect x="45" y="14" width="2" height="2" fill="#e2e8f0" />
+              <rect x="110" y="22" width="1.5" height="1.5" fill="#7dd3fc" />
+              <rect x="180" y="10" width="2" height="2" fill="#ffffff" />
+              <rect x="250" y="28" width="1.5" height="1.5" fill="#e2e8f0" />
+              <rect x="330" y="12" width="2" height="2" fill="#7dd3fc" />
+              <rect x="385" y="25" width="1.5" height="1.5" fill="#e2e8f0" />
+              <rect x="520" y="16" width="2" height="2" fill="#ffffff" />
+              <rect x="580" y="22" width="1.5" height="1.5" fill="#7dd3fc" />
             </g>
 
-            {/* LAYER 2: Sun & Radiating Rays */}
+            {/* LAYER 1: Distant City Skyline Silhouettes */}
+            <g opacity="0.75">
+              <rect x="30" y="72" width="28" height="34" fill="#151e30" />
+              <rect x="58" y="65" width="22" height="41" fill="#101726" />
+              <rect x="80" y="78" width="35" height="28" fill="#151e30" />
+              <rect x="135" y="68" width="30" height="38" fill="#101726" />
+              <rect x="165" y="74" width="24" height="32" fill="#151e30" />
+              <rect x="210" y="62" width="36" height="44" fill="#1a263c" />
+              <rect x="246" y="70" width="28" height="36" fill="#151e30" />
+              <rect x="310" y="66" width="32" height="40" fill="#101726" />
+              <rect x="342" y="75" width="26" height="31" fill="#151e30" />
+              <rect x="390" y="63" width="34" height="43" fill="#1a263c" />
+              <rect x="440" y="71" width="30" height="35" fill="#151e30" />
+              <rect x="590" y="68" width="40" height="38" fill="#101726" />
+
+              {/* Scattered warm glowing windows */}
+              <rect x="64" y="72" width="3" height="3" fill="#ffd952" />
+              <rect x="70" y="78" width="3" height="3" fill="#ffd952" />
+              <rect x="142" y="76" width="3" height="3" fill="#ffd952" />
+              <rect x="220" y="70" width="3" height="3" fill="#ffd952" />
+              <rect x="228" y="80" width="3" height="3" fill="#ffd952" />
+              <rect x="320" y="74" width="3" height="3" fill="#ffd952" />
+              <rect x="402" y="72" width="3" height="3" fill="#ffd952" />
+            </g>
+
+            {/* LAYER 2: Arctic Frost Moon & Radiating Rays */}
             <g transform="translate(450, 34)">
               <g
                 style={{
@@ -185,69 +197,69 @@ export const NoclipepeUpdateLoader = ({
                   animation: 'sunPulse 3s infinite ease-in-out',
                 }}
               >
-                <rect x="-2" y="-22" width="4" height="6" fill="#fed844" />
-                <rect x="-2" y="16" width="4" height="6" fill="#fed844" />
-                <rect x="-22" y="-2" width="6" height="4" fill="#fed844" />
-                <rect x="16" y="-2" width="6" height="4" fill="#fed844" />
-                <rect x="11" y="11" width="4" height="4" fill="#fed844" />
-                <rect x="-15" y="11" width="4" height="4" fill="#fed844" />
-                <rect x="11" y="-15" width="4" height="4" fill="#fed844" />
-                <rect x="-15" y="-15" width="4" height="4" fill="#fed844" />
+                <rect x="-2" y="-22" width="4" height="6" fill="#93c5fd" />
+                <rect x="-2" y="16" width="4" height="6" fill="#93c5fd" />
+                <rect x="-22" y="-2" width="6" height="4" fill="#93c5fd" />
+                <rect x="16" y="-2" width="6" height="4" fill="#93c5fd" />
+                <rect x="11" y="11" width="4" height="4" fill="#93c5fd" />
+                <rect x="-15" y="11" width="4" height="4" fill="#93c5fd" />
+                <rect x="11" y="-15" width="4" height="4" fill="#93c5fd" />
+                <rect x="-15" y="-15" width="4" height="4" fill="#93c5fd" />
               </g>
-              <circle cx="0" cy="0" r="11" fill="#fffbe2" stroke="#fed844" strokeWidth="3" />
+              <circle cx="0" cy="0" r="11" fill="#f0f6fc" stroke="#93c5fd" strokeWidth="2.5" />
             </g>
 
             {/* LAYER 3: Animated Pixel Clouds & Flying Birds */}
-            <g style={{ animation: 'cloudDrift1 34s linear infinite' }}>
+            <g opacity="0.45" style={{ animation: 'cloudDrift1 34s linear infinite' }}>
               <rect x="-100" y="18" width="42" height="7" fill="#ffffff" rx="1" />
               <rect x="-92" y="14" width="26" height="6" fill="#ffffff" rx="1" />
-              <rect x="-84" y="25" width="36" height="3" fill="#e2f0fb" />
+              <rect x="-84" y="25" width="36" height="3" fill="#94a3b8" />
             </g>
-            <g style={{ animation: 'cloudDrift2 48s linear infinite' }}>
+            <g opacity="0.35" style={{ animation: 'cloudDrift2 48s linear infinite' }}>
               <rect x="-140" y="38" width="55" height="8" fill="#ffffff" rx="1" />
               <rect x="-130" y="33" width="32" height="7" fill="#ffffff" rx="1" />
-              <rect x="-120" y="46" width="45" height="3" fill="#e2f0fb" />
+              <rect x="-120" y="46" width="45" height="3" fill="#94a3b8" />
             </g>
             <g style={{ animation: 'birdFly 18s linear infinite' }}>
-              <path d="M70,44 Q73,41 76,44 Q79,41 82,44" stroke="#3e4a5e" strokeWidth="1.6" fill="none" />
-              <path d="M88,48 Q91,45 94,48 Q97,45 100,48" stroke="#3e4a5e" strokeWidth="1.6" fill="none" />
-              <path d="M80,54 Q82,52 84,54 Q86,52 88,54" stroke="#3e4a5e" strokeWidth="1.4" fill="none" />
+              <path d="M70,44 Q73,41 76,44 Q79,41 82,44" stroke="#7dd3fc" strokeWidth="1.4" fill="none" opacity="0.8" />
+              <path d="M88,48 Q91,45 94,48 Q97,45 100,48" stroke="#7dd3fc" strokeWidth="1.4" fill="none" opacity="0.8" />
+              <path d="M80,54 Q82,52 84,54 Q86,52 88,54" stroke="#7dd3fc" strokeWidth="1.2" fill="none" opacity="0.7" />
             </g>
 
             {/* LAYER 4: Top Industrial Track Girder */}
-            <rect x="0" y="12" width="640" height="11" fill="#2c3540" />
-            <rect x="0" y="14" width="640" height="2" fill="#3f4b59" />
+            <rect x="0" y="12" width="640" height="11" fill="#1a202c" />
+            <rect x="0" y="14" width="640" height="2" fill="#2d3748" />
             {Array.from({ length: 32 }).map((_, i) => (
-              <rect key={i} x={i * 20 + 8} y="18" width="3" height="3" fill="#181e26" />
+              <rect key={i} x={i * 20 + 8} y="18" width="3" height="3" fill="#10141d" />
             ))}
-            <rect x="0" y="23" width="640" height="3" fill="#1b2128" />
+            <rect x="0" y="23" width="640" height="3" fill="#0f131a" />
 
-            {/* LAYER 5: Ground & Walkway Platform */}
-            <rect x="0" y="104" width="640" height="3" fill="#ece4d4" />
-            <rect x="0" y="107" width="640" height="15" fill="#c8beaa" />
+            {/* LAYER 5: Ground & Walkway Platform (Nordic Slate / Granite Pavement) */}
+            <rect x="0" y="104" width="640" height="3" fill="#334155" />
+            <rect x="0" y="107" width="640" height="15" fill="#1e293b" />
             {Array.from({ length: 26 }).map((_, i) => (
-              <rect key={i} x={i * 25 + 12} y="107" width="1.5" height="15" fill="#a49884" />
+              <rect key={i} x={i * 25 + 12} y="107" width="1.5" height="15" fill="#0f172a" />
             ))}
-            <rect x="0" y="122" width="640" height="18" fill="#3a3228" />
+            <rect x="0" y="122" width="640" height="18" fill="#141d2b" />
             {Array.from({ length: 13 }).map((_, i) => (
-              <rect key={i} x={i * 50 + 20} y="122" width="8" height="18" fill="#262018" />
+              <rect key={i} x={i * 50 + 20} y="122" width="8" height="18" fill="#0d131d" />
             ))}
 
             {/* LAYER 6: Destination Site Office Shack (At right side) */}
             <g id="siteOfficeShack">
-              <rect x="496" y="68" width="76" height="36" fill="#235c53" />
-              <line x1="496" y1="74" x2="572" y2="74" stroke="#1d4d46" strokeWidth="1" />
-              <line x1="496" y1="80" x2="572" y2="80" stroke="#1d4d46" strokeWidth="1" />
-              <line x1="496" y1="86" x2="572" y2="86" stroke="#1d4d46" strokeWidth="1" />
-              <line x1="496" y1="92" x2="572" y2="92" stroke="#1d4d46" strokeWidth="1" />
-              <line x1="496" y1="98" x2="572" y2="98" stroke="#1d4d46" strokeWidth="1" />
+              <rect x="496" y="68" width="76" height="36" fill="#152232" />
+              <line x1="496" y1="74" x2="572" y2="74" stroke="#0f1722" strokeWidth="1" />
+              <line x1="496" y1="80" x2="572" y2="80" stroke="#0f1722" strokeWidth="1" />
+              <line x1="496" y1="86" x2="572" y2="86" stroke="#0f1722" strokeWidth="1" />
+              <line x1="496" y1="92" x2="572" y2="92" stroke="#0f1722" strokeWidth="1" />
+              <line x1="496" y1="98" x2="572" y2="98" stroke="#0f1722" strokeWidth="1" />
 
               {/* Roof overhang */}
-              <polygon points="492,68 576,68 571,63 496,63" fill="#1b2128" />
+              <polygon points="492,68 576,68 571,63 496,63" fill="#0f1722" />
 
               {/* Chimney */}
-              <rect x="506" y="48" width="10" height="16" fill="#171d24" />
-              <rect x="504" y="46" width="14" height="3" fill="#242c38" />
+              <rect x="506" y="48" width="10" height="16" fill="#111622" />
+              <rect x="504" y="46" width="14" height="3" fill="#1e2638" />
 
               {/* Chimney Smoke */}
               <circle
@@ -255,7 +267,16 @@ export const NoclipepeUpdateLoader = ({
                 cy="42"
                 r="3.5"
                 fill="#ffffff"
+                opacity="0.8"
                 style={{ animation: 'smokePuff1 2.4s infinite ease-out' }}
+              />
+              <circle
+                cx="513"
+                cy="40"
+                r="4.5"
+                fill="#f0f6fc"
+                opacity="0.7"
+                style={{ animation: 'smokePuff2 2.4s infinite 1.2s ease-out' }}
               />
               <circle
                 cx="513"
@@ -329,25 +350,25 @@ export const NoclipepeUpdateLoader = ({
               )}
             </g>
 
-            {/* LAYER 7: Advancing Red Brick Wall (Progress Bar Fill) */}
+            {/* LAYER 7: Advancing Nordic Slate Wall (Progress Bar Fill) */}
             <g clipPath="url(#brickWallClip)">
               <rect x="0" y="26" width="640" height="78" fill="url(#pixelBricks)" />
-              <rect x="0" y="24" width="640" height="4" fill="#3c2214" stroke="#22120a" strokeWidth="0.8" />
-              <rect x="0" y="102" width="640" height="2.5" fill="#582414" />
+              <rect x="0" y="24" width="640" height="4" fill="#1e2638" stroke="#0f1420" strokeWidth="0.8" />
+              <rect x="0" y="102" width="640" height="2.5" fill="#141a26" />
             </g>
 
             {/* STAGGERED BRICK EDGE & ACTIVE MORTAR BED (Laying Bricks Visual) */}
             {frontX > 4 && frontX < MAX_WALL_X && (
               <g>
                 {/* Wet mortar seam */}
-                <rect x={frontX - 2} y="26" width="3" height="78" fill="#e2d8c6" opacity="0.9" />
+                <rect x={frontX - 2} y="26" width="3" height="78" fill="#475569" opacity="0.9" />
                 {/* Alternating brick tooth protrusions (Authentic masonry bond) */}
-                <rect x={frontX - 6} y="26" width="10" height="11" fill="#c04828" stroke="#7a2a16" strokeWidth="0.8" />
-                <rect x={frontX - 2} y="38" width="8" height="11" fill="#a43a1e" stroke="#7a2a16" strokeWidth="0.8" />
-                <rect x={frontX - 6} y="50" width="10" height="11" fill="#d05432" stroke="#7a2a16" strokeWidth="0.8" />
-                <rect x={frontX - 2} y="62" width="8" height="11" fill="#c04828" stroke="#7a2a16" strokeWidth="0.8" />
-                <rect x={frontX - 6} y="74" width="10" height="11" fill="#9e361c" stroke="#7a2a16" strokeWidth="0.8" />
-                <rect x={frontX - 2} y="86" width="8" height="14" fill="#b84224" stroke="#7a2a16" strokeWidth="0.8" />
+                <rect x={frontX - 6} y="26" width="10" height="11" fill="#2a3448" stroke="#141a26" strokeWidth="0.8" />
+                <rect x={frontX - 2} y="38" width="8" height="11" fill="#1f2736" stroke="#141a26" strokeWidth="0.8" />
+                <rect x={frontX - 6} y="50" width="10" height="11" fill="#323e54" stroke="#141a26" strokeWidth="0.8" />
+                <rect x={frontX - 2} y="62" width="8" height="11" fill="#2a3448" stroke="#141a26" strokeWidth="0.8" />
+                <rect x={frontX - 6} y="74" width="10" height="11" fill="#18202d" stroke="#141a26" strokeWidth="0.8" />
+                <rect x={frontX - 2} y="86" width="8" height="14" fill="#2d374a" stroke="#141a26" strokeWidth="0.8" />
 
                 {/* Ghost brick where Mason 1 is dropping next brick */}
                 <rect
@@ -355,8 +376,8 @@ export const NoclipepeUpdateLoader = ({
                   y="26"
                   width="14"
                   height="11"
-                  fill="rgba(192, 72, 40, 0.35)"
-                  stroke="#fed844"
+                  fill="rgba(56, 189, 248, 0.22)"
+                  stroke="#38bdf8"
                   strokeWidth="1.2"
                   strokeDasharray="2,2"
                   className="noclipepe-ghost-brick"
@@ -368,22 +389,22 @@ export const NoclipepeUpdateLoader = ({
             {frontX > 4 && frontX < MAX_WALL_X + 10 && (
               <g transform={`translate(${Math.max(6, Math.min(476, frontX - 6))}, 0)`}>
                 {/* Wooden Scaffolding Framework */}
-                <rect x="0" y="32" width="3.5" height="72" fill="#8c5820" />
-                <rect x="28" y="32" width="3.5" height="72" fill="#8c5820" />
-                <line x1="2" y1="38" x2="29" y2="38" stroke="#724416" strokeWidth="2" />
-                <line x1="2" y1="70" x2="29" y2="70" stroke="#724416" strokeWidth="2" />
+                <rect x="0" y="32" width="3.5" height="72" fill="#475569" />
+                <rect x="28" y="32" width="3.5" height="72" fill="#475569" />
+                <line x1="2" y1="38" x2="29" y2="38" stroke="#334155" strokeWidth="2" />
+                <line x1="2" y1="70" x2="29" y2="70" stroke="#334155" strokeWidth="2" />
                 {/* Cross Bracing */}
-                <line x1="2" y1="40" x2="28" y2="68" stroke="#724416" strokeWidth="1.5" />
-                <line x1="2" y1="68" x2="28" y2="40" stroke="#724416" strokeWidth="1.5" />
-                <line x1="2" y1="72" x2="28" y2="100" stroke="#724416" strokeWidth="1.5" />
-                <line x1="2" y1="100" x2="28" y2="72" stroke="#724416" strokeWidth="1.5" />
+                <line x1="2" y1="40" x2="28" y2="68" stroke="#334155" strokeWidth="1.5" />
+                <line x1="2" y1="68" x2="28" y2="40" stroke="#334155" strokeWidth="1.5" />
+                <line x1="2" y1="72" x2="28" y2="100" stroke="#334155" strokeWidth="1.5" />
+                <line x1="2" y1="100" x2="28" y2="72" stroke="#334155" strokeWidth="1.5" />
                 {/* Platform Planks */}
-                <rect x="-4" y="36" width="38" height="4" fill="#cb9448" stroke="#5a3610" strokeWidth="0.5" />
-                <rect x="-4" y="68" width="38" height="4" fill="#cb9448" stroke="#5a3610" strokeWidth="0.5" />
+                <rect x="-4" y="36" width="38" height="4" fill="#64748b" stroke="#334155" strokeWidth="0.5" />
+                <rect x="-4" y="68" width="38" height="4" fill="#64748b" stroke="#334155" strokeWidth="0.5" />
                 {/* Ready-mix Mortar Bucket & Spare Bricks on Deck */}
-                <rect x="20" y="30" width="7" height="6" fill="#3a404c" rx="1" />
-                <rect x="21" y="28" width="5" height="2" fill="#d8ccb8" />
-                <rect x="-2" y="32" width="6" height="4" fill="#c04828" stroke="#5a1808" strokeWidth="0.5" />
+                <rect x="20" y="30" width="7" height="6" fill="#1e2638" rx="1" />
+                <rect x="21" y="28" width="5" height="2" fill="#64748b" />
+                <rect x="-2" y="32" width="6" height="4" fill="#2a3448" stroke="#141a26" strokeWidth="0.5" />
 
                 {/* MASON 1: Top Bricklayer Laying Bricks on the Wall */}
                 <g transform="translate(2, 12)">
@@ -393,14 +414,14 @@ export const NoclipepeUpdateLoader = ({
                   {/* Face with safety glasses */}
                   <rect x="5" y="6" width="7" height="5" fill="#ffcf9e" />
                   <rect x="9" y="8" width="3" height="2" fill="#1c222c" />
-                  {/* Safety Vest */}
-                  <rect x="3" y="11" width="11" height="8" fill="#e85c24" />
-                  <rect x="6" y="11" width="4" height="8" fill="#f8e830" />
+                  {/* Safety Vest (Frost Cobalt & Reflective Stripe) */}
+                  <rect x="3" y="11" width="11" height="8" fill="#2563eb" />
+                  <rect x="6" y="11" width="4" height="8" fill="#38bdf8" />
                   {/* Pants */}
-                  <rect x="4" y="19" width="4" height="6" fill="#243c66" />
-                  <rect x="9" y="19" width="4" height="6" fill="#243c66" />
+                  <rect x="4" y="19" width="4" height="6" fill="#1e293b" />
+                  <rect x="9" y="19" width="4" height="6" fill="#1e293b" />
                   {/* Left hand holding ready brick */}
-                  <rect x="-2" y="14" width="6" height="3" fill="#c04828" stroke="#5a1808" strokeWidth="0.5" />
+                  <rect x="-2" y="14" width="6" height="3" fill="#2a3448" stroke="#141a26" strokeWidth="0.5" />
                   {/* Animated Trowel Arm Smoothing Mortar */}
                   <g className="noclipepe-trowel-arm">
                     <line x1="12" y1="14" x2="19" y2="12" stroke="#ffcf9e" strokeWidth="2.4" />
@@ -412,16 +433,16 @@ export const NoclipepeUpdateLoader = ({
                     y="13"
                     width="11"
                     height="4"
-                    fill="#c04828"
-                    stroke="#7a2a16"
+                    fill="#2a3448"
+                    stroke="#384660"
                     strokeWidth="0.6"
                     className="noclipepe-placing-brick"
                   />
                   {/* Mortar Sparks popping */}
                   <g className="noclipepe-mortar-sparks">
-                    <rect x="22" y="9" width="2" height="2" fill="#ffffff" />
-                    <rect x="27" y="12" width="2" height="2" fill="#fed844" />
-                    <rect x="24" y="15" width="2" height="2" fill="#ffffff" />
+                    <rect x="22" y="9" width="2" height="2" fill="#38bdf8" />
+                    <rect x="27" y="12" width="2" height="2" fill="#ffffff" />
+                    <rect x="24" y="15" width="2" height="2" fill="#7dd3fc" />
                   </g>
                 </g>
 
@@ -433,14 +454,14 @@ export const NoclipepeUpdateLoader = ({
                   {/* Face */}
                   <rect x="5" y="6" width="6" height="5" fill="#ffcf9e" />
                   {/* Work Shirt */}
-                  <rect x="3" y="11" width="10" height="8" fill="#2d4a68" />
+                  <rect x="3" y="11" width="10" height="8" fill="#1e293b" />
                   {/* Pants */}
-                  <rect x="4" y="19" width="4" height="6" fill="#5c442a" />
-                  <rect x="8" y="19" width="4" height="6" fill="#5c442a" />
+                  <rect x="4" y="19" width="4" height="6" fill="#334155" />
+                  <rect x="8" y="19" width="4" height="6" fill="#334155" />
                   {/* Mallet arm tapping vertical joint */}
                   <g className="noclipepe-mallet-arm">
                     <line x1="10" y1="13" x2="17" y2="11" stroke="#ffcf9e" strokeWidth="2.2" />
-                    <rect x="16" y="8" width="5" height="7" fill="#181818" rx="1" />
+                    <rect x="16" y="8" width="5" height="7" fill="#0f172a" rx="1" />
                   </g>
                 </g>
               </g>
@@ -448,46 +469,46 @@ export const NoclipepeUpdateLoader = ({
 
             {/* LAYER 9: Ground Construction Zone & Active Workers */}
             <g id="groundCrew">
-              {/* Supply Depot Pallet of Red Bricks near Shack */}
+              {/* Supply Depot Pallet of Slate Bricks near Shack */}
               <g transform="translate(470, 96)">
                 {/* Wooden Pallet */}
-                <rect x="0" y="7" width="22" height="3" fill="#8c5820" />
-                <rect x="2" y="10" width="3" height="2" fill="#5a3610" />
-                <rect x="10" y="10" width="3" height="2" fill="#5a3610" />
-                <rect x="18" y="10" width="3" height="2" fill="#5a3610" />
+                <rect x="0" y="7" width="22" height="3" fill="#475569" />
+                <rect x="2" y="10" width="3" height="2" fill="#334155" />
+                <rect x="10" y="10" width="3" height="2" fill="#334155" />
+                <rect x="18" y="10" width="3" height="2" fill="#334155" />
                 {/* Brick Stacks */}
-                <rect x="2" y="3" width="9" height="4" fill="#c04828" stroke="#5a1808" strokeWidth="0.5" />
-                <rect x="11" y="3" width="9" height="4" fill="#c04828" stroke="#5a1808" strokeWidth="0.5" />
-                <rect x="5" y="-1" width="9" height="4" fill="#d05432" stroke="#5a1808" strokeWidth="0.5" />
+                <rect x="2" y="3" width="9" height="4" fill="#2a3448" stroke="#141a26" strokeWidth="0.5" />
+                <rect x="11" y="3" width="9" height="4" fill="#2a3448" stroke="#141a26" strokeWidth="0.5" />
+                <rect x="5" y="-1" width="9" height="4" fill="#323e54" stroke="#141a26" strokeWidth="0.5" />
                 {/* Portland Cement Bag */}
-                <rect x="-10" y="3" width="8" height="7" fill="#e2d8c6" stroke="#9a8c78" strokeWidth="0.6" rx="1" />
-                <rect x="-8" y="5" width="4" height="3" fill="#f4c430" />
+                <rect x="-10" y="3" width="8" height="7" fill="#334155" stroke="#1e293b" strokeWidth="0.6" rx="1" />
+                <rect x="-8" y="5" width="4" height="3" fill="#38bdf8" />
               </g>
 
               {/* Cement Mixer & Operator */}
               <g transform={`translate(${mixerX}, 77)`}>
                 {/* Tripod Stand */}
-                <line x1="6" y1="20" x2="0" y2="28" stroke="#2a2e38" strokeWidth="2.5" />
-                <line x1="16" y1="20" x2="22" y2="28" stroke="#2a2e38" strokeWidth="2.5" />
-                <line x1="11" y1="20" x2="11" y2="28" stroke="#1c2026" strokeWidth="2" />
-                <rect x="-2" y="14" width="8" height="9" fill="#3a404c" rx="1" />
-                {/* Vibrating Mixer Drum */}
+                <line x1="6" y1="20" x2="0" y2="28" stroke="#1e293b" strokeWidth="2.5" />
+                <line x1="16" y1="20" x2="22" y2="28" stroke="#1e293b" strokeWidth="2.5" />
+                <line x1="11" y1="20" x2="11" y2="28" stroke="#0f172a" strokeWidth="2" />
+                <rect x="-2" y="14" width="8" height="9" fill="#1e2638" rx="1" />
+                {/* Vibrating Mixer Drum (Frost Cobalt) */}
                 <g className="noclipepe-mixer-vibrate">
-                  <ellipse cx="12" cy="12" rx="11" ry="9" fill="#e85c24" stroke="#c04414" strokeWidth="1.5" />
-                  <ellipse cx="12" cy="12" rx="7" ry="5" fill="#f4743e" />
-                  <line x1="5" y1="12" x2="19" y2="12" stroke="#ffffff" strokeWidth="1" opacity="0.6" />
+                  <ellipse cx="12" cy="12" rx="11" ry="9" fill="#2563eb" stroke="#1d4ed8" strokeWidth="1.5" />
+                  <ellipse cx="12" cy="12" rx="7" ry="5" fill="#38bdf8" />
+                  <line x1="5" y1="12" x2="19" y2="12" stroke="#ffffff" strokeWidth="1" opacity="0.75" />
                 </g>
                 {/* Mixer Operator with Shovel */}
                 <g transform="translate(24, 0)">
                   <rect x="3" y="0" width="8" height="4" fill="#f4c430" rx="1" />
                   <rect x="4" y="4" width="5" height="4" fill="#ffcf9e" />
-                  <rect x="2" y="8" width="8" height="8" fill="#3a5a80" />
-                  <rect x="3" y="16" width="3" height="11" fill="#243448" />
-                  <rect x="7" y="16" width="3" height="11" fill="#243448" />
+                  <rect x="2" y="8" width="8" height="8" fill="#1e293b" />
+                  <rect x="3" y="16" width="3" height="11" fill="#0f172a" />
+                  <rect x="7" y="16" width="3" height="11" fill="#0f172a" />
                   {/* Shovel in hand */}
                   <g className="noclipepe-shovel-swing">
-                    <line x1="-3" y1="12" x2="5" y2="14" stroke="#8c5820" strokeWidth="1.8" />
-                    <polygon points="-7,11 -3,10 -3,14 -7,13" fill="#6a7888" stroke="#333d48" strokeWidth="0.8" />
+                    <line x1="-3" y1="12" x2="5" y2="14" stroke="#475569" strokeWidth="1.8" />
+                    <polygon points="-7,11 -3,10 -3,14 -7,13" fill="#64748b" stroke="#334155" strokeWidth="0.8" />
                   </g>
                 </g>
               </g>
@@ -503,16 +524,16 @@ export const NoclipepeUpdateLoader = ({
                 >
                   <rect x="4" y="0" width="8" height="4" fill="#f4c430" rx="1" />
                   <rect x="5" y="4" width="5" height="4" fill="#ffcf9e" />
-                  <rect x="3" y="8" width="8" height="8" fill="#e85c24" />
-                  <rect x="5" y="8" width="3" height="8" fill="#f8e830" />
+                  <rect x="3" y="8" width="8" height="8" fill="#f97316" />
+                  <rect x="5" y="8" width="3" height="8" fill="#fef08a" />
                   {/* Legs */}
-                  <rect x="3" y="16" width="3" height="11" fill="#223654" className="noclipepe-leg-left" />
-                  <rect x="8" y="16" width="3" height="11" fill="#223654" className="noclipepe-leg-right" />
-                  {/* Stack of Red Bricks carried in hands */}
+                  <rect x="3" y="16" width="3" height="11" fill="#1e293b" className="noclipepe-leg-left" />
+                  <rect x="8" y="16" width="3" height="11" fill="#1e293b" className="noclipepe-leg-right" />
+                  {/* Stack of Slate Bricks carried in hands */}
                   <g className="noclipepe-carried-bricks">
-                    <rect x="9" y="8" width="8" height="3" fill="#c04828" stroke="#682412" strokeWidth="0.5" />
-                    <rect x="9" y="5" width="8" height="3" fill="#c04828" stroke="#682412" strokeWidth="0.5" />
-                    <rect x="9" y="2" width="8" height="3" fill="#c04828" stroke="#682412" strokeWidth="0.5" />
+                    <rect x="9" y="8" width="8" height="3" fill="#2a3448" stroke="#141a26" strokeWidth="0.5" />
+                    <rect x="9" y="5" width="8" height="3" fill="#2a3448" stroke="#141a26" strokeWidth="0.5" />
+                    <rect x="9" y="2" width="8" height="3" fill="#2a3448" stroke="#141a26" strokeWidth="0.5" />
                   </g>
                 </g>
               )}
@@ -520,27 +541,27 @@ export const NoclipepeUpdateLoader = ({
 
             {/* LAYER 10: Overhead Hanging Percentage Sign */}
             <g transform={`translate(${signX}, 0)`}>
-              <line x1="-16" y1="18" x2="-16" y2="28" stroke="#1c222c" strokeWidth="2" />
-              <line x1="16" y1="18" x2="16" y2="28" stroke="#1c222c" strokeWidth="2" />
-              <rect x="-18" y="15" width="4" height="4" fill="#10141a" />
-              <rect x="14" y="15" width="4" height="4" fill="#10141a" />
+              <line x1="-16" y1="18" x2="-16" y2="28" stroke="#1e2638" strokeWidth="2" />
+              <line x1="16" y1="18" x2="16" y2="28" stroke="#1e2638" strokeWidth="2" />
+              <rect x="-18" y="15" width="4" height="4" fill="#0c101a" />
+              <rect x="14" y="15" width="4" height="4" fill="#0c101a" />
 
-              {/* Crisp White Sign Board with Bold Border */}
+              {/* Crisp Arctic Sign Board with Frost Cobalt Border */}
               <rect
                 x="-32"
                 y="28"
                 width="64"
                 height="26"
                 rx="2"
-                fill={isComplete ? '#ecfdf5' : '#ffffff'}
-                stroke={isComplete ? '#10b981' : '#1c222c'}
+                fill={isComplete ? '#ecfdf5' : '#f8fafc'}
+                stroke={isComplete ? '#10b981' : '#2563eb'}
                 strokeWidth="2.5"
               />
               <text
                 x="0"
                 y="46"
                 textAnchor="middle"
-                fill={isComplete ? '#047857' : '#1c222c'}
+                fill={isComplete ? '#047857' : '#0f172a'}
                 fontSize="14"
                 fontWeight="800"
                 fontFamily="var(--font-mono, 'JetBrains Mono', monospace)"

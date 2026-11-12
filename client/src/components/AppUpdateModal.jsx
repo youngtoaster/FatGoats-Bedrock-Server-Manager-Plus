@@ -169,9 +169,9 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
           maxWidth: updating ? 740 : 620,
           width: '100%',
           transition: 'max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-          background: 'var(--bg-card, #1a1c22)',
-          border: '1px solid var(--border-subtle, rgba(240, 235, 225, 0.08))',
-          borderTop: '1px solid rgba(255, 255, 255, 0.16)',
+          background: 'var(--bg-card, #151923)',
+          border: '1px solid var(--border-subtle, rgba(226, 238, 255, 0.08))',
+          borderTop: '1px solid rgba(226, 238, 255, 0.16)',
           boxShadow: '0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0, 0, 0, 0.8)',
           borderRadius: 'var(--radius-lg, 10px)',
           overflow: 'hidden',
@@ -182,8 +182,8 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
           className="modal-header d-flex justify-between items-center"
           style={{
             padding: '1.15rem 1.4rem',
-            background: 'var(--bg-raised, #262932)',
-            borderBottom: '1px solid var(--border-subtle, rgba(240, 235, 225, 0.08))',
+            background: 'var(--bg-raised, #202737)',
+            borderBottom: '1px solid var(--border-subtle, rgba(226, 238, 255, 0.08))',
           }}
         >
           <div className="d-flex items-center gap-3">
@@ -192,12 +192,12 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                 width: 38,
                 height: 38,
                 borderRadius: 'var(--radius-sm, 5px)',
-                background: 'rgba(217, 119, 54, 0.12)',
-                border: '1px solid rgba(217, 119, 54, 0.35)',
+                background: 'rgba(37, 99, 235, 0.14)',
+                border: '1px solid rgba(56, 189, 248, 0.35)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--copper, #d97736)',
+                color: 'var(--ice, #38bdf8)',
               }}
             >
               {updating ? (
@@ -208,7 +208,7 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
             </div>
             <div>
               <div className="d-flex items-center gap-2">
-                <h3 className="modal-title font-medium m-0" style={{ color: 'var(--text-white, #f5f2eb)', fontSize: '1rem', letterSpacing: '-0.01em' }}>
+                <h3 className="modal-title font-medium m-0" style={{ color: 'var(--text-white, #f8fafc)', fontSize: '1rem', letterSpacing: '-0.01em' }}>
                   Application update available
                 </h3>
                 <span
@@ -218,9 +218,9 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                     fontWeight: 700,
                     textTransform: 'uppercase',
                     letterSpacing: '0.06em',
-                    color: 'var(--copper, #d97736)',
-                    background: 'rgba(217, 119, 54, 0.1)',
-                    border: '1px solid rgba(217, 119, 54, 0.25)',
+                    color: 'var(--ice, #38bdf8)',
+                    background: 'rgba(37, 99, 235, 0.14)',
+                    border: '1px solid rgba(56, 189, 248, 0.28)',
                     padding: '2px 6px',
                     borderRadius: 3,
                   }}
@@ -228,7 +228,7 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                   BSM+ Pipeline
                 </span>
               </div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-sub, #a39e94)' }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-sub, #94a3b8)' }}>
                 FatGoats Bedrock Server Manager Plus
               </span>
             </div>
@@ -365,19 +365,19 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                       )}
                     </div>
 
-                    <div style={{ color: 'var(--copper, #d97736)', fontSize: '1.1rem', padding: '0 0.5rem' }}>
+                    <div style={{ color: 'var(--ice, #38bdf8)', fontSize: '1.1rem', padding: '0 0.5rem' }}>
                       ➔
                     </div>
 
                     <div className="text-right">
-                      <span className="text-2xs uppercase d-block font-bold" style={{ color: 'var(--copper, #d97736)', fontFamily: 'var(--font-sans, sans-serif)' }}>
+                      <span className="text-2xs uppercase d-block font-bold" style={{ color: 'var(--ice, #38bdf8)', fontFamily: 'var(--font-sans, sans-serif)' }}>
                         New Revision
                       </span>
-                      <span className="font-bold text-sm" style={{ color: 'var(--copper, #d97736)' }}>
+                      <span className="font-bold text-sm" style={{ color: 'var(--ice, #38bdf8)' }}>
                         #{updateInfo.remoteCommit}
                       </span>
                       {updateInfo.remoteCommitDate && (
-                        <span className="text-2xs d-block" style={{ color: 'var(--text-sub, #a39e94)' }}>
+                        <span className="text-2xs d-block" style={{ color: 'var(--text-sub, #94a3b8)' }}>
                           {updateInfo.remoteCommitDate}
                         </span>
                       )}
@@ -390,13 +390,13 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                       className="mb-3 p-3 rounded"
                       style={{
                         background: 'rgba(255, 255, 255, 0.02)',
-                        border: '1px solid var(--border-subtle, rgba(240, 235, 225, 0.08))',
+                        border: '1px solid var(--border-subtle, rgba(226, 238, 255, 0.08))',
                       }}
                     >
-                      <span className="text-2xs d-block uppercase font-semibold mb-1" style={{ color: 'var(--text-muted, #78746c)' }}>
+                      <span className="text-2xs d-block uppercase font-semibold mb-1" style={{ color: 'var(--text-muted, #64748b)' }}>
                         Latest Commit Subject
                       </span>
-                      <p className="text-xs m-0 font-medium" style={{ color: 'var(--text-white, #f5f2eb)' }}>
+                      <p className="text-xs m-0 font-medium" style={{ color: 'var(--text-white, #f8fafc)' }}>
                         "{updateInfo.remoteCommitSubject}"
                       </p>
                     </div>
@@ -405,14 +405,14 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                   {/* Changelog List */}
                   {updateInfo.changelog && updateInfo.changelog.length > 0 && (
                     <div className="mb-3">
-                      <span className="text-2xs d-block uppercase font-semibold mb-1.5" style={{ color: 'var(--text-muted, #78746c)', letterSpacing: '0.05em' }}>
+                      <span className="text-2xs d-block uppercase font-semibold mb-1.5" style={{ color: 'var(--text-muted, #64748b)', letterSpacing: '0.05em' }}>
                         Changelog ({updateInfo.commitsBehind} commit{updateInfo.commitsBehind !== 1 ? 's' : ''}):
                       </span>
                       <div
                         className="max-h-36 overflow-y-auto p-2.5 rounded text-xs space-y-1.5"
                         style={{
-                          background: 'var(--bg-input, #0d0e11)',
-                          border: '1px solid var(--border-subtle, rgba(240, 235, 225, 0.08))',
+                          background: 'var(--bg-input, #090b10)',
+                          border: '1px solid var(--border-subtle, rgba(226, 238, 255, 0.08))',
                         }}
                       >
                         {updateInfo.changelog.map((c, idx) => (
@@ -420,17 +420,17 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                             <span
                               style={{
                                 fontFamily: 'var(--font-mono, monospace)',
-                                color: 'var(--copper, #d97736)',
+                                color: 'var(--ice, #38bdf8)',
                                 fontSize: '0.7rem',
                                 flexShrink: 0,
                               }}
                             >
                               #{c.hash}
                             </span>
-                            <span className="truncate flex-1" style={{ color: 'var(--text-main, #ded9cf)', fontSize: '0.75rem' }}>
+                            <span className="truncate flex-1" style={{ color: 'var(--text-main, #e2e8f0)', fontSize: '0.75rem' }}>
                               {c.subject}
                             </span>
-                            <span style={{ color: 'var(--text-muted, #78746c)', fontSize: '0.68rem', flexShrink: 0 }}>
+                            <span style={{ color: 'var(--text-muted, #64748b)', fontSize: '0.68rem', flexShrink: 0 }}>
                               {c.date}
                             </span>
                           </div>

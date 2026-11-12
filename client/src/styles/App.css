@@ -5,50 +5,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  /* Milled Hardware Token Ramp (Zero Neon) */
-  --bg-sidebar: #14151a;
-  --bg-main: #111215;
-  --bg-card: #1a1c22;
-  --bg-card-hover: #21232b;
-  --bg-raised: #262932;
-  --bg-input: #0d0e11;
-  --bg-subtle: #17181e;
-  --bg-glass: rgba(26, 28, 34, 0.96);
+  /* Nordic Slate & Frost Cobalt Hardware Token Ramp (Zero Neon) */
+  --bg-sidebar: #0f1219;
+  --bg-main: #0c0e14;
+  --bg-card: #151923;
+  --bg-card-hover: #1c2230;
+  --bg-raised: #202737;
+  --bg-input: #090b10;
+  --bg-subtle: #11141c;
+  --bg-glass: rgba(21, 25, 35, 0.96);
 
-  /* Warm Milled Metal Hairlines */
-  --border-subtle: rgba(240, 235, 225, 0.08);
-  --border-hover: rgba(240, 235, 225, 0.16);
-  --border-focus: #d97736;
+  /* Brushed Stainless Metal Hairlines */
+  --border-subtle: rgba(226, 238, 255, 0.08);
+  --border-hover: rgba(226, 238, 255, 0.16);
+  --border-focus: #38bdf8;
 
-  /* Matte Hardware Pigments (Zero Neon Glow) */
-  --copper: #d97736;
-  --copper-hover: #c46628;
-  --copper-subtle: rgba(217, 119, 54, 0.14);
+  /* Precision Frost Cobalt & Ice-Blue Pigments (Zero Neon Glow) */
+  --cobalt: #2563eb;
+  --cobalt-hover: #1d4ed8;
+  --cobalt-subtle: rgba(37, 99, 235, 0.14);
 
-  --emerald: #3fa66a;
-  --emerald-hover: #338855;
-  --emerald-subtle: rgba(63, 166, 106, 0.14);
+  --ice: #38bdf8;
+  --ice-hover: #0284c7;
+  --ice-subtle: rgba(56, 189, 248, 0.14);
+
+  /* Legacy aliases for backwards compatibility */
+  --copper: #38bdf8;
+  --copper-hover: #0284c7;
+  --copper-subtle: rgba(56, 189, 248, 0.14);
+
+  --emerald: #10b981;
+  --emerald-hover: #059669;
+  --emerald-subtle: rgba(16, 185, 129, 0.14);
   --emerald-glow: transparent;
 
-  --amber: #d97736;
-  --amber-subtle: rgba(217, 119, 54, 0.14);
+  --amber: #38bdf8;
+  --amber-subtle: rgba(56, 189, 248, 0.14);
   --amber-glow: transparent;
 
-  --rose: #c94a4a;
-  --rose-subtle: rgba(201, 74, 74, 0.14);
+  --rose: #f43f5e;
+  --rose-subtle: rgba(244, 63, 94, 0.14);
   --rose-glow: transparent;
 
-  --cyan: #5c7c99;
-  --cyan-subtle: rgba(92, 124, 153, 0.14);
+  --cyan: #38bdf8;
+  --cyan-subtle: rgba(56, 189, 248, 0.14);
 
-  --purple: #7e7399;
-  --purple-subtle: rgba(126, 115, 153, 0.14);
+  --purple: #818cf8;
+  --purple-subtle: rgba(129, 140, 248, 0.14);
 
-  /* Three Text Roles */
-  --text-main: #ded9cf;
-  --text-sub: #a39e94;
-  --text-muted: #78746c;
-  --text-white: #f5f2eb;
+  /* Architectural Arctic High-Contrast Typography */
+  --text-main: #e2e8f0;
+  --text-sub: #94a3b8;
+  --text-muted: #64748b;
+  --text-white: #f8fafc;
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -160,7 +169,8 @@ html, body, #root {
 .brand-logo-cube {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+  border: 1px solid rgba(56, 189, 248, 0.4);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -241,7 +251,7 @@ html, body, #root {
 
 .nav-link.active {
   color: var(--text-white);
-  background-color: var(--emerald-subtle);
+  background-color: var(--cobalt-subtle);
   font-weight: 600;
 }
 
@@ -252,9 +262,9 @@ html, body, #root {
   top: 15%;
   bottom: 15%;
   width: 3px;
-  background-color: var(--emerald);
+  background-color: var(--ice);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  box-shadow: 0 0 10px var(--emerald-glow);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
 }
 
 .nav-icon {
@@ -990,12 +1000,14 @@ html, body, #root {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-  border-color: #34d399;
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+  color: #f8fafc;
+  border-color: #38bdf8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 .btn-primary:hover {
-  background: #059669;
+  background: linear-gradient(135deg, #0369a1 0%, #1d4ed8 100%);
+  border-color: #7dd3fc;
 }
 
 .btn-secondary {
@@ -2194,13 +2206,14 @@ html, body, #root {
 .auth-logo-badge {
   width: 52px;
   height: 52px;
-  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+  border: 1px solid rgba(56, 189, 248, 0.4);
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
-  box-shadow: 0 8px 24px var(--emerald-glow);
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
 }
 
 .auth-logo-glyph {
@@ -2333,16 +2346,20 @@ html, body, #root {
 .btn-auth-submit {
   width: 100%;
   padding: 0.85rem 1.25rem;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-  border: 1px solid #34d399;
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+  color: #f8fafc;
+  border: 1px solid #38bdf8;
   border-radius: var(--radius-md);
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 18px var(--emerald-glow);
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
   margin-top: 0.35rem;
+}
+.btn-auth-submit:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #1d4ed8 100%);
+  border-color: #7dd3fc;
 }
 
 .btn-auth-submit:hover:not(:disabled) {
@@ -5885,8 +5902,9 @@ html, body, #root {
   }
 
   .mobile-nav-item.active {
-    color: #34d399;
-    background: rgba(16, 185, 129, 0.08);
+    color: var(--ice, #38bdf8);
+    background: rgba(37, 99, 235, 0.14);
+    border: 1px solid rgba(56, 189, 248, 0.28);
   }
 
   .mobile-nav-icon-wrap {
@@ -5904,7 +5922,7 @@ html, body, #root {
 
   .mobile-nav-item.active .mobile-nav-icon {
     transform: translateY(-1.5px) scale(1.08);
-    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.6));
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.4));
   }
 
   .mobile-nav-badge-dot {
