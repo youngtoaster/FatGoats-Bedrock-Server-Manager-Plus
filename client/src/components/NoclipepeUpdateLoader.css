@@ -1,0 +1,261 @@
+/* ==========================================================================
+   NOCLIPEPE PIXEL ART CONSTRUCTION LOADING BAR STYLES
+   Inspired by noclipepe's iconic loading bar ("I made a loading bar you can't stop watching")
+   Reference: https://designeer.xyz/finds/noclipepe-2119881447687569842
+   ========================================================================== */
+
+.noclipepe-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1.5rem 1rem 1.25rem;
+  background: linear-gradient(180deg, #d8cebe 0%, #cbbfad 100%);
+  border-radius: var(--radius-xl, 16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Subtle background vignette & texture */
+.noclipepe-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Top System Status Bar */
+.noclipepe-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 650px;
+  margin-bottom: 0.85rem;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #5a5246;
+  padding: 0 0.5rem;
+}
+
+.noclipepe-author {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #4a4237;
+  letter-spacing: -0.01em;
+}
+
+.noclipepe-author a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.noclipepe-author a:hover {
+  color: #1a1612;
+}
+
+.noclipepe-clock {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4a4237;
+}
+
+.noclipepe-battery {
+  display: inline-flex;
+  align-items: center;
+  width: 22px;
+  height: 11px;
+  border: 1.5px solid #4a4237;
+  border-radius: 2px;
+  padding: 1px;
+  position: relative;
+}
+
+.noclipepe-battery::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 2.5px;
+  width: 2px;
+  height: 4px;
+  background: #4a4237;
+  border-radius: 0 1px 1px 0;
+}
+
+.noclipepe-battery-fill {
+  height: 100%;
+  background: #4a4237;
+  border-radius: 0.5px;
+  animation: batteryPulse 3s infinite ease-in-out;
+}
+
+/* The Main Extruded Capsule Bezel */
+.noclipepe-capsule-bezel {
+  width: 100%;
+  max-width: 650px;
+  height: 140px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #f8f4ee 0%, #ece4d6 100%);
+  padding: 6px;
+  box-shadow: 
+    0 18px 36px rgba(0, 0, 0, 0.35),
+    0 4px 10px rgba(0, 0, 0, 0.2),
+    inset 0 2px 3px rgba(255, 255, 255, 0.95),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Inner Viewport Window */
+.noclipepe-viewport {
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.35), inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  background: #68abe8;
+  image-rendering: pixelated;
+}
+
+/* SVG Scene */
+.noclipepe-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Dynamic Caption Below Pill */
+.noclipepe-caption-area {
+  margin-top: 1.15rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.noclipepe-main-phrase {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #383127;
+  letter-spacing: -0.01em;
+  transition: opacity 0.2s ease;
+}
+
+.noclipepe-sub-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.76rem;
+  color: #635a4d;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.noclipepe-stage-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.45rem;
+  background: rgba(74, 66, 55, 0.12);
+  border: 1px solid rgba(74, 66, 55, 0.2);
+  border-radius: 4px;
+  color: #383127;
+}
+
+.noclipepe-safe-badge {
+  color: #2b704b;
+  font-weight: 600;
+}
+
+/* Animations */
+@keyframes batteryPulse {
+  0%, 100% { width: 75%; }
+  50% { width: 95%; }
+}
+
+@keyframes cloudDrift1 {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(650px); }
+}
+
+@keyframes cloudDrift2 {
+  0% { transform: translateX(-150px); }
+  100% { transform: translateX(650px); }
+}
+
+@keyframes birdFly {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(120px, -6px); }
+  100% { transform: translate(250px, 2px); }
+}
+
+@keyframes sunPulse {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes smokePuff1 {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0.8; }
+  50% { transform: translate(6px, -14px) scale(1); opacity: 0.6; }
+  100% { transform: translate(16px, -28px) scale(1.4); opacity: 0; }
+}
+
+@keyframes smokePuff2 {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  20% { opacity: 0.7; }
+  70% { transform: translate(10px, -20px) scale(1.1); opacity: 0.5; }
+  100% { transform: translate(22px, -34px) scale(1.5); opacity: 0; }
+}
+
+@keyframes catTailWag {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(18deg); }
+  75% { transform: rotate(-12deg); }
+}
+
+@keyframes mixerVibrate {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+}
+
+@keyframes mixerDrumSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes trowelSwing {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-25deg); }
+}
+
+@keyframes workerWalkCycle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes yellowArrowBlink {
+  0%, 100% { opacity: 1; transform: translateY(0); }
+  50% { opacity: 0.2; transform: translateY(3px); }
+}
+
+@keyframes cheerWave {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-4px) scaleY(1.08); }
+}

@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../api';
+import NoclipepeUpdateLoader from '../components/NoclipepeUpdateLoader';
 import { useAuth } from '../context/AuthContext';
 import { safeCopyToClipboard } from '../utils/clipboard';
 
@@ -1260,30 +1261,15 @@ export const Settings = () => {
 
                     {/* Real-time Update Progress Bar */}
                     {updatingApp && (
-                      <div className="update-progress-container mb-4">
-                        <div className="update-progress-header">
-                          <div>
-                            <span className="text-2xs uppercase font-bold text-sub d-block" style={{ letterSpacing: '0.08em' }}>
-                              Pipeline Execution
-                            </span>
-                            <strong className="text-white text-sm">Automated Pipeline in Progress</strong>
-                          </div>
-                          <div className="d-flex items-baseline gap-1">
-                            <span className="update-progress-percentage">{Math.min(100, Math.round(updateDisplayPercent))}%</span>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted, #78746c)', fontFamily: 'var(--font-mono, monospace)' }}>
-                              / 100%
-                            </span>
-                          </div>
-                        </div>
+                      <div className="mb-4">
+                        <NoclipepeUpdateLoader
+                          percent={updateDisplayPercent}
+                          stage={updateProgressData.stage}
+                          progressText={updateProgressData.progress}
+                          targetCommit={updateStatus?.remoteCommit}
+                        />
 
-                        <div className="update-progress-track">
-                          <div
-                            className="update-progress-fill"
-                            style={{ width: `${updateDisplayPercent}%` }}
-                          />
-                        </div>
-
-                        <div className="update-steps-stepper">
+                        <div className="update-steps-stepper mt-4">
                           {[
                             { num: 1, label: 'Safety Backup', icon: HardDrive },
                             { num: 2, label: 'Pull Commits', icon: GitCommit },
@@ -1308,14 +1294,6 @@ export const Settings = () => {
                               </div>
                             );
                           })}
-                        </div>
-
-                        <div className="update-status-live-line">
-                          <span className="update-status-dot" />
-                          <span className="truncate flex-1" style={{ color: 'var(--text-main, #ded9cf)' }}>{updateProgressData.progress}</span>
-                          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted, #78746c)', marginLeft: 'auto' }}>
-                            Stage {updateProgressData.stage}/5
-                          </span>
                         </div>
                       </div>
                     )}

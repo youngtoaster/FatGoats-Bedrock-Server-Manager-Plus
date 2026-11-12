@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../api';
+import NoclipepeUpdateLoader from './NoclipepeUpdateLoader';
 import {
   ArrowUpCircle,
   CheckCircle2,
@@ -168,7 +169,9 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
         className="modal app-update-modal"
         onClick={(e) => e.stopPropagation()}
         style={{
-          maxWidth: 620,
+          maxWidth: updating ? 740 : 620,
+          width: '100%',
+          transition: 'max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
           background: 'var(--bg-card, #1a1c22)',
           border: '1px solid var(--border-subtle, rgba(240, 235, 225, 0.08))',
           borderTop: '1px solid rgba(255, 255, 255, 0.16)',
@@ -327,34 +330,16 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
 
               {/* Real-time Update Progress Bar & Steps when updating */}
               {updating ? (
-                <div className="update-progress-container mb-2">
-                  <div className="update-progress-header">
-                    <div>
-                      <span className="text-2xs uppercase font-bold text-sub d-block" style={{ letterSpacing: '0.08em' }}>
-                        Pipeline Execution
-                      </span>
-                      <strong style={{ color: 'var(--text-white, #f5f2eb)', fontSize: '0.9rem' }}>
-                        Applying Automated System Upgrade
-                      </strong>
-                    </div>
-                    <div className="d-flex items-baseline gap-1">
-                      <span className="update-progress-percentage">{roundedDisplay}%</span>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted, #78746c)', fontFamily: 'var(--font-mono, monospace)' }}>
-                        / 100%
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Visual Precision Track */}
-                  <div className="update-progress-track">
-                    <div
-                      className="update-progress-fill"
-                      style={{ width: `${displayPercent}%` }}
-                    />
-                  </div>
+                <div className="mb-2">
+                  <NoclipepeUpdateLoader
+                    percent={displayPercent}
+                    stage={progressData.stage}
+                    progressText={progressData.progress}
+                    targetCommit={updateInfo.remoteCommit}
+                  />
 
                   {/* Step Pills */}
-                  <div className="update-steps-stepper">
+                  <div className="update-steps-stepper mt-4">
                     {updateSteps.map((s) => {
                       const isDone = progressData.stage > s.num || roundedDisplay >= s.num * 20;
                       const isActive = progressData.stage === s.num && !isDone;
@@ -373,17 +358,6 @@ export const AppUpdateModal = ({ updateInfo, onClose, onUpdateSuccess }) => {
                         </div>
                       );
                     })}
-                  </div>
-
-                  {/* Live Status Telemetry Line */}
-                  <div className="update-status-live-line">
-                    <span className="update-status-dot" />
-                    <span className="truncate flex-1" style={{ color: 'var(--text-main, #ded9cf)' }}>
-                      {progressData.progress}
-                    </span>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted, #78746c)', marginLeft: 'auto' }}>
-                      Stage {progressData.stage}/5
-                    </span>
                   </div>
                 </div>
               ) : (
